@@ -63,7 +63,6 @@
 
 + (NSString*) getInstallURL:(NSString*)nextPage install:(BOOL)isInstall apn:(NSString*)apn idc:(NSString*)idcCode
 {
-    NSLog(@"11111");
     DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
     NSString* type = [UIDevice connectionTypeString];
     NSString* deviceToken =  [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
