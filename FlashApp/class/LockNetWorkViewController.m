@@ -512,6 +512,8 @@
     
     [AppDelegate showAlert:@"已恢复应用的网络连接！"];
     
+    NSLog(@"11");
+    
 }
 
 -(void)hiddenLoadingViewWithjiasuo
