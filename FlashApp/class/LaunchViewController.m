@@ -58,6 +58,10 @@
     {
         self.imageView.image=[UIImage imageNamed:@"Default-568h@2x.jpg"];
     }
+    
+    /*
+     *查询本月的流量使用情况，方法
+     */
     time_t now;
     time(&now);
     time_t peroid[2];
@@ -66,22 +70,21 @@
     long endTime=peroid[1];
     StageStats *stageStas = [StatsMonthDAO statForPeriod:startTime endTime:endTime];
     float number = [NSString bytesNumberByUnit:stageStas.bytesBefore-stageStas.bytesAfter unit:@"MB"];
-
     NSString* item1Number = [NSString stringWithFormat:@"%.2f", number];
     self.MBdataLabel.text=item1Number;
     
     UserSettings* user = [AppDelegate getAppDelegate].user;
-    float totalm=[user.ctTotal floatValue];
-    float used=[user.ctUsed longLongValue];
+    float totalm=[user.ctTotal floatValue]; // 用户总共的流量 单位：MB
+    float used=[user.ctUsed longLongValue]; //  实际使用的流量 单位：byte
     float persent;
-    float count=totalm-used/1024.0/1024.0;
+    float count=totalm-used/1024.0/1024.0; //剩余的流量 单位：MB
     NSString*str=nil;
     if(used==0)
     {
-        [self.MBdataLabel setHidden:YES];
-        [self.MBLabel setHidden:YES];
-        [self.saveDataLabel setHidden:YES];
-        [self.saveImageView setHidden:YES];
+        [self.MBdataLabel setHidden:YES];//节省的数字
+        [self.MBLabel setHidden:YES]; //数字后面的MB & GB
+        [self.saveDataLabel setHidden:YES]; //本月已节省
+        [self.saveImageView setHidden:YES]; //小猪的图片
     }
     if(totalm==0)
     {
@@ -175,9 +178,12 @@
         }
     }
     else {
-        float currentCapacity = [UserSettings currentCapacity];
+        float currentCapacity = [UserSettings currentCapacity]; //套用户的 压缩流量 限额
+        
         NSLog(@"currentCapacity=%f", currentCapacity);
-        if ( currentCapacity == 0 ) {
+        
+        if ( currentCapacity == 0 ) { // 用户第一次启动的时候 没有压缩流量限额 引导用户安装配置文件
+            
             [self showSetupView];
             
             // [self showDatasaveView:NO];

@@ -271,6 +271,34 @@
 }
 
 
+- (DeviceInfo*) getDeviceInfo
+{
+    DeviceInfo* deviceInfo = [TwitterClient getRegisteredDevice];
+    if ( deviceInfo ) {
+        user.capacity = [deviceInfo.quantity floatValue];
+        user.status = [deviceInfo.status intValue];
+        
+        if ( connType == CELL_2G || connType == CELL_3G || connType == CELL_4G ) {
+            int proxyFlag = [deviceInfo.proxyflag intValue];
+            if ( proxyFlag ) {
+                //安装了profile
+                user.proxyFlag = INSTALL_FLAG_YES;
+            }
+            else {
+                //没有安装profile
+                user.proxyFlag = INSTALL_FLAG_NO;
+            }
+        }
+    }
+    else {
+        user.capacity = QUANTITY_INIT;
+        user.status = STATUS_NEW;
+    }
+    //user.proxyFlag = INSTALL_FLAG_NO;
+    
+    return deviceInfo;
+}
+
 #pragma mark - application delegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -313,8 +341,10 @@
         }
     }
     
+    //初始化user类，单例
     self.user = [UserSettings currentUserSettings];
     
+    //sim 卡信息
     CTTelephonyNetworkInfo* tni = [[CTTelephonyNetworkInfo alloc] init];
     self.carrier = tni.subscriberCellularProvider;
     [tni release];
@@ -344,8 +374,9 @@
     //初始化微信SDK
     [WXApi registerApp:@"wx0d70d827b4ee5ad2"];
     
-    
+    //显示程序开启页面 ， 提示安装描述文件，和欢迎界面都在这里面设置的
     [self showSetupView];
+    
     [self.window makeKeyAndVisible];
     
     if ( connType == CELL_2G || connType == CELL_3G || connType == CELL_4G || connType == WIFI || connType == ETHERNET ) {
@@ -381,38 +412,39 @@
     refreshThread = [[NSThread alloc] initWithTarget:self selector:@selector(runRefresh:) object:nil];
     [refreshThread start];
     
-    
-    
-    
     return YES;
 }
 
-- (DeviceInfo*) getDeviceInfo
+- (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    DeviceInfo* deviceInfo = [TwitterClient getRegisteredDevice];
-    if ( deviceInfo ) {
-        user.capacity = [deviceInfo.quantity floatValue];
-        user.status = [deviceInfo.status intValue];
-        
-        if ( connType == CELL_2G || connType == CELL_3G || connType == CELL_4G ) {
-            int proxyFlag = [deviceInfo.proxyflag intValue];
-            if ( proxyFlag ) {
-                //安装了profile
-                user.proxyFlag = INSTALL_FLAG_YES;
-            }
-            else {
-                //没有安装profile
-                user.proxyFlag = INSTALL_FLAG_NO;
-            }
-        }
+    /*
+     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+     */
+    //    [TCUtils readIfData:-1];
+    //    [TwitterClient getStatsData];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+    UIViewController* controller = [self currentViewController];
+    if ( [controller isKindOfClass:[FlowJiaoZhunViewController class]] ) {
+        FlowJiaoZhunViewController* flowJiaoZhunViewController = (FlowJiaoZhunViewController*) controller;
+        [flowJiaoZhunViewController  loadDingWei];
     }
-    else {
-        user.capacity = QUANTITY_INIT;
-        user.status = STATUS_NEW;
+    if ( [controller isKindOfClass:[SetingViewController class]] ) {
+        SetingViewController* setingViewController = (SetingViewController*) controller;
+        [setingViewController.setTableView reloadData];
     }
-    //user.proxyFlag = INSTALL_FLAG_NO;
     
-    return deviceInfo;
+    NSLog(@"++++++++++++++applicationDidBecomeActive");
+    float currentCapacity = [UserSettings currentCapacity];
+    if ( currentCapacity > 0 ) {
+        [self incrDayCapacity];
+        
+        //访问getMemberInfo接口
+        [self getMemberInfo];
+    }
+    // [self timerTask];
+    /*if ( !timer || !timer.isValid ) {
+     [self performSelector:@selector(startTimer) withObject:nil afterDelay:60];
+     }*/
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
@@ -1092,37 +1124,6 @@
     hud.labelText = @"加载失败,请检查网络状况";
     //hud.detailsLabelText = @"";
     [self hideLockView];
-}
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    /*
-     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-     */
-//    [TCUtils readIfData:-1];
-//    [TwitterClient getStatsData];
-    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
-    UIViewController* controller = [self currentViewController];
-    if ( [controller isKindOfClass:[FlowJiaoZhunViewController class]] ) {
-        FlowJiaoZhunViewController* flowJiaoZhunViewController = (FlowJiaoZhunViewController*) controller;
-        [flowJiaoZhunViewController  loadDingWei];
-    }
-    if ( [controller isKindOfClass:[SetingViewController class]] ) {
-        SetingViewController* setingViewController = (SetingViewController*) controller;
-        [setingViewController.setTableView reloadData];
-    }
-
-    NSLog(@"++++++++++++++applicationDidBecomeActive");
-    float currentCapacity = [UserSettings currentCapacity];
-    if ( currentCapacity > 0 ) {
-        [self incrDayCapacity];
-        
-        //访问getMemberInfo接口
-        [self getMemberInfo];
-    }
-   // [self timerTask];
-    /*if ( !timer || !timer.isValid ) {
-     [self performSelector:@selector(startTimer) withObject:nil afterDelay:60];
-     }*/
 }
 
 @end
