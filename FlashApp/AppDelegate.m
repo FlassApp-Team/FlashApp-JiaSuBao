@@ -239,19 +239,53 @@
 }
 
 
+- (void) showDatasaveView:(BOOL)justInstallProfile
+{
+    //       time_t now;
+    //    time(&now);
+    //    time_t peroid[2];
+    //    [TCUtils getPeriodOfTcMonth:peroid time:now];
+    ViewController *viewController =  [[[ViewController alloc]init] autorelease];
+    self.navController=[[[UINavigationController alloc]initWithRootViewController:viewController] autorelease];
+    self.window.rootViewController = self.navController;
+    
+}
+
+
+- (void) showSetupView
+{
+    LaunchViewController *lanuchController =  [[[LaunchViewController alloc]init] autorelease];
+    if(self.navController==nil)
+    {
+        self.navController=[[[UINavigationController alloc]initWithRootViewController:lanuchController] autorelease];
+    }
+    DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
+    float version = [device.version floatValue];
+    if ( version >= 4.0 ) {
+        self.window.rootViewController =  self.navController;
+        
+    }
+    else {
+        [self.window addSubview: self.navController.view];
+    }
+}
+
+
+#pragma mark - application delegate
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     timerTaskLock = [[NSObject alloc] init];
     timerTaskDoing = false;
     
     refreshingLock = [[NSLock alloc] init];
-
+    
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-
-
+    
+    
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
     [WXApi registerApp:@"wxd1be1f55db841585"];
-
+    
     
     BOOL versionUpgrade = NO;
     NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
@@ -278,7 +312,7 @@
             }
         }
     }
-
+    
     self.user = [UserSettings currentUserSettings];
     
     CTTelephonyNetworkInfo* tni = [[CTTelephonyNetworkInfo alloc] init];
@@ -347,7 +381,7 @@
     refreshThread = [[NSThread alloc] initWithTarget:self selector:@selector(runRefresh:) object:nil];
     [refreshThread start];
     
-
+    
     
     
     return YES;
@@ -380,42 +414,6 @@
     
     return deviceInfo;
 }
-
-
-#pragma mark - application delegate
-
-
-- (void) showDatasaveView:(BOOL)justInstallProfile
-{
-//       time_t now;
-//    time(&now);
-//    time_t peroid[2];
-//    [TCUtils getPeriodOfTcMonth:peroid time:now];
-    ViewController *viewController =  [[[ViewController alloc]init] autorelease];
-    self.navController=[[[UINavigationController alloc]initWithRootViewController:viewController] autorelease];
-    self.window.rootViewController = self.navController;
-
-}
-
-
-- (void) showSetupView
-{
-    LaunchViewController *lanuchController =  [[[LaunchViewController alloc]init] autorelease];
-    if(self.navController==nil)
-    {
-        self.navController=[[[UINavigationController alloc]initWithRootViewController:lanuchController] autorelease];
-    }
-    DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
-    float version = [device.version floatValue];
-    if ( version >= 4.0 ) {
-        self.window.rootViewController =  self.navController;
-
-    }
-    else {
-        [self.window addSubview: self.navController.view];
-    }
-}
-
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
