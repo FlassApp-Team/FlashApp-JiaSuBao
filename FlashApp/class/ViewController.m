@@ -22,6 +22,7 @@
 #import "UserAgentLockDAO.h"
 #import "NoLoginViewController.h"
 #import "DateUtils.h"
+#import "VPNHelpViewController.h"
 #define PageCount 2
 #define PageAllCount 2
 
@@ -121,8 +122,7 @@
 {
     [super viewDidLoad];
     
-    
-    
+    [self pdVpnAndWifiOrSome];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     [self.navigationController setNavigationBarHidden:YES ];
@@ -226,6 +226,7 @@
 {
     [self getAccessData:NO];
 }
+
 
 
 - (void) didGetAccessData:(TwitterClient*)client obj:(NSObject*)obj
@@ -579,10 +580,48 @@
         [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请连接网络"];
         return;
     }
+    
+    [self pdVpnAndWifiOrSome];
+    
+    
     [[AppDelegate getAppDelegate ]timerTask];
     [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
 
 }
+
+/*
+ *判断在wifi下 或者在 3G下 VPN 是否开启关闭
+ *
+ */
+-(void)pdVpnAndWifiOrSome
+{
+    ConnectionType type = [UIDevice connectionType];
+    if (type==WIFI && [AppDelegate pdVpnIsOpenOrClose]) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您关闭VPN" message:@"系统检测到您正在WIFI环境下，请您关闭VPN，获得更好的网络体验！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 关闭 VPN", nil];
+        alertView.tag = 1111;
+        [alertView show];
+        [alertView release];
+    }
+    
+    if (type ==CELL_2G  && ![AppDelegate pdVpnIsOpenOrClose] ) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您开启VPN" message:@"系统检测到您正在2G/3G环境下，请您开启VPN，获得更好的网络体验！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 开启 VPN", nil];
+        alertView.tag = 1112;
+        [alertView show];
+        [alertView release];
+    }
+
+}
+
+#pragma mark - UIAlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
+        [self.navigationController pushViewController:vpnHelp animated:YES];
+        [vpnHelp release];
+    }
+}
+
 -(void)selectFinish:(NSString*)str title:(NSString*)title
 {
     UIImage *image=[UIImage imageNamed:str];

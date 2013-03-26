@@ -11,6 +11,7 @@
 @interface StarLastViewController : UIViewController
 @property(nonatomic,retain)FeedbackViewController*feedbackViewController;
 @property(nonatomic,retain)IBOutlet UIButton *feedBackBtn;
+@property(nonatomic ,retain)IBOutlet UIView *bgView;
 -(IBAction)turnBtnPress:(id)sender;
 -(IBAction)feedBackBtnPress:(id)sender;
 -(IBAction)againBtnPress:(id)sender;

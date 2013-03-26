@@ -29,6 +29,7 @@
 #import "AppInfo.h"
 #import "OpenUDID.h"
 #import "MBProgressHUD.h"
+#import "GetAddress.h"
 #define APPID 606803214//addd jianfei han
 
 @implementation AppDelegate
@@ -61,6 +62,34 @@
     [super dealloc];
 }
 
++ (void) installProfile:(NSString *)nextPage idc:(NSString*)idcCode
+{
+    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
+    NSString* apn = [userDefault objectForKey:@"apnName"];
+    
+    NSString* url = [AppDelegate getInstallURL:nextPage install:YES apn:apn idc:idcCode];
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+}
+
+/*
+ *安装apn
+ */
++ (void) installProfile:(NSString *)nextPage apn:(NSString*)apn
+{
+    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
+    if ( apn && [apn length] > 0 ) {
+        [userDefault setObject:apn forKey:@"apnName"];
+    }
+    else {
+        [userDefault removeObjectForKey:@"apnName"];
+    }
+    [userDefault synchronize];
+    
+    NSString* url = [AppDelegate getInstallURL:nextPage install:YES apn:apn idc:nil];
+    NSLog(@"url=%@", url);
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+}
+
 + (NSString*) getInstallURL:(NSString*)nextPage install:(BOOL)isInstall apn:(NSString*)apn idc:(NSString*)idcCode
 {
     DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
@@ -78,25 +107,37 @@
     NSMutableString* url=nil;
     if(user.nickname)
     {
-         url= [NSMutableString stringWithFormat:@"http://%@/install?_method=profile&deviceId=%@&name=%@&platform=%@&osversion=%@&connType=%@&carrier=%@&mcc=%@&mnc=%@&install=%d&apn=%@&appid=%d&chl=%@&rd=%d&code=%@&ver=%@%@&username=%@&deviceToken=%@", P_HOST, device.deviceId, [device.hardware encodeAsURIComponent], [device.platform encodeAsURIComponent], [device.version encodeAsURIComponent], type,
-                                carrier ? [carrier.carrierName encodeAsURIComponent] : @"",
-                                carrier ? carrier.mobileCountryCode : @"",
-                                carrier ? carrier.mobileNetworkCode : @"",
-                                isInstall ? 1 : 0,
-                                apn && [apn length] > 0 ? [apn encodeAsURIComponent] : @"",2,CHANNEL, rd, code, API_VER,
-                                idcCode ? [NSString stringWithFormat:@"&area=%@", idcCode] : @"",[user.nickname encodeAsURIComponent],deviceToken ];
-
+        url= [NSMutableString stringWithFormat:@"http://%@/install?_method=profile&deviceId=%@&name=%@&platform=%@&osversion=%@&connType=%@&carrier=%@&mcc=%@&mnc=%@&install=%d&apn=%@&appid=%d&chl=%@&rd=%d&code=%@&ver=%@%@&username=%@&deviceToken=%@", P_HOST, device.deviceId, [device.hardware encodeAsURIComponent], [device.platform encodeAsURIComponent], [device.version encodeAsURIComponent], type,
+              carrier ? [carrier.carrierName encodeAsURIComponent] : @"",
+              carrier ? carrier.mobileCountryCode : @"",
+              carrier ? carrier.mobileNetworkCode : @"",
+              isInstall ? 1 : 0,
+              apn && [apn length] > 0 ? [apn encodeAsURIComponent] : @"",2,CHANNEL, rd, code, API_VER,
+              idcCode ? [NSString stringWithFormat:@"&area=%@", idcCode] : @"",[user.nickname encodeAsURIComponent],deviceToken ];
+        
     }
     else
     {
-         url = [NSMutableString stringWithFormat:@"http://%@/install?_method=profile&deviceId=%@&name=%@&platform=%@&osversion=%@&connType=%@&carrier=%@&mcc=%@&mnc=%@&install=%d&apn=%@&appid=%d&chl=%@&rd=%d&code=%@&ver=%@%@&deviceToken=%@", P_HOST, device.deviceId, [device.hardware encodeAsURIComponent], [device.platform encodeAsURIComponent], [device.version encodeAsURIComponent], type,
-                                carrier ? [carrier.carrierName encodeAsURIComponent] : @"",
-                                carrier ? carrier.mobileCountryCode : @"",
-                                carrier ? carrier.mobileNetworkCode : @"",
-                                isInstall ? 1 : 0,
-                                apn && [apn length] > 0 ? [apn encodeAsURIComponent] : @"",2,CHANNEL, rd, code, API_VER,
-                                idcCode ? [NSString stringWithFormat:@"&area=%@", idcCode] : @"",deviceToken ];
-
+        url = [NSMutableString stringWithFormat:@"http://%@/install?_method=profile&deviceId=%@&name=%@&platform=%@&osversion=%@&connType=%@&carrier=%@&mcc=%@&mnc=%@&install=%d&apn=%@&appid=%d&chl=%@&rd=%d&code=%@&ver=%@%@&deviceToken=%@",
+               P_HOST,
+               device.deviceId,
+               [device.hardware encodeAsURIComponent],
+               [device.platform encodeAsURIComponent],
+               [device.version encodeAsURIComponent],
+               type,
+               carrier ? [carrier.carrierName encodeAsURIComponent] : @"",
+               carrier ? carrier.mobileCountryCode : @"",
+               carrier ? carrier.mobileNetworkCode : @"",
+               isInstall ? 1 : 0,
+               apn && [apn length] > 0 ? [apn encodeAsURIComponent] : @"",
+               2,
+               CHANNEL,
+               rd,
+               code,
+               API_VER,
+               idcCode ? [NSString stringWithFormat:@"&area=%@", idcCode] : @"",
+               deviceToken ];
+        
     }
     if ( nextPage && [nextPage length] > 0 )
     {
@@ -106,49 +147,101 @@
     return url;
 }
 
-
-+ (void) installProfile:(NSString *)nextPage idc:(NSString*)idcCode
+/*
+ *安装vpn
+ */
++ (void) installProfile:(NSString *)nextPage vpn:(NSString*)vpn
 {
     NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
-    NSString* apn = [userDefault objectForKey:@"apnName"];
-    
-    NSString* url = [AppDelegate getInstallURL:nextPage install:YES apn:apn idc:idcCode];
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-}
-
-
-+ (void) installProfile:(NSString *)nextPage apn:(NSString*)apn
-{
-    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
-    if ( apn && [apn length] > 0 ) {
-        [userDefault setObject:apn forKey:@"apnName"];
+    if ( vpn && [vpn length] > 0 ) {
+        [userDefault setObject:vpn forKey:@"vpnName"];
     }
     else {
-        [userDefault removeObjectForKey:@"apnName"];
+        [userDefault removeObjectForKey:@"vpnName"];
     }
     [userDefault synchronize];
     
-    NSString* url = [AppDelegate getInstallURL:nextPage install:YES apn:apn idc:nil];
+    NSString* url = [AppDelegate getInstallURL:nextPage install:YES vpn:vpn idc:nil];
     NSLog(@"url=%@", url);
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 
++ (NSString*) getInstallURL:(NSString*)nextPage install:(BOOL)isInstall vpn:(NSString*)apn idc:(NSString*)idcCode
+{
+    DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
+    NSString* type = [UIDevice connectionTypeString];
+    NSString* deviceToken =  [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
+    CTTelephonyNetworkInfo* tni = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier* carrier = tni.subscriberCellularProvider;
+    [tni release];
+    
+    int rd = ((double) rand() / RAND_MAX) * 10000; //随机数
+    
+    NSString* deviceId = [OpenUDID value];
+    NSString* code = [[NSString stringWithFormat:@"%@%@%@%d", deviceId, CHANNEL, API_KEY, rd] md5HexDigest];
+    //add jianfei han
+    UserSettings* user = [AppDelegate getAppDelegate].user;
+    NSMutableString* url=nil;
+    if(user.nickname)
+    {
+        url= [NSMutableString stringWithFormat:@"http://%@/vpnn?_method=profile&deviceId=%@&name=%@&platform=%@&osversion=%@&connType=%@&carrier=%@&mcc=%@&mnc=%@&install=%d&apn=%@&appid=%d&chl=%@&rd=%d&code=%@&ver=%@%@&username=%@&deviceToken=%@", P_HOST, device.deviceId, [device.hardware encodeAsURIComponent], [device.platform encodeAsURIComponent], [device.version encodeAsURIComponent], type,
+              carrier ? [carrier.carrierName encodeAsURIComponent] : @"",
+              carrier ? carrier.mobileCountryCode : @"",
+              carrier ? carrier.mobileNetworkCode : @"",
+              isInstall ? 1 : 0,
+              apn && [apn length] > 0 ? [apn encodeAsURIComponent] : @"",2,CHANNEL, rd, code, API_VER,
+              idcCode ? [NSString stringWithFormat:@"&area=%@", idcCode] : @"",[user.nickname encodeAsURIComponent],deviceToken ];
+        
+    }
+    else
+    {
+        url = [NSMutableString stringWithFormat:@"http://%@/vpnn?_method=profile&deviceId=%@&name=%@&platform=%@&osversion=%@&connType=%@&carrier=%@&mcc=%@&mnc=%@&install=%d&apn=%@&appid=%d&chl=%@&rd=%d&code=%@&ver=%@%@&deviceToken=%@", P_HOST, device.deviceId, [device.hardware encodeAsURIComponent], [device.platform encodeAsURIComponent], [device.version encodeAsURIComponent], type,
+               carrier ? [carrier.carrierName encodeAsURIComponent] : @"",
+               carrier ? carrier.mobileCountryCode : @"",
+               carrier ? carrier.mobileNetworkCode : @"",
+               isInstall ? 1 : 0,
+               apn && [apn length] > 0 ? [apn encodeAsURIComponent] : @"",2,CHANNEL, rd, code, API_VER,
+               idcCode ? [NSString stringWithFormat:@"&area=%@", idcCode] : @"",deviceToken ];
+        
+    }
+    if ( nextPage && [nextPage length] > 0 )
+    {
+        [url appendFormat:@"&nextPage=%@", [nextPage encodeAsURIComponent]];
+    }
+    
+    return url;
+}
 
 + (void) installProfile:(NSString*)nextPage
 {
     NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
-    NSString* apn = [userDefault objectForKey:@"apnName"];
     
-    [self installProfile:nextPage apn:apn];
+    if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+        NSString *vpn = [userDefault objectForKey:@"vpnName"];
+        [self installProfile:nextPage vpn:vpn];
+    }
+    else{
+        NSString* apn = [userDefault objectForKey:@"apnName"];
+        [self installProfile:nextPage apn:apn];
+    }
 }
 
 
 + (void) uninstallProfile:(NSString*)nextPage
 {
     NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
-    NSString* apn = [userDefault objectForKey:@"apnName"];
     
-    NSString* url = [AppDelegate getInstallURL:nextPage install:NO apn:apn idc:nil];
+    NSString *url ;
+    
+    if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+        NSString *vpn = [userDefault objectForKey:@"vpnName"];
+        url = [AppDelegate getInstallURL:nextPage install:NO vpn:vpn idc:nil];
+    }
+    else{
+        NSString* apn = [userDefault objectForKey:@"apnName"];
+        url = [AppDelegate getInstallURL:nextPage install:NO apn:apn idc:nil];
+    }
+   
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
     
     //    InstallProfileViewController* controller = [[InstallProfileViewController alloc] init];
@@ -299,6 +392,19 @@
     return deviceInfo;
 }
 
+/*
+ *通知网络状态发生改变的时候进入的方法
+ *
+ */
+//- (void)reachabilityWillChanged:(NSNotification *)note {
+//    
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络状态改变"
+//                                                    message:@"您的网络状态发生改变。"
+//                                                   delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//    [alert show];
+//    [alert release];
+//}
+
 #pragma mark - application delegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -359,6 +465,7 @@
     self.refreshDatasave = NO;
     
     self.networkReachablity = [Reachability reachabilityWithHostName:P_HOST];
+    [self.networkReachablity startNotifier];
     
     connType = [UIDevice connectionType];
     /*DeviceInfo* deviceInfo = nil;
@@ -409,6 +516,10 @@
         //[self performSelectorOnMainThread:@selector(processRemoteNotification:) withObject:userInfo waitUntilDone:NO];
     }
     
+
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityWillChanged:)
+//                                                 name:kReachabilityChangedNotification object:nil];
+    
     refreshThread = [[NSThread alloc] initWithTarget:self selector:@selector(runRefresh:) object:nil];
     [refreshThread start];
     
@@ -445,6 +556,37 @@
     /*if ( !timer || !timer.isValid ) {
      [self performSelector:@selector(startTimer) withObject:nil afterDelay:60];
      }*/
+
+}
+
+/*
+ *判断VPN是开启还是关闭
+ *return YES 开启 ， return NO 关闭； 
+ */
++(BOOL)pdVpnIsOpenOrClose
+{
+    GetAddress* ga = [[GetAddress alloc] init];
+    BOOL vpnStarted = NO;
+    [ga getIPAddress];
+    NSArray* ipNames = ga.ipNames;
+    NSArray* ifNames = ga.ifNames;
+    int len = [ipNames count];
+    NSString* ifName;
+    NSString* ipName;
+    for ( int i=0; i<len; i++ ) {
+        ifName = [ifNames objectAtIndex:i];
+        ipName = [ipNames objectAtIndex:i];
+        NSRange r = [ifName rangeOfString:@"utun"];
+        if ( r.location == NSNotFound ) {
+            continue;
+        }
+        else {
+            vpnStarted  = YES;
+            break;
+        }
+    }
+    [ga release];
+    return vpnStarted;
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url

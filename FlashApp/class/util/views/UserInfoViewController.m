@@ -65,9 +65,7 @@
 //    return userInfoViewController;
 //}
 -(void)viewWillAppear:(BOOL)animated
-{
-
-    
+{    
     [super viewWillAppear:YES];
 }
 
@@ -131,19 +129,20 @@
     else if(currentStage<=6){
         self.levelImageView.image=[UIImage imageNamed:@"level_icon7"];
     }
-
     
     CGSize mbDataFrame = [self.nameLabel.text sizeWithFont:self.nameLabel.font constrainedToSize:CGSizeMake(320, 999) lineBreakMode:UILineBreakModeWordWrap];
+    
     self.nameLabel.frame =CGRectMake(self.nameLabel.frame.origin.x,self.nameLabel.frame.origin.y,mbDataFrame.width,self.nameLabel.frame.size.height);
+    
     self.nameLineImageView.frame=CGRectMake(self.nameLineImageView.frame.origin.x,self.nameLineImageView.frame.origin.y,mbDataFrame.width+15,self.nameLineImageView.frame.size.height);
+    
     self.levelImageView.frame=CGRectMake(self.nameLabel.frame.origin.x+self.nameLabel.frame.size.width+2,self.levelImageView.frame.origin.y,self.levelImageView.frame.size.width,self.levelImageView.frame.size.height);
     
     CGSize feiBiDataFrame = [self.levelOrFeiBiLabel.text sizeWithFont:self.levelOrFeiBiLabel.font constrainedToSize:CGSizeMake(320, 999) lineBreakMode:UILineBreakModeWordWrap];
+    
     self.levelOrFeiBiLabel.frame =CGRectMake(self.levelOrFeiBiLabel.frame.origin.x,self.levelOrFeiBiLabel.frame.origin.y,feiBiDataFrame.width,self.levelOrFeiBiLabel.frame.size.height);
+    
     self.feibiLineImageView.frame=CGRectMake(self.feibiLineImageView.frame.origin.x,self.feibiLineImageView.frame.origin.y,feiBiDataFrame.width+self.feibiImageView.frame.size.width,self.feibiLineImageView.frame.size.height);
-
-    
-    
 }
 
 -(void)logined

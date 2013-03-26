@@ -38,6 +38,9 @@
     UIImage* img=[UIImage imageNamed:@"opaque_small.png"];
     img=[img stretchableImageWithLeftCapWidth:7 topCapHeight:8];
     [self.feedBackBtn setBackgroundImage:img forState:UIControlStateNormal];
+    if (iPhone5) {
+        self.bgView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    }
     // Do any additional setup after loading the view from its nib.
 }
 -(IBAction)turnBtnPress:(id)sender

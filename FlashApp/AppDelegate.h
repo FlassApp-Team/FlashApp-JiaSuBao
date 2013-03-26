@@ -53,9 +53,11 @@
 #define TCChangedNotification @"TCChangedNotification"
 #define RefreshAppLockedNotification @"refreshAppLockedNotification"
 #define RefreshLoginNotification @"refreshLoginNotification"
+
 #define CHANNEL @"appstore"
 
 //#define CHANNEL @"91_market"
+//#define CHANNEL @"weiphone_market"
 //#define CHANNEL @"jasubao_market"
 //#define CHANNEL @"tongbutui_market"
 //#define CHANNEL @"163_market"
@@ -64,6 +66,9 @@
 //#define CHANNEL @"souhu_market"
 //#define CHANNEL @"pp_market"
 //#define CHANNEL @"kuaiyong_market"
+//#define CHANNEL @"xianmian_market"
+//#define CHANNEL @"gaoqu_market"
+//#define CHANNEL @"liqu_market"
 
 #define DES_KEY @"flashapp12345678ppahsalf"
 
@@ -113,6 +118,7 @@
 @property(nonatomic,retain) UINavigationController *navController;
 @property (nonatomic, retain) Reachability* networkReachablity;
 
+
 + (time_t) getLastAccessLogTime;
 +(void)setLabelFrame:(UILabel *)label1 label2:(UILabel*)label2;
 - (void) timerTask;
@@ -134,6 +140,7 @@
 + (void) showUserReviews;
 + (void) installProfile:(NSString *)nextPage idc:(NSString*)idcCode;
 + (void) installProfile:(NSString *)nextPage apn:(NSString*)apn;
++ (void) installProfile:(NSString *)nextPage vpn:(NSString*)vpn;
 + (void) installProfile:(NSString*)nextPage;
 + (void) uninstallProfile:(NSString*)nextPage;
 - (void) startLocationManager;
@@ -144,4 +151,5 @@
 - (void) showSetupView;
 - (BOOL) proxyServerSlow;
 - (NSString*) appInfoToJSONString:(NSDictionary*)currentApps;
++(BOOL)pdVpnIsOpenOrClose;
 @end

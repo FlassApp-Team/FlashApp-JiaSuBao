@@ -98,8 +98,12 @@ self.golingMessLabel=nil;
     }
     else
     {
-        [AppDelegate installProfile:nil apn:nil];
-
+        if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+            [AppDelegate installProfile:nil vpn:nil];
+        }
+        else{
+            [AppDelegate installProfile:nil apn:nil];
+        }
     }
 }
 -(void)judegServerOpen
@@ -116,25 +120,13 @@ self.golingMessLabel=nil;
     
     if ( type ==WIFI )
     {
+        [self.normalView setHidden:YES];
+        [self.warningView setHidden:YES];
+        [self.wigiView setHidden:NO];
+        self.wigiTitleLabel.text=@"WIFI测速";
+        self.wifiLabel.text=@"当前WIFI下,暂停压缩加速服务,点击测速.";
 
-//        if ( user.proxyFlag == INSTALL_FLAG_NO )
-//        {
-//            [self.normalView setHidden:YES];
-//            [self.wigiView setHidden:YES];
-//            [self.warningView setHidden:NO];
-//            self.warningLabel.text=@"压缩服务未启用点击启用";
-//           // self.controller=[NSNull null];
-//        }
-//        else
-//        {
-            [self.normalView setHidden:YES];
-            [self.warningView setHidden:YES];
-            [self.wigiView setHidden:NO];
-            self.wigiTitleLabel.text=@"WIFI测速";
-            self.wifiLabel.text=@"当前WIFI下,暂停压缩加速服务,点击测速.";
-
-            self.flag=101;
-       // }
+        self.flag=101;
     }
     else if(type!=NONE)
     {

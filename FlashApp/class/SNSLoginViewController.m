@@ -137,7 +137,6 @@
         [dic setObject:nickname forKey:@"nickname"];
         [dic setObject:capacity forKey:@"curentNum"];
 
-
         [TwitterClient doLogin:dic];
         return NO;
     }
@@ -145,6 +144,7 @@
         return YES;
     }
 }
+
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
 
@@ -154,7 +154,6 @@
     [UserSettings saveUserSettings:user];
     [[NSNotificationCenter defaultCenter] postNotificationName:RefreshLoginNotification object:nil];
     [self performSelector:@selector(afterLogin) withObject:nil];
-
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request
@@ -163,7 +162,6 @@
     NSError *error = [request error];
     NSLog(@"error=====%@",error);
     [self performSelector:@selector(afterLogin) withObject:nil];
-
 }
 
 - (void) afterLogin

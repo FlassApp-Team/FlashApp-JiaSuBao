@@ -833,6 +833,7 @@
     else {
         self.errorMessage = @"现在您的网络无法使用，访问网络失败";
         self.errorDetail  = [error localizedDescription];
+        [[AppDelegate getAppDelegate] hideLockView];
         [delegate performSelector:action withObject:self withObject:nil];
     }
     [self autorelease];

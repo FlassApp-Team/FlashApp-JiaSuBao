@@ -414,7 +414,7 @@
 #pragma mark : 查询没有锁网的应用
 - (void) getAccessData
 {
-    [TCUtils readIfData:-1];
+//    [TCUtils readIfData:-1];
     
     [[AppDelegate getAppDelegate] showLockView:@"正在更新数据..."];
     
@@ -430,25 +430,38 @@
     }
     
     //？？
-    if ( ![[AppDelegate getAppDelegate].refreshingLock tryLock] ) {
-        // [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
-        return;
-    }
+//    if ( ![[AppDelegate getAppDelegate].refreshingLock tryLock] ) {
+//        // [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
+//        return;
+//    }
     
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     time_t lastDayLong = [AppDelegate getLastAccessLogTime];
+    
+    UserSettings* user = [AppDelegate getAppDelegate].user;
+    
+    DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
+    
+    NSString* platform = device.platform;
+    
+    NSNumber* number = [[NSUserDefaults standardUserDefaults] objectForKey:ACCESS_LOG_LAST_TIME];
+
+    NSString* lastDayString = [DateUtils stringWithDateFormat:lastDayLong format:@"yyyy-MM-dd"];
+    
+    NSString* url = [NSString stringWithFormat:@"http://%@/api/%@.json?accessTime=%@&host=%@&port=%d&platform=%@&cpi=%lld", user.idcServer, API_LOG_LOG, lastDayString, user.proxyServer, user.proxyPort, [platform encodeAsURIComponent], number?[number longLongValue]:0];
+    
     twitterClient = [[TwitterClient alloc] initWithTarget:self action:@selector(didGetAccessData:obj:)];
-    twitterClient.context = [NSNumber numberWithLong:lastDayLong];
-    [twitterClient getAccessData];
+    url = [TwitterClient composeURLVerifyCode:url];
+    [twitterClient get:url];
+
 }
 
 - (void) didGetAccessData:(TwitterClient*)client obj:(NSObject*)obj
 {
+    twitterClient = nil;
     
     [[AppDelegate getAppDelegate] hideLockView];
-    
-    twitterClient = nil;
     
     NSNumber* num = client.context;
     time_t t = [num longValue];

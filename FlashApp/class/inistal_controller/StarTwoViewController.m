@@ -65,7 +65,16 @@
 {
     
     [self activtyStar];
-    [AppDelegate installProfile:nil apn:nil];
+    
+    /*
+     *判断市场，如果是app Store 那么就叫用户安装VPN
+     */
+    if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+        [AppDelegate installProfile:nil vpn:nil];
+    }else{
+        [AppDelegate installProfile:nil apn:nil];
+    }
+    
     
 
 

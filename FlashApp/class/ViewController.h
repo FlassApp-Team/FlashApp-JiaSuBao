@@ -28,7 +28,7 @@ typedef enum {
 -(void)selectFinish:(NSString*)str title:(NSString*)title;
 
 @end
-@interface ViewController : UIViewController<UIScrollViewDelegate,ViewControllerDelegate>
+@interface ViewController : UIViewController<UIScrollViewDelegate,ViewControllerDelegate,UIAlertViewDelegate>
 {
     BOOL islogin;
     BOOL justLoaded;

@@ -537,9 +537,21 @@
 		B1E9ECBD16895462006DD353 /* FeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1E9ECBB1689545C006DD353 /* FeedbackViewController.xib */; };
 		B1F980C116E5AED10057261E /* LoadMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F980BF16E5AED10057261E /* LoadMoreViewController.m */; };
 		B1F980C216E5AED10057261E /* LoadMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1F980C016E5AED10057261E /* LoadMoreViewController.xib */; };
+		B3AAE85B1700794D00914E52 /* theme.css in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE8511700794D00914E52 /* theme.css */; };
+		B3AAE8631700794D00914E52 /* YDD.html in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE85A1700794D00914E52 /* YDD.html */; };
+		B3AAE86C17007CC100914E52 /* images1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE86517007CC100914E52 /* images1.jpg */; };
+		B3AAE86D17007CC100914E52 /* images2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE86617007CC100914E52 /* images2.jpg */; };
+		B3AAE86E17007CC100914E52 /* images3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE86717007CC100914E52 /* images3.jpg */; };
+		B3AAE86F17007CC100914E52 /* images4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE86817007CC100914E52 /* images4.jpg */; };
+		B3AAE87017007CC100914E52 /* images5.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE86917007CC100914E52 /* images5.png */; };
+		B3AAE87117007CC100914E52 /* images6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE86A17007CC100914E52 /* images6.jpg */; };
+		B3AAE87217007CC100914E52 /* images7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE86B17007CC100914E52 /* images7.jpg */; };
+		B3AAE875170082B100914E52 /* GetAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = B3AAE874170082B100914E52 /* GetAddress.m */; };
 		B3CD677616F9A5C600070417 /* LockNetWorkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3CD677516F9A5C600070417 /* LockNetWorkViewController.xib */; };
 		B3CD677816F9A64300070417 /* suowanganniu.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CD677716F9A64300070417 /* suowanganniu.png */; };
 		B3CD677A16F9A67900070417 /* jiesuoanniu.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CD677916F9A67900070417 /* jiesuoanniu.png */; };
+		B3EE05F6170040AD00452226 /* VPNHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3EE05F4170040AD00452226 /* VPNHelpViewController.m */; };
+		B3EE05F7170040AD00452226 /* VPNHelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3EE05F5170040AD00452226 /* VPNHelpViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1284,9 +1296,23 @@
 		B1F980BE16E5AED10057261E /* LoadMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMoreViewController.h; sourceTree = "<group>"; };
 		B1F980BF16E5AED10057261E /* LoadMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreViewController.m; sourceTree = "<group>"; };
 		B1F980C016E5AED10057261E /* LoadMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadMoreViewController.xib; sourceTree = "<group>"; };
+		B3AAE8511700794D00914E52 /* theme.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = theme.css; sourceTree = "<group>"; };
+		B3AAE85A1700794D00914E52 /* YDD.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = YDD.html; sourceTree = "<group>"; };
+		B3AAE86517007CC100914E52 /* images1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images1.jpg; sourceTree = "<group>"; };
+		B3AAE86617007CC100914E52 /* images2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images2.jpg; sourceTree = "<group>"; };
+		B3AAE86717007CC100914E52 /* images3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images3.jpg; sourceTree = "<group>"; };
+		B3AAE86817007CC100914E52 /* images4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images4.jpg; sourceTree = "<group>"; };
+		B3AAE86917007CC100914E52 /* images5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = images5.png; sourceTree = "<group>"; };
+		B3AAE86A17007CC100914E52 /* images6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images6.jpg; sourceTree = "<group>"; };
+		B3AAE86B17007CC100914E52 /* images7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images7.jpg; sourceTree = "<group>"; };
+		B3AAE873170082B100914E52 /* GetAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetAddress.h; sourceTree = "<group>"; };
+		B3AAE874170082B100914E52 /* GetAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetAddress.m; sourceTree = "<group>"; };
 		B3CD677516F9A5C600070417 /* LockNetWorkViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LockNetWorkViewController.xib; path = ../LockNetWorkViewController.xib; sourceTree = "<group>"; };
 		B3CD677716F9A64300070417 /* suowanganniu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = suowanganniu.png; sourceTree = "<group>"; };
 		B3CD677916F9A67900070417 /* jiesuoanniu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jiesuoanniu.png; sourceTree = "<group>"; };
+		B3EE05F3170040AD00452226 /* VPNHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VPNHelpViewController.h; sourceTree = "<group>"; };
+		B3EE05F4170040AD00452226 /* VPNHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VPNHelpViewController.m; sourceTree = "<group>"; };
+		B3EE05F5170040AD00452226 /* VPNHelpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VPNHelpViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1358,6 +1384,7 @@
 		B1143D551679A2790023B6F9 /* FlashApp */ = {
 			isa = PBXGroup;
 			children = (
+				B3AAE84F1700794D00914E52 /* profile */,
 				B1672D4D16A505330095889C /* image */,
 				B1143D5E1679A2790023B6F9 /* AppDelegate.h */,
 				B1143D5F1679A2790023B6F9 /* AppDelegate.m */,
@@ -1502,6 +1529,9 @@
 				B13253B916B9218300B917F9 /* AboutServiceViewController.h */,
 				B13253BA16B9218400B917F9 /* AboutServiceViewController.m */,
 				B13253BB16B9218400B917F9 /* AboutServiceViewController.xib */,
+				B3EE05F3170040AD00452226 /* VPNHelpViewController.h */,
+				B3EE05F4170040AD00452226 /* VPNHelpViewController.m */,
+				B3EE05F5170040AD00452226 /* VPNHelpViewController.xib */,
 			);
 			path = class;
 			sourceTree = "<group>";
@@ -2289,6 +2319,8 @@
 		B195CF251680529500EC5FB2 /* util */ = {
 			isa = PBXGroup;
 			children = (
+				B3AAE873170082B100914E52 /* GetAddress.h */,
+				B3AAE874170082B100914E52 /* GetAddress.m */,
 				B1672F1A16A553810095889C /* views */,
 				B1672F1716A543E90095889C /* QuartzUtils.c */,
 				B1672F1816A543E90095889C /* QuartzUtils.h */,
@@ -2312,6 +2344,38 @@
 				B13F450E1699117B001452DA /* Localizable.strings */,
 			);
 			path = util;
+			sourceTree = "<group>";
+		};
+		B3AAE84F1700794D00914E52 /* profile */ = {
+			isa = PBXGroup;
+			children = (
+				B3AAE86417007CC100914E52 /* images */,
+				B3AAE8501700794D00914E52 /* css */,
+				B3AAE85A1700794D00914E52 /* YDD.html */,
+			);
+			path = profile;
+			sourceTree = "<group>";
+		};
+		B3AAE8501700794D00914E52 /* css */ = {
+			isa = PBXGroup;
+			children = (
+				B3AAE8511700794D00914E52 /* theme.css */,
+			);
+			path = css;
+			sourceTree = "<group>";
+		};
+		B3AAE86417007CC100914E52 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				B3AAE86517007CC100914E52 /* images1.jpg */,
+				B3AAE86617007CC100914E52 /* images2.jpg */,
+				B3AAE86717007CC100914E52 /* images3.jpg */,
+				B3AAE86817007CC100914E52 /* images4.jpg */,
+				B3AAE86917007CC100914E52 /* images5.png */,
+				B3AAE86A17007CC100914E52 /* images6.jpg */,
+				B3AAE86B17007CC100914E52 /* images7.jpg */,
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2744,6 +2808,16 @@
 				B3CD677616F9A5C600070417 /* LockNetWorkViewController.xib in Resources */,
 				B3CD677816F9A64300070417 /* suowanganniu.png in Resources */,
 				B3CD677A16F9A67900070417 /* jiesuoanniu.png in Resources */,
+				B3EE05F7170040AD00452226 /* VPNHelpViewController.xib in Resources */,
+				B3AAE85B1700794D00914E52 /* theme.css in Resources */,
+				B3AAE8631700794D00914E52 /* YDD.html in Resources */,
+				B3AAE86C17007CC100914E52 /* images1.jpg in Resources */,
+				B3AAE86D17007CC100914E52 /* images2.jpg in Resources */,
+				B3AAE86E17007CC100914E52 /* images3.jpg in Resources */,
+				B3AAE86F17007CC100914E52 /* images4.jpg in Resources */,
+				B3AAE87017007CC100914E52 /* images5.png in Resources */,
+				B3AAE87117007CC100914E52 /* images6.jpg in Resources */,
+				B3AAE87217007CC100914E52 /* images7.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2892,6 +2966,8 @@
 				B13C60F716DC963F00EA43CC /* LevelCell.m in Sources */,
 				B1F980C116E5AED10057261E /* LoadMoreViewController.m in Sources */,
 				B1983C6016E5D62500FD28D0 /* SleepStyleViewController.m in Sources */,
+				B3EE05F6170040AD00452226 /* VPNHelpViewController.m in Sources */,
+				B3AAE875170082B100914E52 /* GetAddress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

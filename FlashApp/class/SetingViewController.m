@@ -21,6 +21,7 @@
 #import "AccountNumberViewController.h"
 #import "StarViewController.h"
 #import "AboutFlashViewController.h"
+#import "VPNHelpViewController.h"
 @interface SetingViewController ()
 
 @end
@@ -232,9 +233,6 @@
             }
           
             
-            
-       
-            
             [cell.contentView addSubview:turnBtn];
             [cell.contentView addSubview:turnLabe];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
@@ -245,8 +243,12 @@
             cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
             cell.textLabel. textColor=[UIColor darkGrayColor];
             cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-            cell.textLabel.text=@"  APN校准";
-
+            if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+                cell.textLabel.text = @"  VPN设置";
+            }
+            else{
+                cell.textLabel.text=@"  APN校准";
+            }
         }
         if([indexPath row]==2)
         {
@@ -281,38 +283,13 @@
                 [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_open.png"] forState:UIControlStateNormal];
                 turnLabe.text=@"开";
             }
-//            if([[UIApplication sharedApplication] enabledRemoteNotificationTypes]==UIRemoteNotificationTypeNone)
-//            {
-//                [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_close.png"] forState:UIControlStateNormal];
-//                turnLabe.text=@"关";
-//
-//            }
-//            else
-//            {
-//                [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_open.png"] forState:UIControlStateNormal];
-//                turnLabe.text=@"开";
-//
-//            }
-
 
             [turnBtn addTarget:self action:@selector(turnMessageBtnPress:) forControlEvents:UIControlEventTouchUpInside];
             [cell.contentView addSubview:turnBtn];
             [cell.contentView addSubview:turnLabe];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
-
-            
         }
         
-//        if([indexPath row]==4)
-//        {
-//            
-//            cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-//            cell.textLabel. textColor=[UIColor darkGrayColor];
-//            cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-//            cell.textLabel.text=@"  新手上路";
-//            
-//            
-//        }
         if([indexPath row]==4)
         {
             
@@ -322,6 +299,7 @@
             cell.textLabel.text=@"  常见问题";
             
         }
+        
         if([indexPath row]==5)
         {
             
@@ -331,6 +309,7 @@
             cell.textLabel.text=@"  软件评分";
             
         }
+        
         if([indexPath row]==6)
         {
             
@@ -340,6 +319,7 @@
             cell.textLabel.text=@"  检测更新";
             
         }
+        
         if([indexPath row]==7)
         {
             
@@ -349,6 +329,7 @@
             cell.textLabel.text=@"  关于加速宝";
             
         }
+        
         UIImageView *lineImageView=[[[UIImageView alloc]init] autorelease];
         lineImageView.frame=CGRectMake(0, cell.frame.size.height-1, 320, 1);
         lineImageView.image=[UIImage imageNamed:@"henxian.png"];
@@ -364,17 +345,17 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if([indexPath row]==1)
     {
-        APNViewController*apnJiaoZhunViewController=[[[APNViewController alloc]init] autorelease];
-        [self.navigationController pushViewController:apnJiaoZhunViewController animated:YES];
+        if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+            VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
+            [self.navigationController pushViewController:vpnHelp animated:YES];
+            [vpnHelp release];
+        }
+        else{
+            APNViewController*apnJiaoZhunViewController=[[APNViewController alloc]init];
+            [self.navigationController pushViewController:apnJiaoZhunViewController animated:YES];
+            [apnJiaoZhunViewController release];
+        }
     }
-
-    
-//    if([indexPath row]==4)//新手上路
-//    {
-//        StarViewController *starController=[StarViewController sharedstarViewController];
-//        [starController starAnimation ];
-//        [self.navigationController pushViewController:starController animated:YES];
-//    }
     if([indexPath row]==4)
     {
 
@@ -402,6 +383,46 @@
         [[sysdelegate navController  ] pushViewController:aboutFlashViewController animated:YES];
     }
 }
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath row]==0||[indexPath row]==2)
+    {
+        return nil;
+    }
+    return indexPath;
+}
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    
+    if ( section == 0 ) {
+        
+        return 160;
+    }
+    return 0;
+}
+- (UIView*) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return  [self userView:tableView viewForHeaderInSection:section];
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    
+    return 8;
+}
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ( [indexPath row] == 3 )
+    {
+        return 10;
+    }
+    return 44;
+}
+
 #pragma mark - tool methods
 
 - (void) installProfile
@@ -492,25 +513,6 @@
 //        label.text=@"关";
 //    }
 }
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath row]==0||[indexPath row]==2||[indexPath row]==3)
-    {
-        return nil;
-    }
-    return indexPath;
-}
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    
-    if ( section == 0 ) {
-        
-        return 160;
-    }
-    
-    
-    return 0;
-}
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     UIImageView*imageView=(UIImageView*)[self.bgView viewWithTag:5001];
@@ -578,30 +580,6 @@
     return nil;
 
 }
-- (UIView*) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    return  [self userView:tableView viewForHeaderInSection:section];
-}
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    
-    return 8;
-}
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ( [indexPath row] == 3 )
-    {
-        return 10;
-    }
-        return 44;
-
-
-}
-
 
 
 - (void)didReceiveMemoryWarning
