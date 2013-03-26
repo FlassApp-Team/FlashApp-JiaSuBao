@@ -64,11 +64,17 @@
 
 + (void) installProfile:(NSString *)nextPage idc:(NSString*)idcCode
 {
-    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
-    NSString* apn = [userDefault objectForKey:@"apnName"];
     
-    NSString* url = [AppDelegate getInstallURL:nextPage install:YES apn:apn idc:idcCode];
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
+    NSString *url;
+    if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+        NSString *vpn = [userDefault objectForKey:@"vpnName"];
+        url = [AppDelegate getInstallURL:nextPage install:YES vpn:vpn idc:idcCode];
+    }else{
+        NSString* apn = [userDefault objectForKey:@"apnName"];
+        url = [AppDelegate getInstallURL:nextPage install:YES apn:apn idc:idcCode];
+    }
+     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 
 /*
@@ -531,9 +537,9 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-    //    [TCUtils readIfData:-1];
-    //    [TwitterClient getStatsData];
-    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+    
+    //这里就不要发送通知了，这个通知叫 viewController 的 - viewDidAppear 去发送吧。
+//    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
     UIViewController* controller = [self currentViewController];
     if ( [controller isKindOfClass:[FlowJiaoZhunViewController class]] ) {
         FlowJiaoZhunViewController* flowJiaoZhunViewController = (FlowJiaoZhunViewController*) controller;
@@ -552,11 +558,6 @@
         //访问getMemberInfo接口
         [self getMemberInfo];
     }
-    // [self timerTask];
-    /*if ( !timer || !timer.isValid ) {
-     [self performSelector:@selector(startTimer) withObject:nil afterDelay:60];
-     }*/
-
 }
 
 /*

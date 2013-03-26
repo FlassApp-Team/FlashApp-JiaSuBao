@@ -19,6 +19,9 @@
 #import "IDCInfo.h"
 #import "DESCrypter.h"
 #import "StringUtil.h"
+#import <CoreTelephony/CTCall.h>
+#import <CoreTelephony/CTCallCenter.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 @implementation TwitterClient
 
@@ -743,7 +746,15 @@
 
 - (void) getIDCList
 {
-    NSString* url = [NSString stringWithFormat:@"%@/%@.json?&desc=%@", API_BASE, API_IDC_ZLIST,@"1"];
+    CTTelephonyNetworkInfo* tni = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier* carrier = tni.subscriberCellularProvider;
+    [tni release];
+    NSString* url = [NSString stringWithFormat:@"%@/%@.json?&desc=%@&mnc=%@$mcc=%@",
+                     API_BASE,
+                     API_IDC_ZLIST,
+                     @"1",
+                     carrier ? carrier.mobileCountryCode : @"",
+                     carrier ? carrier.mobileNetworkCode : @""];
     url = [TwitterClient composeURLVerifyCode:url];
     [self get:url];
 }

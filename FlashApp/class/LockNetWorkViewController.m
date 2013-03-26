@@ -418,16 +418,19 @@
     
     [[AppDelegate getAppDelegate] showLockView:@"正在更新数据..."];
     
-    if ( twitterClient ) {
-        //[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
-        return;
-    }
-    
-    AppDelegate* app = [AppDelegate getAppDelegate];
-    if ( [app.networkReachablity currentReachabilityStatus] == NotReachable ) {
-        //   [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
-        return;
-    }
+//    if ( twitterClient ) {
+//        //[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
+//        
+//        [[AppDelegate getAppDelegate] hideLockView];
+//        return;
+//    }
+//    
+//    AppDelegate* app = [AppDelegate getAppDelegate];
+//    if ( [app.networkReachablity currentReachabilityStatus] == NotReachable ) {
+//        //   [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
+//        [[AppDelegate getAppDelegate ] hideLockView];
+//        return;
+//    }
     
     //？？
 //    if ( ![[AppDelegate getAppDelegate].refreshingLock tryLock] ) {
@@ -676,7 +679,7 @@
         return;
     }
     
-    if ( ![AppDelegate networkReachable] ) {
+    if ( ![AppDelegate networkReachable] && ![AppDelegate pdVpnIsOpenOrClose]) {
         [AppDelegate showAlert:@"抱歉，网络访问失败!"];
         return;
     }
@@ -814,7 +817,7 @@
         [AppDelegate showAlert:@"没有可锁网的应用了哦。"];
         return;
     }
-    if ( ![AppDelegate networkReachable] ) {
+    if ( ![AppDelegate networkReachable] && ![AppDelegate pdVpnIsOpenOrClose] ) {
         [AppDelegate showAlert:@"抱歉，网络访问失败!"];
         return;
     }

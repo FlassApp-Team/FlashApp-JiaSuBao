@@ -73,6 +73,9 @@
     NSString* item1Number = [NSString stringWithFormat:@"%.2f", number];
     self.MBdataLabel.text=item1Number;
     
+    /*
+     *用户使用流量的详情
+     */
     UserSettings* user = [AppDelegate getAppDelegate].user;
     float totalm=[user.ctTotal floatValue]; // 用户总共的流量 单位：MB
     float used=[user.ctUsed longLongValue]; //  实际使用的流量 单位：byte
@@ -166,7 +169,7 @@
 -(void)initViewController
 {
     float systemVersion = [[UIDevice currentDevice].systemVersion floatValue];
-    if ( systemVersion < 4.0 ) {
+    if ( systemVersion < 4.0 ) { //版本 < ios4.0
         NSString* v = [[NSUserDefaults standardUserDefaults] objectForKey:@"systemVersion"];
         if ( v ) {
             [self showDatasaveView];
@@ -177,10 +180,10 @@
             // [self showDatasaveView:NO];
         }
     }
-    else {
+    else { // >iOS4.0
         float currentCapacity = [UserSettings currentCapacity]; //套用户的 压缩流量 限额
         
-        NSLog(@"currentCapacity=%f", currentCapacity);
+        NSLog(@"currentCapacity =================================== %f", currentCapacity);
         
         if ( currentCapacity == 0 ) { // 用户第一次启动的时候 没有压缩流量限额 引导用户安装配置文件
             
@@ -213,7 +216,6 @@
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     StarViewController*starViewController=[StarViewController sharedstarViewController];
-    // ViewController *viewController=[[[ViewController alloc]init] autorelease];
     [self.navigationController pushViewController:starViewController animated:NO];
 }
 

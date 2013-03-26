@@ -97,12 +97,15 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    //发送通知检查
+    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+    
     if ( justLoaded ) {
         [self performSelector:@selector(getAccessData) withObject:nil afterDelay:0.0];
         
         stepStats.bytesBefore = 0;
         
-
         justLoaded = NO;
     }
     else {
@@ -113,10 +116,6 @@
         }
     }
     
-
-    
-  //  [self checkProfile];
-
 }
 - (void)viewDidLoad
 {
@@ -138,9 +137,6 @@
 	[pageControl setOffColor: [UIColor colorWithWhite: 0.7f alpha: 1.0f]] ;
 	[pageControl setIndicatorDiameter: 5.0f] ;
 	[pageControl setIndicatorSpace: 7.0f] ;
-    
-    
-    
     
     if(self.userInfoViewController==nil)
     {
@@ -583,8 +579,8 @@
     
     [self pdVpnAndWifiOrSome];
     
-    
     [[AppDelegate getAppDelegate ]timerTask];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
 
 }

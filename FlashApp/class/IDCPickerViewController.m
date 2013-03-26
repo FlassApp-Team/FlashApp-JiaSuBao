@@ -703,7 +703,7 @@
         
         //刷新访问数据
         [TwitterClient getStatsData];
-        
+    
         //开始安装profile
         IDCInfo* idc = [idcArray objectAtIndex:selectedRow];
         if ( idc ) {
