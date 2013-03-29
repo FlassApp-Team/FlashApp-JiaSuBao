@@ -13,6 +13,7 @@ static const char encodingTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq
 static const NSString* charactersToLeaveUnescaped = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 @implementation NSString (NSStringUtils)
+//？？
 - (NSString*)encodeAsURIComponent
 {
 	const char* p = [self UTF8String];

@@ -70,7 +70,7 @@
     Reachability* reachablity = [Reachability reachabilityForInternetConnection];
     NetworkStatus status = [reachablity currentReachabilityStatus];
     if (  status == NotReachable ) {
-        [AppDelegate showAlert:@"抱歉，连接网络失败。"];
+        [AppDelegate showAlert:@"网络连接异常,请链接网络"];
         return;
     }
     UIViewController* controller = [[AppDelegate getAppDelegate] currentViewController];
@@ -101,6 +101,13 @@
 }
 -(IBAction)weixinBtnPress:(id)sender
 {
+    Reachability* reachablity = [Reachability reachabilityForInternetConnection];
+    NetworkStatus status = [reachablity currentReachabilityStatus];
+    if (  status == NotReachable ) {
+        [AppDelegate showAlert:@"网络连接异常,请链接网络"];
+        return;
+    }
+
     UIViewController* controller = [[AppDelegate getAppDelegate] currentViewController];
     if ( [controller respondsToSelector:@selector(sendWeixinImage)]) {
         [controller performSelector:@selector(sendWeixinImage) withObject:nil afterDelay:0.3f];

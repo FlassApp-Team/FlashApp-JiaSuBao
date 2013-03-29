@@ -65,13 +65,14 @@ self.golingMessLabel=nil;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(judegServerOpen) name:RefreshNotification object: nil];
   //  self.speedLabel.font = [UIFont fontWithName:@"count" size:44.0];
 
-    [self judegServerOpen];
+//    [self judegServerOpen];
     // Do any additional setup after loading the view from its nib.
 }
 //-(void)loadAndShowData
 //{
 //    [self check];
 //}
+
 -(void)nextContorller
 {
     self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
@@ -81,7 +82,7 @@ self.golingMessLabel=nil;
     ConnectionType type = [UIDevice connectionType];
     if(type==NONE)
     {
-        [AppDelegate showAlert:@"提示信息" message:@"网络无链接,请检查网络"];
+        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请链接网络"];
         return;
     }
     if(flag==101)

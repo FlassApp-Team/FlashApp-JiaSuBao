@@ -440,6 +440,7 @@ NSString *TWITTERFON_FORM_BOUNDARY = @"0194784892923";
     }
 }
 
+#pragma mark - connection Delegate
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)aResponse
 {
     NSHTTPURLResponse *resp = (NSHTTPURLResponse*)aResponse;
@@ -453,6 +454,21 @@ NSString *TWITTERFON_FORM_BOUNDARY = @"0194784892923";
 - (void)connection:(NSURLConnection *)aConn didReceiveData:(NSData *)data
 {
 	[buf appendData:data];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)aConn
+{
+    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    //NSString* s = [[[NSString alloc] initWithData:buf encoding:NSUTF8StringEncoding] autorelease];
+    //NSLog(@"response: %@", s);
+    [self TFConnectionDidFinishLoading];
+    
+    [connection autorelease];
+    connection = nil;
+    [buf autorelease];
+    buf = nil;
 }
 
 - (void)connection:(NSURLConnection *)aConn didFailWithError:(NSError *)error
@@ -474,25 +490,9 @@ NSString *TWITTERFON_FORM_BOUNDARY = @"0194784892923";
     }
 }
 
-
 - (void)TFConnectionDidFailWithError:(NSError*)error
 {
     // To be implemented in subclass
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)aConn
-{
-    
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
-    //NSString* s = [[[NSString alloc] initWithData:buf encoding:NSUTF8StringEncoding] autorelease];
-    //NSLog(@"response: %@", s);
-    [self TFConnectionDidFinishLoading];
-
-    [connection autorelease];
-    connection = nil;
-    [buf autorelease];
-    buf = nil;
 }
 
 - (void)TFConnectionDidFinishLoading

@@ -538,8 +538,8 @@
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     
-    //这里就不要发送通知了，这个通知叫 viewController 的 - viewDidAppear 去发送吧。
-//    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+    //这里就不要发送通知了，这个通知叫 viewController 的 - viewDidAppear 去发送吧。错误，这里还是要发送，应为我程序运行到后台再起来的时候要接收通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
     UIViewController* controller = [self currentViewController];
     if ( [controller isKindOfClass:[FlowJiaoZhunViewController class]] ) {
         FlowJiaoZhunViewController* flowJiaoZhunViewController = (FlowJiaoZhunViewController*) controller;

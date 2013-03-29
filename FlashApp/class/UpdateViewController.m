@@ -62,7 +62,7 @@
 {
     Reachability* reachable = [Reachability reachabilityWithHostName:P_HOST];
     if ( [reachable currentReachabilityStatus] == NotReachable ) {
-        [AppDelegate showAlert:@"抱歉，连接网络失败。"];
+        [AppDelegate showAlert:@"网络连接异常,请链接网络"];
         return;
     }
     DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];

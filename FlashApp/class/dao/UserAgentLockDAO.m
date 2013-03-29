@@ -40,7 +40,7 @@
 {
     sqlite3* conn = [DBConnection getDatabase];
    // char* sql = "insert or replace into user_agent_lock (useragent, locked, locktime, timelength, resumetime) values (?,?,?,?,?)";
-    char* sql = "insert or replace into user_agent_lock (useragent, locked, locktime, timelength, resumetime,appname) values (?,?,?,?,?,?)";//add jianfei han 2013-02-28
+    char* sql = "insert or replace into user_agent_lock (useragent, locked, locktime, timelength, resumetime,appname) values (?,?,?,?,?,?)"; //add jianfei han 2013-02-28
 
     Statement* stmt = [[Statement alloc] initWithDB:conn sql:sql];
     [stmt bindString:lock.userAgent forIndex:1];

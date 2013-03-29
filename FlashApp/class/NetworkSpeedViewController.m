@@ -205,7 +205,7 @@
     GoLineModleViewController*golineController=(GoLineModleViewController*)self.controller;
 
 
-    [golineController judegServerOpen ];
+//    [golineController judegServerOpen ];
     [[sysdelegate navController  ] popViewControllerAnimated:YES];
 
 }

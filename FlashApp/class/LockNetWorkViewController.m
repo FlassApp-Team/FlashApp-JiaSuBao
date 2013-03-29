@@ -266,6 +266,12 @@
     twitterClient = nil;
     [[AppDelegate getAppDelegate] hideLockView];
     
+    if ( tc.hasError ) {
+        [[AppDelegate getAppDelegate].refreshingLock unlock]; //开锁
+        [AppDelegate showAlert:tc.errorMessage];
+        return;
+    }
+    
     if ( !obj && ![obj isKindOfClass:[NSDictionary class]]) {
         return;
     }
@@ -596,7 +602,7 @@
 #pragma mark - 解锁单个应用
 -(void)unlockButtonPress:(UIButton*)button
 {
-    int indexs=button.tag- AGENT_BUTTON_TAG;
+    int indexs=button.tag - AGENT_BUTTON_TAG;
     
     [self disableUserAgentNetwork:0 lockMinutes:0 usStrIndex:indexs];
     
@@ -628,9 +634,8 @@
 - (void) didUnlockApp:(TwitterClient*)tc obj:(NSObject*)obj
 {
     twitterClient = nil;
-    NSArray *dataArray=[self.allLockDic allKeys];
     
-    UserAgentLock *agentLock=(UserAgentLock*)[self.allLockDic objectForKey:[dataArray objectAtIndex:index]];
+    UserAgentLock *agentLock=(UserAgentLock*)[allLockArr objectAtIndex:index];
     [[AppDelegate getAppDelegate] hideLockView];
     
     if ( tc.hasError ) {

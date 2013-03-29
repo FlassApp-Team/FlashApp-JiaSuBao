@@ -16,6 +16,7 @@
     int currentCount;
     int currentPageForPage;
     NSOperationQueue*queue;
+    BOOL pdSanJiao;
 
 }
 @property(nonatomic,retain)NSMutableArray *requestArray;
@@ -27,10 +28,14 @@
 
 @property(nonatomic,retain)IBOutlet UILabel *titleLabel;
 
+@property (retain, nonatomic) IBOutlet UIImageView *scrollShowImage;
+@property (retain, nonatomic) IBOutlet UIButton *scrollShowBtn;
+
 @property(nonatomic,retain)RecommendDetailViewController *recommendDetailViewController;
 -(IBAction)topAppBtnPress:(id)sender;
 -(IBAction)topGameBtnPress:(id)sender;
 -(IBAction)explainBtnPress:(id)sender;
 -(IBAction)turnBrnPress:(id)sender;
+
 
 @end

@@ -453,7 +453,7 @@
     ConnectionType type = [UIDevice connectionType];
     if(type==NONE)
     {
-        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请连接网络"];
+        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请链接网络"];
         return;
     }
     [self relodaTableViewDate];

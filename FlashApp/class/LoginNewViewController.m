@@ -285,8 +285,8 @@
     NSString* desc = nil;
     if(type==NONE)
     {
-        desc = @"网络连接异常,请连接网络";
-        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请连接网络"];
+        desc = @"网络连接异常,请链接网络";
+        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请链接网络"];
         return;
     }
     

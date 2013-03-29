@@ -68,21 +68,16 @@
         tongZhiFlag=TRUE;
     [userDefault setBool:tongZhiFlag forKey:@"tongZhiFlag"];
     
-    
-    
-    
     self.setTableView.separatorColor=[UIColor clearColor];
     [self.setTableView setShowsVerticalScrollIndicator:NO];
+    
     [AppDelegate labelShadow:self.fanKuiBtn.titleLabel];
     
-
     self.bigImageView.frame = CGRectMake(0, BGimageViewOfSet, 320, 270);
-    
     
     UIImage* img=[UIImage imageNamed:@"opaque_small.png"];
     img=[img stretchableImageWithLeftCapWidth:7 topCapHeight:8];
     [self.fanKuiBtn setBackgroundImage:img forState:UIControlStateNormal];
-    
     
     self.dataArray=[[[NSMutableArray alloc]initWithObjects:@"压缩服务",@"APN校准",@"通知",@"新手上路",@"常见问题",@"软件评分",@"检测更新",@"关于加速宝", nil]autorelease];
 }

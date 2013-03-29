@@ -92,6 +92,8 @@
     self.images=nil;
     self.currentappsPage=nil;
     self.pageControl=nil;
+    [_scrollShowImage release];
+    [_scrollShowBtn release];
     [super dealloc];
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -104,11 +106,17 @@
     }
     return self;
 }
+
 -(IBAction)turnBrnPress:(id)sender
 {
     [[sysdelegate navController  ] popViewControllerAnimated:YES];
-    
 }
+
+- (IBAction)scrollShowBtn:(id)sender
+{
+    [self moveBottomViewToo];
+}
+
 -(IBAction)topAppBtnPress:(id)sender
 {
     self.topGameBtn.enabled=YES;
@@ -152,48 +160,6 @@
     
 }
 
-
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    //    self.imageDatas=[[[NSMutableArray alloc] initWithCapacity:3] autorelease];
-    ConnectionType type = [UIDevice connectionType];
-    [self startRequest];
-    if ( type == WIFI )
-    {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"BannerImageUtil"];
-        [self startBannerRequest];
-    }
-    else{
-        NSMutableArray *arr=[BannerImageUtil  getBanners];
-        self.bannerInfo=arr;
-        if(![self.bannerInfo count])
-            return;
-        [self moveBottomView];
-        for (int i=[arr count]-1; i>=0; i--)
-        {
-            UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:i+1];
-            imgv.image=[UIImage imageWithData:[[arr objectAtIndex:i] objectForKey:@"imageData"]];
-        }
-        scrollTimer=[NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollViewAnimate) userInfo:nil repeats:YES];
-    }
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    for(int i=0;i<[self.requestArray count];i++)
-    {
-        ASIHTTPRequest*request=[self.requestArray objectAtIndex:i];
-        [request clearDelegatesAndCancel];
-    }
-    [self.requestArray removeAllObjects];
-    if (scrollTimer)
-        [scrollTimer invalidate];
-}
-
--(void)viewDidUnload{
-    [super viewDidUnload];
-    if (scrollTimer)
-        [scrollTimer invalidate];}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -201,7 +167,6 @@
     UITapGestureRecognizer*tapGestures=[[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pressBanner)] autorelease];
     tapGestures.delegate=self;
     [self.topScrollView addGestureRecognizer:tapGestures];
-    
     
     UIImage* img=[UIImage imageNamed:@"opaque_small.png"];
     img=[img stretchableImageWithLeftCapWidth:7 topCapHeight:8];
@@ -231,7 +196,7 @@
     self.btnBgImageView.frame=newFrame;
     
     self.topAppBtn.frame=CGRectMake(self.topAppBtn.frame.origin.x, newFrame.origin.y+offsetY, self.topAppBtn.frame.size.width, self.topAppBtn.frame.size.height);
-    self.topGameBtn.frame=CGRectMake(self.topGameBtn.frame.origin.x, newFrame.origin.y+offsetY, self.topGameBtn.frame.size.width, self.topGameBtn.frame.size.height);
+    self.topGameBtn.frame=CGRectMake(self.topGameBtn.frame.origin.x, newFrame.origin.y+offsetY, self.topGameBtn.frame.size.width+2, self.topGameBtn.frame.size.height); //加 2 是为了叫按钮填充满屏幕
     self.freeBtn.frame=CGRectMake(self.freeBtn.frame.origin.x, newFrame.origin.y+offsetY, self.freeBtn.frame.size.width, self.freeBtn.frame.size.height);
     
     self.myTableView.frame=CGRectMake(self.myTableView.frame.origin.x, newFrame.origin.y+newFrame.size.height, self.myTableView.frame.size.width, self.view.frame.size.height-newFrame.origin.y-newFrame.size.height);
@@ -266,6 +231,53 @@
     [self setExtraCellLineHidden:self.myTableView];
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    //    self.imageDatas=[[[NSMutableArray alloc] initWithCapacity:3] autorelease];
+//    ConnectionType type = [UIDevice connectionType];
+    [self startRequest];
+    
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"BannerImageUtil"];
+    
+        //请求scrollView显示的图片
+        [self startBannerRequest];
+
+        NSMutableArray *arr=[BannerImageUtil  getBanners];
+        self.bannerInfo=arr;
+        if(![self.bannerInfo count])
+        {
+            return;
+        }
+        [self moveBottomView];
+        for (int i=[arr count]-1; i>=0; i--)
+        {
+            UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:i+1];
+            imgv.image=[UIImage imageWithData:[[arr objectAtIndex:i] objectForKey:@"imageData"]];
+        }
+        scrollTimer=[NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollViewAnimate) userInfo:nil repeats:YES];
+
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    for(int i=0;i<[self.requestArray count];i++)
+    {
+        ASIHTTPRequest*request=[self.requestArray objectAtIndex:i];
+        [request clearDelegatesAndCancel];
+    }
+    [self.requestArray removeAllObjects];
+    if (scrollTimer)
+        [scrollTimer invalidate];
+}
+
+-(void)viewDidUnload
+{
+    [self setScrollShowImage:nil];
+    [self setScrollShowBtn:nil];
+    [super viewDidUnload];
+    if (scrollTimer)
+        [scrollTimer invalidate];
+}
+
 -(void)setExtraCellLineHidden: (UITableView *)tableView
 {
     UIView *view = [UIView new];
@@ -285,7 +297,13 @@
 
 
 -(void)moveBottomView{
-    CGRect newFrame=CGRectMake(self.btnBgImageView.frame.origin.x, self.oriTableViewFrame.origin.y-self.topScrollView.frame.size.height, self.btnBgImageView.frame.size.width, self.btnBgImageView.frame.size.height);
+    
+    pdSanJiao = YES;
+    
+    CGRect newFrame=CGRectMake(self.btnBgImageView.frame.origin.x, self.topScrollView.frame.origin.y+self.topScrollView.frame.size.height, self.btnBgImageView.frame.size.width, self.btnBgImageView.frame.size.height);
+    
+    NSLog(@"newFrame = %f,%f，%f,%f",self.btnBgImageView.frame.origin.x,self.oriTableViewFrame.origin.y-self.topScrollView.frame.size.height,self.btnBgImageView.frame.size.width,self.btnBgImageView.frame.size.height);
+    
     [UIView animateWithDuration:0.5 animations:^{
         self.btnBgImageView.frame=newFrame;
         
@@ -296,11 +314,69 @@
         self.gamenumberView.frame=CGRectMake(self.topGameBtn.frame.origin.x+self.topGameBtn.frame.size.width-20, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, 20, 20);
         self.myTableView.frame=CGRectMake(0, self.oriTableViewFrame.origin.y, self.oriTableViewFrame.size.width, self.view.frame.size.height-self.oriTableViewFrame.origin.y);
     } completion:^(BOOL finished) {
-        
+        [self performSelector:@selector(moveBottomViewToo) withObject:self afterDelay:10.0f];
     }];
-    [self initScrollView];
+    
+        [self initScrollView];
+}
+
+-(void)moveBottomViewToo
+{
+    
+    //第一次广告位弹上来的时候出现可以点击出现或者消失的按钮
+    self.scrollShowBtn.hidden = NO;
+    self.scrollShowImage.hidden = NO;
+    
+    CGRect newRect = CGRectMake(self.topScrollView.frame.origin.x, self.topScrollView.frame.origin.y, self.btnBgImageView.frame.size.width, self.btnBgImageView.frame.size.height);
+    
+    if (pdSanJiao) {
+        
+        //如果是横三角就是NO , 如果是倒三角就是YES；
+        pdSanJiao = NO;
+        
+        //先改变右上角 按钮上图片的样式
+        self.scrollShowImage.image = [UIImage imageNamed:@"hengsanjiao.png"];
+        
+        //将scrollView隐藏.改变页面上其他控件的位置其实就是
+        [UIView animateWithDuration:0.5 animations:^{
+            self.btnBgImageView.frame = newRect;
+            self.topAppBtn.frame = CGRectMake(self.topAppBtn.frame.origin.x, self.btnBgImageView.frame.origin.y, self.topAppBtn.frame.size.width, self.topAppBtn.frame.size.height);
+            self.topGameBtn.frame=CGRectMake(self.topGameBtn.frame.origin.x, self.btnBgImageView.frame.origin.y, self.topGameBtn.frame.size.width, self.topGameBtn.frame.size.height);
+            self.freeBtn.frame=CGRectMake(self.freeBtn.frame.origin.x, self.btnBgImageView.frame.origin.y, self.freeBtn.frame.size.width, self.freeBtn.frame.size.height);
+            self.freenumberView.frame=CGRectMake(self.freeBtn.frame.origin.x+self.freeBtn.frame.size.width-20, self.btnBgImageView.frame.origin.y, 20, 20);
+            self.gamenumberView.frame=CGRectMake(self.topGameBtn.frame.origin.x+self.topGameBtn.frame.size.width-20, self.btnBgImageView.frame.origin.y, 20, 20);
+            self.myTableView.frame=CGRectMake(0, self.btnBgImageView.frame.origin.y+self.btnBgImageView.frame.size.height, self.oriTableViewFrame.size.width, self.view.frame.size.height-self.btnBgImageView.frame.origin.y-self.btnBgImageView.frame.size.height);
+            
+        } completion:^(BOOL finished) {
+
+        }];
+        
+    }else{
+        
+        //如果是横三角就是NO , 如果是倒三角就是YES；
+        pdSanJiao = YES;
+        
+        //先改变右上角 按钮上图片的样式
+        self.scrollShowImage.image = [UIImage imageNamed:@"daosanjiao.png"];
+    
+        //显示ScrollView
+        //将scrollView隐藏
+        [UIView animateWithDuration:0.5 animations:^{
+            
+            self.topAppBtn.frame=CGRectMake(self.topAppBtn.frame.origin.x, self.oriTableViewFrame.origin.y-self.topAppBtn.frame.size.height, self.topAppBtn.frame.size.width, self.topAppBtn.frame.size.height);
+            self.topGameBtn.frame=CGRectMake(self.topGameBtn.frame.origin.x, self.oriTableViewFrame.origin.y-self.topGameBtn.frame.size.height, self.topGameBtn.frame.size.width, self.topGameBtn.frame.size.height);
+            self.freeBtn.frame=CGRectMake(self.freeBtn.frame.origin.x, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, self.freeBtn.frame.size.width, self.freeBtn.frame.size.height);
+            self.freenumberView.frame=CGRectMake(self.freeBtn.frame.origin.x+self.freeBtn.frame.size.width-20, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, 20, 20);
+            self.gamenumberView.frame=CGRectMake(self.topGameBtn.frame.origin.x+self.topGameBtn.frame.size.width-20, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, 20, 20);
+            self.myTableView.frame=CGRectMake(0, self.oriTableViewFrame.origin.y, self.oriTableViewFrame.size.width, self.view.frame.size.height-self.oriTableViewFrame.origin.y);
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+    
     
 }
+
 -(void)initScrollView
 {
     for(UIView *view in [self.topScrollView subviews])
@@ -339,6 +415,7 @@
     [self.requestArray addObject:request];
 }
 
+//请求scrollView显示的图片
 -(void)startBannerRequest{
     DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
     NSString *str=[NSString stringWithFormat:@"http://apps.flashapp.cn/api/rcapp/banner?deviceId=%@&platform=%@&cp=%d",device.deviceId,[device.platform encodeAsURIComponent],[BannerImageUtil getTimeStamp]];
@@ -357,7 +434,7 @@
 -(void)startRequest{
     Reachability* reachable = [Reachability reachabilityWithHostName:P_HOST];
     if ( [reachable currentReachabilityStatus] == NotReachable ) {
-        [AppDelegate showAlert:@"抱歉，连接网络失败。"];
+        [AppDelegate showAlert:@"网络连接异常,请链接网络"];
         return;
     }
     DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
@@ -383,13 +460,10 @@
     [request startAsynchronous];
     [self.requestArray addObject:request];
     
-    
-    
-    
 }
 
 -(void)setCates{
-    //NSLog(@"TTTTTTTTTTTTTT%@",[[self.catesArr objectAtIndex:1] objectForKey:@"new"]);
+//    NSLog(@"TTTTTTTTTTTTTT%@",[[self.catesArr objectAtIndex:0] objectForKey:@"name"] );
     [self.topAppBtn setTitle:[[self.catesArr objectAtIndex:0] objectForKey:@"name"] forState:UIControlStateNormal];
     [self.freeBtn setTitle:[[self.catesArr objectAtIndex:1] objectForKey:@"name"] forState:UIControlStateNormal];
     [self.topGameBtn setTitle:[[self.catesArr objectAtIndex:2] objectForKey:@"name"] forState:UIControlStateNormal];
@@ -504,7 +578,7 @@
 {
     UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:currentCount];
     imgv.image=[UIImage imageWithData:[request responseData]];
-    NSLog(@"imgv.image======%@",imgv);
+//    NSLog(@"imgv.image======%@",imgv);
     if(currentCount-1<0||!imgv)
     {
         currentCount--;
@@ -520,6 +594,8 @@
     currentCount--;
 }
 
+
+#pragma mark - asiRequestDelegate
 - (void)requestFinished:(ASIHTTPRequest *)request{
     id response=[[request responseString] JSONValue];
     
@@ -533,7 +609,8 @@
     if([requestUrl rangeOfString:@"banner"].length){
         self.bannerInfo=[response objectForKey:@"banner"];
         currentCount= [self.bannerInfo count];
-        // NSLog(@"bannerInfobannerInfobannerI===%@",bannerInfo);
+        
+        NSLog(@"bannerInfobannerInfobannerI===%@",bannerInfo);
         
         if(self.bannerInfo){
             [self moveBottomView];
@@ -546,6 +623,8 @@
     if([requestUrl rangeOfString:@"rcapp/apps"].length){
         [appsDic release];
         appsDic=[response retain];
+        
+//        NSLog(@"appDic =%@",appsDic);
         [self reloadApps];
     }
     
@@ -559,6 +638,19 @@
     //    [alert show];
 }
 
+#pragma mark - tableView Delegate
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if([self.appsArr count])
+        return [self.appsArr count]+1;
+    else
+        return  [self.appsArr count];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 76;
+}
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -574,11 +666,10 @@
         }
         
         
-        for(UIView*subView in cell.contentView.subviews)
-        {
+        for(UIView *subView in cell.contentView.subviews){
             [subView removeFromSuperview];
         }
-        UIButton*button1=[UIButton buttonWithType:UIButtonTypeCustom];
+        UIButton *button1=[UIButton buttonWithType:UIButtonTypeCustom];
         button1.tag=110;
         button1.frame=CGRectMake(23, 12, 274, 52);
         [button1 addTarget:self action:@selector(loadMore:) forControlEvents:UIControlEventTouchUpInside];
@@ -610,7 +701,6 @@
             }
             UIImageView *imageView=[[[UIImageView alloc]initWithFrame:CGRectMake(7, 7, 62, 62)] autorelease];
             imageView.tag=100;
-            
             
             UILabel *nameLabel=[[[UILabel alloc]init] autorelease];
             nameLabel.frame=CGRectMake(76, 8, 140, 21);
@@ -721,6 +811,30 @@
     }
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if([indexPath row] == ([appsArr count]))
+        return;
+    NSDictionary *dic=[self.appsArr objectAtIndex: [indexPath row]];
+    
+    if(iPhone5)
+    {
+        self.recommendDetailViewController=[[[RecommendDetailViewController alloc]initWithNibName:@"RecommendDetailViewController_iphone5" bundle:nil] autorelease];
+    }
+    else
+    {
+        
+        self.recommendDetailViewController=[[[RecommendDetailViewController alloc]initWithNibName:@"RecommendDetailViewController" bundle:nil] autorelease];
+    }
+    
+    self.recommendDetailViewController.appName=[dic objectForKey:@"apname"];
+    self.recommendDetailViewController.appDescibe=[dic objectForKey:@"apdesc"];
+    self.recommendDetailViewController.appSize=[dic objectForKey:@"fsize"];
+    self.recommendDetailViewController.appIcon=[UIImage imageWithData:[self.images objectForKey:[dic objectForKey:@"icon"]]];
+    self.recommendDetailViewController.linkUrl=[dic objectForKey:@"link"];
+    self.recommendDetailViewController.appStar=[[dic objectForKey:@"star"] integerValue];
+    [self.view addSubview:recommendDetailViewController.view];
+}
+
 -(void)loadMore:(id)sender
 {
     UIButton *button=(UIButton*)sender;
@@ -733,9 +847,6 @@
         
     }
 }
-
-
-
 
 //- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
 //    if(!moring&&[indexPath row]>=[self.appsArr count]-1){
@@ -765,42 +876,6 @@
     //    self.recommendDetailViewController.appStar=button.appStar;
     //    [self.view addSubview:recommendDetailViewController.view];
     
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if([indexPath row] == ([appsArr count]))
-        return;
-    NSDictionary *dic=[self.appsArr objectAtIndex: [indexPath row]];
-    
-    if(iPhone5)
-    {
-        self.recommendDetailViewController=[[[RecommendDetailViewController alloc]initWithNibName:@"RecommendDetailViewController_iphone5" bundle:nil] autorelease];
-    }
-    else
-    {
-        
-        self.recommendDetailViewController=[[[RecommendDetailViewController alloc]initWithNibName:@"RecommendDetailViewController" bundle:nil] autorelease];
-    }
-    
-    self.recommendDetailViewController.appName=[dic objectForKey:@"apname"];
-    self.recommendDetailViewController.appDescibe=[dic objectForKey:@"apdesc"];
-    self.recommendDetailViewController.appSize=[dic objectForKey:@"fsize"];
-    self.recommendDetailViewController.appIcon=[UIImage imageWithData:[self.images objectForKey:[dic objectForKey:@"icon"]]];
-    self.recommendDetailViewController.linkUrl=[dic objectForKey:@"link"];
-    self.recommendDetailViewController.appStar=[[dic objectForKey:@"star"] integerValue];
-    [self.view addSubview:recommendDetailViewController.view];
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if([self.appsArr count])
-        return [self.appsArr count]+1;
-    else
-        return  [self.appsArr count];
-}
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 76;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

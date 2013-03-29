@@ -252,7 +252,7 @@
     if ( hasData ) {
         //从数据库中加载数据
         [self loadDataFromDB];
-        [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
     }
     
     //读已用流量
@@ -376,8 +376,6 @@
         stepStats.bytesBefore = 0;
  
     }
-    
-
 }
 
 -(void)initScrollview
@@ -406,15 +404,13 @@
     self.firstPageViewController.view.tag=201;
     [self.scrollview addSubview:self.firstPageViewController.view];
 
-
-
-    
     self.secondPageViewController.view.tag=202;
     [self.scrollview addSubview:self.secondPageViewController.view];
     
     
     self.scrollview.decelerationRate=0.1;
 }
+
 -(void)gameStyleBtnShow
 {
     NSString* str=[[NSUserDefaults standardUserDefaults] objectForKey:Model];
@@ -455,6 +451,7 @@
     [self.gameStyleBtn setTitle:titleStr forState:UIControlStateNormal];
     [self.gameStyleImageView setImage:[UIImage imageNamed:imageStr]];
 }
+
 - (void)layoutScrollImages
 {
     UIView  *view = nil;
@@ -573,15 +570,13 @@
     ConnectionType type = [UIDevice connectionType];
     if(type==NONE)
     {
-        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请连接网络"];
+        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请链接网络"];
         return;
     }
     
     [self pdVpnAndWifiOrSome];
     
     [[AppDelegate getAppDelegate ]timerTask];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
 
 }
 
@@ -591,19 +586,21 @@
  */
 -(void)pdVpnAndWifiOrSome
 {
-    ConnectionType type = [UIDevice connectionType];
-    if (type==WIFI && [AppDelegate pdVpnIsOpenOrClose]) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您关闭VPN" message:@"系统检测到您正在WIFI环境下，请您关闭VPN，获得更好的网络体验！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 关闭 VPN", nil];
-        alertView.tag = 1111;
-        [alertView show];
-        [alertView release];
-    }
-    
-    if (type ==CELL_2G  && ![AppDelegate pdVpnIsOpenOrClose] ) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您开启VPN" message:@"系统检测到您正在2G/3G环境下，请您开启VPN，获得更好的网络体验！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 开启 VPN", nil];
-        alertView.tag = 1112;
-        [alertView show];
-        [alertView release];
+    if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+        ConnectionType type = [UIDevice connectionType];
+        if (type==WIFI && [AppDelegate pdVpnIsOpenOrClose]) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您关闭VPN" message:@"系统检测到您正在WIFI环境下，请您关闭VPN，获得更好的网络体验！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 关闭 VPN", nil];
+            alertView.tag = 1111;
+            [alertView show];
+            [alertView release];
+        }
+        
+        if (type ==CELL_2G  && ![AppDelegate pdVpnIsOpenOrClose] ) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您开启VPN" message:@"系统检测到您正在2G/3G环境下，请您开启VPN，获得更好的网络体验！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 开启 VPN", nil];
+            alertView.tag = 1112;
+            [alertView show];
+            [alertView release];
+        }
     }
 
 }
