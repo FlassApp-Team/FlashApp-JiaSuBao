@@ -28,6 +28,8 @@
 @property (nonatomic, assign) long startTime;
 @property (nonatomic, assign) long endTime;
 
+//设置分享的时候提示第一个应用压缩了多少流量，因为节省流量有排序，所以要从节省流量页面把 节省最高的拿到，用于分享
+@property (nonatomic ,retain) NSMutableArray *shareArray;
 
 
 @property(nonatomic,retain)NSMutableArray *controllerArray;//存储列表

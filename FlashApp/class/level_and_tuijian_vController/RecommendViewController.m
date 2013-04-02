@@ -15,6 +15,7 @@
 #import "BannerImageUtil.h"
 #import "ASIDownloadCache.h"
 #import "UpdataNumber.h"
+#import "AppDetailsViewController.h"
 
 @interface RecommendViewController ()
 @property(nonatomic,retain)IBOutlet UIScrollView *topScrollView;
@@ -229,6 +230,26 @@
     // Do any additional setup after loading the view from its nib.
     
     [self setExtraCellLineHidden:self.myTableView];
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"BannerImageUtil"];
+    
+    //请求scrollView显示的图片
+    [self startBannerRequest];
+    
+    NSMutableArray *arr=[BannerImageUtil  getBanners];
+    self.bannerInfo=arr;
+    if(![self.bannerInfo count])
+    {
+        return;
+    }
+    [self moveBottomView];
+    for (int i=[arr count]-1; i>=0; i--)
+    {
+        UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:i+1];
+        imgv.image=[UIImage imageWithData:[[arr objectAtIndex:i] objectForKey:@"imageData"]];
+    }
+
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -237,24 +258,7 @@
 //    ConnectionType type = [UIDevice connectionType];
     [self startRequest];
     
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"BannerImageUtil"];
-    
-        //请求scrollView显示的图片
-        [self startBannerRequest];
-
-        NSMutableArray *arr=[BannerImageUtil  getBanners];
-        self.bannerInfo=arr;
-        if(![self.bannerInfo count])
-        {
-            return;
-        }
-        [self moveBottomView];
-        for (int i=[arr count]-1; i>=0; i--)
-        {
-            UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:i+1];
-            imgv.image=[UIImage imageWithData:[[arr objectAtIndex:i] objectForKey:@"imageData"]];
-        }
-        scrollTimer=[NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollViewAnimate) userInfo:nil repeats:YES];
+    scrollTimer=[NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollViewAnimate) userInfo:nil repeats:YES];
 
 }
 
@@ -737,10 +741,6 @@
             [button setTitleShadowColor:[UIColor grayColor] forState:UIControlStateNormal];
             [[button titleLabel]setShadowOffset:CGSizeMake(0, -1)];
             
-            
-            
-            
-            
             [cell.contentView addSubview:button];
             [cell.contentView addSubview:imageView];
             [cell.contentView addSubview:nameLabel];
@@ -833,6 +833,15 @@
     self.recommendDetailViewController.linkUrl=[dic objectForKey:@"link"];
     self.recommendDetailViewController.appStar=[[dic objectForKey:@"star"] integerValue];
     [self.view addSubview:recommendDetailViewController.view];
+    
+//    AppDetailsViewController *appDetail = [[AppDetailsViewController alloc] init];
+//    appDetail.appImages = [UIImage imageWithData:[self.images objectForKey:[dic objectForKey:@"icon"]]];
+//    appDetail.appDic = [dic mutableCopy];
+//    [self.navigationController pushViewController:appDetail animated:YES];
+//    [appDetail release];
+//    [dic release];
+
+    
 }
 
 -(void)loadMore:(id)sender
@@ -840,6 +849,7 @@
     UIButton *button=(UIButton*)sender;
     button.enabled=NO;
     if(!moring&&[self.appsArr count]>=[self.appsArr count]-1){
+        
         moring=YES;
         
         [self startAPPSRequest:currentCateID Page:self.currentappsPage];

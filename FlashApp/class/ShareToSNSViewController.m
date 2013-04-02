@@ -223,7 +223,6 @@
     [AppDelegate showAlert:error];
 }
 
-
 - (void)twitPicClientDidDone:(TwitPicClient*)sender content:(NSString*)response
 {
     picClient = nil;
@@ -243,48 +242,6 @@
     
     NSString* url = [dic objectForKey:@"redirect"];
     if ( !url ) return;
-    
-    /*
-    //给用户增加限额
-    UserSettings* user = [AppDelegate getAppDelegate].user;
-    
-    time_t now;
-    time( &now );
-    NSString* month = [DateUtils stringWithDateFormat:now format:@"MM"];
-    
-    BOOL flag = YES;
-    if ( user.month ) {
-        if ( [month compare:user.month] == NSOrderedSame ) {
-            if ( user.monthCapacity < QUANTITY_MONTH_SHARE_LIMIT ) {
-                user.monthCapacity += QUANTITY_PER_SHARE;
-                user.monthCapacityDelta += QUANTITY_PER_SHARE;
-                user.capacity += QUANTITY_PER_SHARE;
-            }
-            else {
-                flag = NO;
-            }
-        }
-        else {
-            user.month = month;
-            user.monthCapacity = QUANTITY_PER_SHARE;
-            user.monthCapacityDelta = QUANTITY_PER_SHARE;
-            user.capacity += QUANTITY_PER_SHARE;
-        }
-    }
-    else {
-        user.month = month;
-        user.monthCapacity = QUANTITY_PER_SHARE;
-        user.monthCapacityDelta = QUANTITY_PER_SHARE;
-        user.capacity += QUANTITY_PER_SHARE;
-    }
-    
-    if ( flag ) {
-        [UserSettings saveUserSettings:user];
-        //刷新Datasave页面
-        [AppDelegate getAppDelegate].refreshDatasave = YES;
-        //[self getAccessData];
-    }
-     */
     
     self.textLabel.text = NSLocalizedString(@"shareToSNS.share.loading", nil);
    // NSLog(@"AAAAAAAAAAAAAAAAA%@",url);

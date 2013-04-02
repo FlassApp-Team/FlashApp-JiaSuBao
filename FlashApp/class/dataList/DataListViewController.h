@@ -40,9 +40,21 @@
 @property(nonatomic,retain)IBOutlet UIView *bgView;
 
 @property (nonatomic ,retain) NSMutableDictionary *JieShengDic;
+
+//本类的代理方法，目的是为了把值传给分享的页面，分享页面要用到这个值来
+@property(nonatomic ,assign) id delegate;
+
 -(void)reloadData;
 - (void) getAccessData;
 -(IBAction)jiaSuBtnPress:(id)sender;
 -(IBAction)monthSaveBtnPress:(id)sender;
+
+
+@end
+
+
+@protocol DataListViewControllerDelegate <NSObject>
+
+-(void)getStageWithArray:(NSArray *)arr atPage:(int)page;
 
 @end

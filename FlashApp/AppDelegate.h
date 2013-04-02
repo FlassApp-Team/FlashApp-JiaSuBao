@@ -54,9 +54,9 @@
 #define RefreshAppLockedNotification @"refreshAppLockedNotification"
 #define RefreshLoginNotification @"refreshLoginNotification"
 
-//#define CHANNEL @"appstore"
+#define CHANNEL @"appstore"
 
-#define CHANNEL @"91_market"
+//#define CHANNEL @"91_market"
 //#define CHANNEL @"weiphone_market"
 //#define CHANNEL @"jasubao_market"
 //#define CHANNEL @"tongbutui_market"

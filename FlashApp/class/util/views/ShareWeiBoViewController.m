@@ -65,26 +65,6 @@
 {
     [self.view removeFromSuperview];
 }
--(void)share:(NSString *)sns
-{
-    Reachability* reachablity = [Reachability reachabilityForInternetConnection];
-    NetworkStatus status = [reachablity currentReachabilityStatus];
-    if (  status == NotReachable ) {
-        [AppDelegate showAlert:@"网络连接异常,请链接网络"];
-        return;
-    }
-    UIViewController* controller = [[AppDelegate getAppDelegate] currentViewController];
-    
-    if ( [controller respondsToSelector:@selector(shareToSNS:)]) {
-        [controller performSelector:@selector(shareToSNS:) withObject:sns afterDelay:0.3f];
-    }
-    else
-    {
-        [self shareToSNS:sns];
-    }
-    [self.view removeFromSuperview];
-
-}
 -(IBAction)sinaBtnPress:(id)sender
 {
     [self share:@"sinaWeibo"];
@@ -119,6 +99,27 @@
     [self.view removeFromSuperview];
 }
 
+-(void)share:(NSString *)sns
+{
+    Reachability* reachablity = [Reachability reachabilityForInternetConnection];
+    NetworkStatus status = [reachablity currentReachabilityStatus];
+    if (status == NotReachable ) {
+        [AppDelegate showAlert:@"网络连接异常,请链接网络"];
+        return;
+    }
+    
+    UIViewController* controller = [[AppDelegate getAppDelegate] currentViewController];
+    
+    if ( [controller respondsToSelector:@selector(shareToSNS:)]) {
+        [controller performSelector:@selector(shareToSNS:) withObject:sns afterDelay:0.3f];
+    }
+    else
+    {
+        [self shareToSNS:sns];
+    }
+    [self.view removeFromSuperview];
+}
+
 #pragma mark - Share Methods
 - (void) shareToSNS:(NSString*)sns
 {
@@ -138,8 +139,6 @@
     [controller release];
     [nav release];
 }
-
-
 
 - (void) sendWeixin:(enum WXScene)scene text:(NSString*)text
 {

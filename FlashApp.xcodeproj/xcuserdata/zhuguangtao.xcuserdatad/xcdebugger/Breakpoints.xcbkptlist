@@ -7,32 +7,6 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "FlashApp/class/level_and_tuijian_vController/RecommendViewController.m"
-         timestampString = "386154953.03668"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "577"
-         endingLineNumber = "577"
-         landmarkName = "-changeBannerImg:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/class/level_and_tuijian_vController/RecommendViewController.m"
-         timestampString = "386220049.972633"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "599"
-         endingLineNumber = "599"
-         landmarkName = "-requestFinished:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "FlashApp/class/LockNetWorkViewController.m"
          timestampString = "386237013.924359"
          startingColumnNumber = "9223372036854775807"

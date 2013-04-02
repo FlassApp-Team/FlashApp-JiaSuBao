@@ -17,8 +17,8 @@
     int currentPageForPage;
     NSOperationQueue*queue;
     BOOL pdSanJiao;
-
 }
+
 @property(nonatomic,retain)NSMutableArray *requestArray;
 @property(nonatomic,retain)IBOutlet UITableView *myTableView;
 @property(nonatomic,retain)IBOutlet UIImageView *btnBgImageView;

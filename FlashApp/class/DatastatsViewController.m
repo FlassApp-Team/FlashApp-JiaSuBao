@@ -57,6 +57,12 @@
 
 @synthesize savePoint;
 @synthesize saveTriangle;
+
+@synthesize shareArray;
+
+//这个变量是用来标记scrollView的页面的，是第几个页面。 用这个来取shareArray 里面最高的节省的应用。用于分享
+static int shareArrayPage ;
+
 -(void)dealloc
 {
     
@@ -83,6 +89,8 @@
     self.shareWeiBoViewController=nil;
     
     self.controllerArray=nil;
+    
+    self.shareArray = nil;
     
     if ( twitterClient ) {
         [twitterClient cancel];
@@ -118,12 +126,12 @@
     [self.scrollView setPagingEnabled:YES];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.scrollView setShowsVerticalScrollIndicator:NO];
-    self.scrollView.delegate=self;
+    self.scrollView.delegate = self;
     
     UIImage* img1=[UIImage imageNamed:@"opaque_small.png"];
     img1=[img1 stretchableImageWithLeftCapWidth:img1.size.width/2 topCapHeight:img1.size.height/2];
     [self.refleshBtn setBackgroundImage:img1 forState:UIControlStateNormal];
-    // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadData) name:RefreshNotification object: nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadData) name:RefreshNotification object: nil];
     
     [self initscrollview];
     
@@ -132,8 +140,8 @@
     time(&now);
     time_t peroid[2];
     [TCUtils getPeriodOfTcMonth:peroid time:now];
-    startTime=peroid[0];
-    endTime=peroid[1];
+    startTime = peroid[0];
+    endTime = peroid[1];
     
     //更新数据
     [self loadData];
@@ -150,7 +158,6 @@
     {
         [self loadScrollViewWithPage:currentPage _userAgent:userAgentStats _StageStats:self.currentStats];
         [self.monthSliderViewController loadScrollViewWithPage:currentPage _StageStats:self.currentStats];
-        
     }
     
     if ( prevMonthStats.bytesAfter > 0 ) //上个月节省后的流量 大于 0 说明有上个月
@@ -192,8 +199,8 @@
     time( &now );
     
     time_t prevPeroid[2];
-    [TCUtils getPeriodOfTcMonth:prevPeroid time:startTime - 1]; //开始的时间 - 1 就变成了上个月的最后一天 从上个月的 天 可以得到上个月的 开始和结束时间， 放数组，
-    if ( prevPeroid[1] < firstDay ) { //上个月最后一天小于第一次访问的时间 ，比如第一次访问是 13年1月15号，  得到的时间是 12年12月31号
+    [TCUtils getPeriodOfTcMonth:prevPeroid time:startTime - 1]; //开始的时间 - 1 就变成了上个月的最后一天 从上个月的 天 可以得到上个月的 开始和结束时间， 在prevPeroid 数组里面，
+    if (prevPeroid[1] < firstDay) { //上个月的最后一天要小于开始时间，说明没有用够一个月，那么prevMonthStats就是空的
         self.prevMonthStats = nil;
     }
     else {
@@ -219,8 +226,8 @@
         self.nextMonthStats = nil;
     }
     
-    //本月流量详情
-    if ( currentStats.bytesBefore > 0 ) {
+//    //本月流量详情
+    if (currentStats.bytesBefore > 0 ) {
         NSArray* arr = [StatsMonthDAO userAgentStatsForPeriod:startTime endTime:endTime orderby:nil];
         NSArray* tempArr = [arr sortedArrayUsingSelector:@selector(compareByBefore:)];
         [userAgentStats addObjectsFromArray:tempArr];
@@ -248,10 +255,11 @@
         [self.shareBtn setHidden:YES];
     }
         
+    
     DataListViewController *dataListViewController = [self.controllerArray objectAtIndex:page];
     if ((NSNull *)dataListViewController == [NSNull null])
     {
-        dataListViewController = [[DataListViewController alloc] init];
+        dataListViewController = [[DataListViewController alloc] init];//初始化
         [self.controllerArray replaceObjectAtIndex:page withObject:dataListViewController]; //array 里面替代的方法 指定一个位置 替代为要替换的对象
         [dataListViewController release];
     }
@@ -266,7 +274,7 @@
         [scrollView addSubview:dataListViewController.view];
         dataListViewController.currentStats=stageStats;
         self.monthSliderViewController.currentStats=stageStats;
-//        dataListViewController.userAgentArray=userAgentArray;
+        dataListViewController.userAgentArray=userAgentArray;
         dataListViewController.startTime=stageStats.startTime;
         dataListViewController.endTime=stageStats.endTime;
         dataListViewController.viewcontroller=self;
@@ -274,7 +282,6 @@
     }
         
     scrollView.contentSize = CGSizeMake(scrollView.frame.size.width * (page+1), scrollView.frame.size.height);
-    
 }
 
 
@@ -284,13 +291,21 @@
     return;
 }
 
+// 调用以下函数，来自动滚动到想要的位置，此过程中设置有动画效果，停止时，触发该函数
+// UIScrollView的setContentOffset:animated:
+// UIScrollView的scrollRectToVisible:animated:
+// UITableView的scrollToRowAtIndexPath:atScrollPosition:animated:
+// UITableView的selectRowAtIndexPath:animated:scrollPosition:
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     CGFloat pageWidth = self.scrollView.frame.size.width;
     int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     
+    shareArrayPage = page;
+    
 //    self.mondleDataListViewController = (DataListViewController *)[self.controllerArray objectAtIndex:page];
     page=page+1;
+    
     if(currentPage<page)
     {
         currentPage=page;
@@ -299,21 +314,19 @@
     }
     else if(currentPage>page)
     {
-        //        [self monthSliderNext];
-        //        currentPage=page;
-        
-        return;
+        currentPage=page;
+        [self monthSliderNext];
         
     }
     else
     {
-        //  [self monthSliderNow];
-        return;
+        [self monthSliderNow];
         
     }
     
 }
 
+// 滚动停止时，触发该函数
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView               //"触摸滑动事件
 {
     CGFloat pageWidth = self.scrollView.frame.size.width;
@@ -324,8 +337,11 @@
         DataListViewController*da=(DataListViewController*)dataListViewController;
         [da  monthSaveBtnPress:da.monthSaveBtn];
     }
-    NSLog(@"page = %d" ,page);
+    
+    shareArrayPage = page;
+    
     page=page+1;
+    
     if(currentPage<page)
     {
         currentPage=page;
@@ -335,19 +351,21 @@
     }
     else if(currentPage>page)
     {
-        //       [self loadData];
-        //        currentPage=page;
-        return;
+        currentPage = page;
+        [self monthSliderNext];
+        
+//        return;
         
     }
     else
     {
-        //  [self monthSliderNow];
-        return;
+          [self monthSliderNow];
+//        return;
         
     }
 }
 
+// 触摸屏幕来滚动画面还是其他的方法使得画面滚动，皆触发该函数
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     float superXX=self.scrollView.contentOffset.x/self.scrollView.bounds.size.width;
@@ -373,6 +391,20 @@
     }
 }
 
+- (void) monthSliderNext
+{
+    if ( nextMonthStats ) {
+        
+        self.startTime = nextMonthStats.startTime;
+        self.endTime = nextMonthStats.endTime;
+        [self loadData];
+        NSArray* arr = [StatsMonthDAO userAgentStatsForPeriod:self.nextMonthStats.startTime endTime:self.nextMonthStats.endTime orderby:nil];
+        NSArray* tempArr = [arr sortedArrayUsingSelector:@selector(compareByPercent:)];
+        NSMutableArray*array=[NSMutableArray arrayWithArray:tempArr];
+        [self loadScrollViewWithPage:currentPage  _userAgent:array _StageStats:self.nextMonthStats];
+        [self.monthSliderViewController loadScrollViewWithPage:currentPage _StageStats:self.nextMonthStats ];
+    }
+}
 
 #pragma mark -- 
 - (void) getAccessData
@@ -486,13 +518,13 @@
 #pragma mark - Share To
 - (void) shareToSNS:(NSString*)sns
 {
-    if ( !currentStats || !userAgentStats || [userAgentStats count] == 0 ) return;
-    StatsDetail* topStats = [userAgentStats objectAtIndex:0];
-    //StatsDetail* topStats = [[StatsDetail alloc] init];
     
+    if ( !currentStats || !shareArray || [shareArray count] == 0 ) return;
+    if (shareArrayPage >= [shareArray count]) {
+        return; //如果 存放月份里面节省最多的流量app的array 它的长度 小于或者等于 页数那么不对防止崩溃，所以退出
+    }
+    StatsDetail* topStats = [shareArray objectAtIndex:shareArrayPage];
     NSString* deviceId = [OpenUDID value];
-    
-    
     NSString* date = [DateUtils stringWithDateFormat:currentStats.startTime format:@"yyyy-MM"];
     NSString* content = [NSString stringWithFormat:@"#%@用加速宝#我正在使用加速宝，本月已经节省了%@，实际使用%@，压缩总比例为%.1f%%，其中%@压缩比例高达%.1f%%，加速宝流量，省钱，快速。 下载地址：http://jiasu.flashapp.cn/social/%@.html %@", date,
                          [NSString stringForByteNumber:(currentStats.bytesBefore - currentStats.bytesAfter)],
@@ -500,7 +532,7 @@
                          ((float) (currentStats.bytesBefore - currentStats.bytesAfter)) / currentStats.bytesBefore * 100,
                          [topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,
                          ((float)(topStats.before - topStats.after)) / topStats.before * 100,
-                         deviceId,@"(@飞速流量压缩仪)"];
+                         deviceId,@"(@加速宝)"];
     //content = @"Very Good!";
     
     NSData* image = [self captureScreen];
@@ -595,18 +627,6 @@
     }
 }
 
-- (void) monthSliderNext
-{
-    if ( nextMonthStats ) {
-        
-        self.startTime = nextMonthStats.startTime;
-        self.endTime = nextMonthStats.endTime;
-        [self loadData];
-        
-        // [self show];
-        // [self.scrollView setContentOffset:CGPointMake(0, 0)];
-    }
-}
 
 - (void) monthSliderNow
 {

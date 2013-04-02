@@ -68,6 +68,7 @@
         return;
     if(!StatsTime)
         return;
+    
     UILabel *label;
     UIButton *button;
     label=[[[UILabel alloc]init]autorelease];

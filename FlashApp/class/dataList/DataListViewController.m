@@ -121,7 +121,10 @@
     }
     
     DatastatsViewController *controller=(DatastatsViewController*)viewcontroller;
-    
+//    if (controller.userAgentStats!=nil) {
+//        [controller.userAgentStats removeAllObjects];
+//    }
+//    controller.userAgentStats = self.userAgentArray;
     
     if(self.currentStats.bytesBefore==0)
     {
@@ -135,8 +138,6 @@
         [self.titleLabel setHidden:YES];
         [self.dataView setHidden:NO];
         [controller.shareBtn setHidden:NO];
-        
-        
     }
     if(!self.jiasuAgentArray)
     {
@@ -177,6 +178,7 @@
         }
     }
     
+    //节省流量 放到字典， 字典的key = 压缩前 - 压缩后  ；排序它的Key值，根据从高调地，然后放入 jieshengAgentArray 数数组里面
     if ([JieShengDic count] != 0) {
         NSArray * keys = [[JieShengDic allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             if ([obj1 integerValue] < [obj2 integerValue]) { 
@@ -191,6 +193,12 @@
         for (NSString *key in keys) {
             [jieshengAgentArray addObject:[JieShengDic objectForKey:key ]];
         }
+        if (controller.shareArray == nil) {
+            controller.shareArray = [[[NSMutableArray alloc] init] autorelease];
+        }
+        
+        //把每个月 节省流量 节省最多的这个应用放 array 里面。 用 scrollView 的page 值去取这个最高的，用来分享
+        [controller.shareArray addObject:[jieshengAgentArray objectAtIndex:0]];
     }
     
     if(self.currentBtn==self.monthSaveBtn)
@@ -421,7 +429,7 @@
         }
         
         StatsDetail *detail=[self.jieshengAgentArray objectAtIndex:[indexPath row]];
-        UserAgentLock*agentLock = [UserAgentLockDAO getUserAgentLock:detail.uaStr];
+        UserAgentLock *agentLock = [UserAgentLockDAO getUserAgentLock:detail.uaStr];
         UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 62)] autorelease];
         UIImage *image1=[UIImage imageNamed:@"jianbian.png"];
         bgImageView.backgroundColor=[UIColor colorWithPatternImage:image1] ;

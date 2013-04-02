@@ -511,6 +511,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     UIImageView*imageView=(UIImageView*)[self.bgView viewWithTag:5001];
+        
     if(scrollView.contentOffset.y<0)
     {
         [imageView setHidden:YES];
@@ -520,9 +521,9 @@
         [imageView setHidden:NO];
     }
     float factorY = scrollView.contentOffset.y / scrollView.contentSize.height;
-    // NSLog(@"factor====%f",factorX);
+//     NSLog(@"factor====%f",factorY);
     CGRect frame = self.bigImageView.frame;
-  // NSLog(@"AAAAAAAAA%f",scrollView.contentOffset.y);
+//   NSLog(@"AAAAAAAAA%f",scrollView.contentOffset.y);
     frame.origin.y =-factorY * 90+BGimageViewOfSet;
     self.bigImageView.frame = frame;
 

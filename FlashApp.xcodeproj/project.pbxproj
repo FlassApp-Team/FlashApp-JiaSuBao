@@ -537,6 +537,10 @@
 		B1E9ECBD16895462006DD353 /* FeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1E9ECBB1689545C006DD353 /* FeedbackViewController.xib */; };
 		B1F980C116E5AED10057261E /* LoadMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F980BF16E5AED10057261E /* LoadMoreViewController.m */; };
 		B1F980C216E5AED10057261E /* LoadMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1F980C016E5AED10057261E /* LoadMoreViewController.xib */; };
+		B391BE3C1709446F00825495 /* AppDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B391BE3A1709446F00825495 /* AppDetailsViewController.m */; };
+		B391BE3D1709446F00825495 /* AppDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B391BE3B1709446F00825495 /* AppDetailsViewController.xib */; };
+		B391BE41170958AF00825495 /* 横条.png in Resources */ = {isa = PBXBuildFile; fileRef = B391BE3F170958AF00825495 /* 横条.png */; };
+		B391BE42170958AF00825495 /* 立即下载.png in Resources */ = {isa = PBXBuildFile; fileRef = B391BE40170958AF00825495 /* 立即下载.png */; };
 		B3A7734E1703F645008CBC4A /* daosanjiao.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A7734C1703F645008CBC4A /* daosanjiao.png */; };
 		B3A7734F1703F645008CBC4A /* hengsanjiao.png in Resources */ = {isa = PBXBuildFile; fileRef = B3A7734D1703F645008CBC4A /* hengsanjiao.png */; };
 		B3AAE85B1700794D00914E52 /* theme.css in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE8511700794D00914E52 /* theme.css */; };
@@ -1298,6 +1302,11 @@
 		B1F980BE16E5AED10057261E /* LoadMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMoreViewController.h; sourceTree = "<group>"; };
 		B1F980BF16E5AED10057261E /* LoadMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreViewController.m; sourceTree = "<group>"; };
 		B1F980C016E5AED10057261E /* LoadMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadMoreViewController.xib; sourceTree = "<group>"; };
+		B391BE391709446F00825495 /* AppDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDetailsViewController.h; sourceTree = "<group>"; };
+		B391BE3A1709446F00825495 /* AppDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDetailsViewController.m; sourceTree = "<group>"; };
+		B391BE3B1709446F00825495 /* AppDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppDetailsViewController.xib; sourceTree = "<group>"; };
+		B391BE3F170958AF00825495 /* 横条.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "横条.png"; sourceTree = "<group>"; };
+		B391BE40170958AF00825495 /* 立即下载.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "立即下载.png"; sourceTree = "<group>"; };
 		B3A7734C1703F645008CBC4A /* daosanjiao.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = daosanjiao.png; sourceTree = "<group>"; };
 		B3A7734D1703F645008CBC4A /* hengsanjiao.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hengsanjiao.png; sourceTree = "<group>"; };
 		B3AAE8511700794D00914E52 /* theme.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = theme.css; sourceTree = "<group>"; };
@@ -1721,6 +1730,9 @@
 				B160C00C16BA65BC000F44CB /* RecommendViewController.h */,
 				B160C00D16BA65BC000F44CB /* RecommendViewController.m */,
 				B160C00E16BA65BC000F44CB /* RecommendViewController.xib */,
+				B391BE391709446F00825495 /* AppDetailsViewController.h */,
+				B391BE3A1709446F00825495 /* AppDetailsViewController.m */,
+				B391BE3B1709446F00825495 /* AppDetailsViewController.xib */,
 			);
 			path = level_and_tuijian_vController;
 			sourceTree = "<group>";
@@ -1987,6 +1999,8 @@
 		B1672D4D16A505330095889C /* image */ = {
 			isa = PBXGroup;
 			children = (
+				B391BE3F170958AF00825495 /* 横条.png */,
+				B391BE40170958AF00825495 /* 立即下载.png */,
 				B3A7734C1703F645008CBC4A /* daosanjiao.png */,
 				B3A7734D1703F645008CBC4A /* hengsanjiao.png */,
 				B3CD677916F9A67900070417 /* jiesuoanniu.png */,
@@ -2826,6 +2840,9 @@
 				B3AAE87217007CC100914E52 /* images7.jpg in Resources */,
 				B3A7734E1703F645008CBC4A /* daosanjiao.png in Resources */,
 				B3A7734F1703F645008CBC4A /* hengsanjiao.png in Resources */,
+				B391BE3D1709446F00825495 /* AppDetailsViewController.xib in Resources */,
+				B391BE41170958AF00825495 /* 横条.png in Resources */,
+				B391BE42170958AF00825495 /* 立即下载.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2976,6 +2993,7 @@
 				B1983C6016E5D62500FD28D0 /* SleepStyleViewController.m in Sources */,
 				B3EE05F6170040AD00452226 /* VPNHelpViewController.m in Sources */,
 				B3AAE875170082B100914E52 /* GetAddress.m in Sources */,
+				B391BE3C1709446F00825495 /* AppDetailsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
