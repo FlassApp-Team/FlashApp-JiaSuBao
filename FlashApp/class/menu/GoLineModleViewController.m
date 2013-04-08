@@ -125,7 +125,7 @@ self.golingMessLabel=nil;
         [self.warningView setHidden:YES];
         [self.wigiView setHidden:NO];
         self.wigiTitleLabel.text=@"WIFI测速";
-        self.wifiLabel.text=@"当前WIFI下,暂停压缩加速服务,点击测速.";
+        self.wifiLabel.text=@"暂停压缩加速服务 \n点击测速";
 
         self.flag=101;
     }

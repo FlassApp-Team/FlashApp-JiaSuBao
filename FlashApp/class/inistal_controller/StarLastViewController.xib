@@ -85,7 +85,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">“一次只能安装一个APN配置” 可能您安装了飞速流量之外的描述文件.可以打开设置-点击通用-描述文件-选择安装过的描述文件进行删除即可.</string>
+								<string key="IBUIText">“一次只能安装一个APN配置” 可能您安装了飞速流量之外的描述文件。可以打开设置-点击通用-描述文件-选择安装过的描述文件进行删除即可。</string>
 								<object class="NSColor" key="IBUITextColor" id="455765497">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MC4zMzMzMzMzMzMzAA</bytes>
@@ -329,7 +329,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">如果浏览器没有响应,请确保手机网络连接正常,或者 “刷新” 或者打开系统设置-safari，确保“JavaScript”和“阻止弹出式窗口”为开启状态,再试一次.</string>
+								<string key="IBUIText">如果浏览器没有响应,请确保手机网络连接正常，或者 “刷新” 或者打开系统设置-safari，确保“JavaScript”和“阻止弹出式窗口”为开启状态，再试一次。</string>
 								<reference key="IBUITextColor" ref="455765497"/>
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
@@ -351,7 +351,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">这是因为您设置了 “开机密码” 或者 “锁屏密码” 输入相同的密码即可.</string>
+								<string key="IBUIText">这是因为您设置了 “开机密码” 或者 “锁屏密码” 输入相同的密码即可。</string>
 								<reference key="IBUITextColor" ref="455765497"/>
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>

@@ -54,11 +54,18 @@
 #define RefreshAppLockedNotification @"refreshAppLockedNotification"
 #define RefreshLoginNotification @"refreshLoginNotification"
 
-#define CHANNEL @"appstore"
+//#define CHANNEL @"appstore"
+
+//#define CHANNEL @"jasubao_market"
+
+//#define CHANNEL @"fangyi_market"
+
+//#define CHANNEL @"zhuguangtao_market"
+
+#define CHANNEL @"yulei_market"
 
 //#define CHANNEL @"91_market"
 //#define CHANNEL @"weiphone_market"
-//#define CHANNEL @"jasubao_market"
 //#define CHANNEL @"tongbutui_market"
 //#define CHANNEL @"163_market"
 //#define CHANNEL @"baidu_market"

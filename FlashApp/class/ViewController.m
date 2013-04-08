@@ -54,6 +54,7 @@
 @synthesize monthStats;
 @synthesize noLoginViewController;
 @synthesize pageControl;
+
 -(void)dealloc
 {
     self.pageControl=nil;
@@ -83,8 +84,6 @@
         [twitterClient release];
         twitterClient = nil;
     }
-
-
     
     [super dealloc];
 }
@@ -97,6 +96,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
     
     //发送通知检查
     [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
@@ -117,11 +117,12 @@
     }
     
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    [self pdVpnAndWifiOrSome];
+    [self refreshBtnPress:nil];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     [self.navigationController setNavigationBarHidden:YES ];
@@ -175,12 +176,22 @@
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
-
 - (void)viewWillDisappear:(BOOL)animated
 {
    // [dialogView close];
     [super viewWillDisappear:animated];
 }
+
++(id)getSelfViewController
+{
+    static ViewController *viewController = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        viewController = [[[ViewController alloc] init] autorelease];
+    });
+    return viewController;
+}
+
 - (void) getAccessData:(BOOL)dropdownRefresh
 {
     //读已用流量
@@ -216,14 +227,12 @@
     twitterClient = [[TwitterClient alloc] initWithTarget:self action:@selector(didGetAccessData:obj:)];
     twitterClient.context = [NSArray arrayWithObjects:[NSNumber numberWithLong:lastDayLong], [NSNumber numberWithBool:dropdownRefresh],nil];
     [twitterClient getAccessData];
-
 }
+
 - (void) getAccessData
 {
     [self getAccessData:NO];
 }
-
-
 
 - (void) didGetAccessData:(TwitterClient*)client obj:(NSObject*)obj
 {
@@ -264,20 +273,15 @@
     //显示数据
     [self displayAfterLoad:mstats];
     [mstats release];
-    
-
 }
 
 #pragma mark - loadData
-
-
 - (void) showMessage:(NSString*)message
 {
 //    if ( refreshing ) return;
 //    refreshing = YES;
 //    [self.tableView reloadData];
 }
-
 
 -(void)juedeNoLoginTimes//每个月提示三次信息
 {
@@ -337,8 +341,8 @@
 
         }
     }
- 
 }
+
 - (void) loadDataFromDB
 {
     [DBConnection beginTransaction];
@@ -367,6 +371,7 @@
     [self displayAfterLoad:oldStats];
     [oldStats release];
 }
+
 - (void) displayAfterLoad:(StageStats*)oldMonthStats
 {
     //[self viewShowData];add jianfei han 
@@ -472,6 +477,7 @@
     //NSLog(@"scrollview subs: %@",subviews);
     [self.scrollview setContentSize:CGSizeMake((PageCount * self.scrollview.bounds.size.width),self.scrollview.bounds.size.height)];
 }
+
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView               //"触摸滑动事件
 {
     CGFloat pageWidth = self.scrollview.frame.size.width;
@@ -534,24 +540,26 @@
 //        
 //    }
 //}
-//
+
 -(void)detailBtnPress
 {
 
     AccountNumberViewController*accountNumberViewController=[[[AccountNumberViewController alloc]init] autorelease];
     [self.navigationController pushViewController:accountNumberViewController animated:YES];
 }
+
 -(IBAction)settingBtnPress:(id)sender
 {
     SetingViewController *setController=[[[SetingViewController alloc]init] autorelease];
     [self.navigationController pushViewController:setController animated:YES];
-
 }
+
 -(IBAction)questionBtnPress:(id)sender
 {
     CommonProblemViewController*commonProblemViewController=[[[CommonProblemViewController alloc]init] autorelease];
     [self.navigationController pushViewController:commonProblemViewController animated:YES];
 }
+
 -(IBAction)gameStyleBtnPress:(id)sender
 {
 //    if(self.gameStyleViewController!=nil)
@@ -566,18 +574,21 @@
 //    [sysdelegate.window.rootViewController.view addSubview:self.gameStyleViewController.view];
 }
 -(IBAction)refreshBtnPress:(id)sender
-{
+{    
     ConnectionType type = [UIDevice connectionType];
+    
     if(type==NONE)
     {
         [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请链接网络"];
         return;
     }
     
-    [self pdVpnAndWifiOrSome];
-    
-    [[AppDelegate getAppDelegate ]timerTask];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        //先刷新，刷新完成后在去判断是否安装描述文件
+        [[AppDelegate getAppDelegate ]timerTask];
+    });
 
+    [self pdVpnAndWifiOrSome];
 }
 
 /*
@@ -586,33 +597,48 @@
  */
 -(void)pdVpnAndWifiOrSome
 {
-    if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
-        ConnectionType type = [UIDevice connectionType];
-        if (type==WIFI && [AppDelegate pdVpnIsOpenOrClose]) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您关闭VPN" message:@"系统检测到您正在WIFI环境下，请您关闭VPN，获得更好的网络体验！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 关闭 VPN", nil];
-            alertView.tag = 1111;
-            [alertView show];
-            [alertView release];
+    UserSettings *user = [UserSettings currentUserSettings];    
+    //如果没有安装描述文件
+    if ([user.profileType isEqualToString:@"vpn"]) {
+        if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+            ConnectionType type = [UIDevice connectionType];
+            if (type==WIFI && [AppDelegate pdVpnIsOpenOrClose]) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您关闭VPN" message:@"已连接wifi网络，无法网络加速及节省流量，建议关闭vpn服务" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 关闭 VPN", nil];
+                alertView.tag = 1111;
+                [alertView show];
+                [alertView release];
+            }
+            if (type ==CELL_2G  && ![AppDelegate pdVpnIsOpenOrClose] ) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您开启VPN" message:@"已连接2G/3G网络，开启vpn服务可上网加速3倍以上，节省流量40-85%" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 开启 VPN", nil];
+                alertView.tag = 1112;
+                [alertView show];
+                [alertView release];
+            }
         }
-        
-        if (type ==CELL_2G  && ![AppDelegate pdVpnIsOpenOrClose] ) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您开启VPN" message:@"系统检测到您正在2G/3G环境下，请您开启VPN，获得更好的网络体验！" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 开启 VPN", nil];
-            alertView.tag = 1112;
-            [alertView show];
-            [alertView release];
-        }
-    }
 
+    }
 }
 
 #pragma mark - UIAlertView Delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
-        VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
-        [self.navigationController pushViewController:vpnHelp animated:YES];
-        [vpnHelp release];
+    if (alertView.tag == 1111 ||alertView.tag ==1112) {
+        if (buttonIndex == 1) {
+            VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
+            [self.navigationController pushViewController:vpnHelp animated:YES];
+            [vpnHelp release];
+        }
+    }else if (alertView.tag == 1999){
+        if (buttonIndex == 1 ) {
+            if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+                [AppDelegate installProfile:nil vpn:nil];
+            }
+            else{
+                [AppDelegate installProfile:nil apn:nil];
+            }
+        }
     }
+    
 }
 
 -(void)selectFinish:(NSString*)str title:(NSString*)title
@@ -634,4 +660,8 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidUnload {
+    [self setReflashActivity:nil];
+    [super viewDidUnload];
+}
 @end

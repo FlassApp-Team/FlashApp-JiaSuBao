@@ -385,7 +385,7 @@
         [button1 addTarget:self action:@selector(loadMore:) forControlEvents:UIControlEventTouchUpInside];
         [button1 setTitleColor:BgTextColor forState:UIControlStateNormal];
         [[button1 titleLabel] setFont:[UIFont systemFontOfSize:15.0]];
-        [button1 setTitle:@"点击加载更多" forState:UIControlStateNormal   ];
+        [button1 setTitle:@"更多..." forState:UIControlStateNormal   ];
         UIImage*image=[UIImage imageNamed:@"loadmore.png"];
         image=[image stretchableImageWithLeftCapWidth:image.size.width/2 topCapHeight:0];
         [button1 setBackgroundImage:image forState:UIControlStateNormal];
@@ -503,6 +503,7 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         cell.accessoryType=UITableViewCellAccessoryNone;
+        cell.userInteractionEnabled = NO;
         //  cell.selectionStyle=UITableViewCellSelectionStyleBlue;
         
         //        UIColor* color=[UIColor blueColor];//cell选中后的效果
@@ -518,12 +519,6 @@
     
     StatsDetail *detail=[self.jiasuAgentArray objectAtIndex:[indexPath row]];
     UserAgentLock*agentLock = [UserAgentLockDAO getUserAgentLock:detail.uaStr];
-  //  UserAgentLockStatus lockStatus=[agentLock lockStatus];
-    UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 62)] autorelease];
-    UIImage *image1=[UIImage imageNamed:@"jianbian.png"];
-    bgImageView.backgroundColor=[UIColor colorWithPatternImage:image1] ;
-    bgImageView.opaque=NO;
-    [cell.contentView addSubview:bgImageView];
     
     UIImageView *lineImageView=[[[UIImageView alloc]init] autorelease];
     lineImageView.frame=CGRectMake(0, 61, 320, 1);
@@ -572,7 +567,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     DatastatsDetailViewController*datastatsDetailViewController=[[[DatastatsDetailViewController alloc]init] autorelease];
     if(self.currentBtn==self.monthSaveBtn)
     {
@@ -591,6 +585,7 @@
     datastatsDetailViewController.startTime=self.startTime;
     datastatsDetailViewController.endTime=self.endTime;
     [[sysdelegate currentViewController].navigationController pushViewController:datastatsDetailViewController animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     NSLog(@"indexPath====%d",[indexPath row]);
 }
@@ -601,9 +596,10 @@
     if(self.currentBtn==self.monthSaveBtn)
     {
         return indexPath;
-
+       
     }
     else
+        
         return nil;
 }
 

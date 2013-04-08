@@ -58,7 +58,7 @@
         self.zhiliangLabel.font=[UIFont systemFontOfSize:13.0];
         self.zhiliangLabel.textAlignment=UITextAlignmentLeft;
         self.zhiliangLabel.numberOfLines=3;
-        self.zhiliangLabel.text=@"图片无压缩，调节图片质量，可节省更多";
+        self.zhiliangLabel.text=@"图片无压缩 \n调节图片质量 \n可节省更多";
         
     }
     else if ( user.pictureQsLevel == PIC_ZL_LOW ) {

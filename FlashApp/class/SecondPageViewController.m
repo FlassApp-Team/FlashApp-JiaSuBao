@@ -83,10 +83,10 @@
         self.imageModleViewController.view.frame=CGRectMake(152, 234, self.imageModleViewController.view.frame.size.width, self.imageModleViewController.view.frame.size.height);
         
         
-        self.wenTiModleViewController=[[[WenTiModleViewController alloc]initWithNibName:@"WenTiModleViewController_iphone5" bundle:nil] autorelease];
-
-        [self.view addSubview:self.wenTiModleViewController.view];
-        self.wenTiModleViewController.view.frame=CGRectMake(17, 376, self.wenTiModleViewController.view.frame.size.width, self.wenTiModleViewController.view.frame.size.height);
+        //常见问题
+//        self.wenTiModleViewController=[[[WenTiModleViewController alloc]initWithNibName:@"WenTiModleViewController_iphone5" bundle:nil] autorelease];
+//        [self.view addSubview:self.wenTiModleViewController.view];
+//        self.wenTiModleViewController.view.frame=CGRectMake(17, 376, self.wenTiModleViewController.view.frame.size.width, self.wenTiModleViewController.view.frame.size.height);
 
     }
     else
@@ -111,10 +111,10 @@
         [self.view addSubview:self.imageModleViewController.view];
         self.imageModleViewController.view.frame=CGRectMake(149, 182, self.imageModleViewController.view.frame.size.width, self.imageModleViewController.view.frame.size.height);
         
-        
-        self.wenTiModleViewController=[[[WenTiModleViewController alloc]init] autorelease];
-        [self.view addSubview:self.wenTiModleViewController.view];
-        self.wenTiModleViewController.view.frame=CGRectMake(17, 311, self.wenTiModleViewController.view.frame.size.width, self.wenTiModleViewController.view.frame.size.height);
+        //常见问题
+//        self.wenTiModleViewController=[[[WenTiModleViewController alloc]init] autorelease];
+//        [self.view addSubview:self.wenTiModleViewController.view];
+//        self.wenTiModleViewController.view.frame=CGRectMake(17, 311, self.wenTiModleViewController.view.frame.size.width, self.wenTiModleViewController.view.frame.size.height);
 
     }
    //    

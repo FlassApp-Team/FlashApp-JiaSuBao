@@ -55,6 +55,7 @@
 @synthesize nologinCount;
 @synthesize nologinTime;
 @synthesize sleepStyleFlag;
+@synthesize profileType;
 - (void) dealloc
 {
     self.nologinTime=nil;
@@ -75,6 +76,7 @@
     [carrierSmstext release];
     [phone release];
     [idcServer release];
+    [profileType release];
     self.idcName=nil;
     self.lastUpdate=nil;
     self.headImageData=nil;
@@ -177,6 +179,10 @@
     
     settings.pictureQsLevel = [userDefaults integerForKey:@"pictureQsLevel"];
     
+    //add guangtao 
+    settings.profileType = [userDefaults objectForKey:@"profileType"];
+    settings.rcen = [userDefaults integerForKey:@"rcen" ];
+    
     return settings;
 }
 
@@ -187,7 +193,6 @@
     [userDefaults setInteger:settings.userId forKey:@"userId"];
     
     [userDefaults setBool:settings.sleepStyleFlag forKey:@"sleepStyleFlag"];
-
 
     [userDefaults setInteger:settings.lvxpcur forKey:@"lvxpcur"];
     [userDefaults setInteger:settings.lvxpmax forKey:@"lvxpmax"];
@@ -228,6 +233,11 @@
 
     [userDefaults setObject:settings.idcList forKey:@"idcList"];
     [userDefaults setInteger:settings.pictureQsLevel forKey:@"pictureQsLevel"];
+    
+    // add guangtao 
+    [userDefaults setObject:settings.profileType forKey:@"profileType"];
+    [userDefaults setInteger:settings.rcen forKey:@"rcen"];
+    
     [userDefaults synchronize];
 }
 

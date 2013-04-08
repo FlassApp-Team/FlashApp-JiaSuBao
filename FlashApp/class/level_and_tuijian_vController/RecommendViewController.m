@@ -176,19 +176,6 @@
     [self.topGameBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
     [self.topAppBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [self.topGameBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    //    UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:1];
-    //    self.topScrollView.contentSize=CGSizeMake(imgv.frame.size.width*3, self.topScrollView.frame.size.height);
-    //    UIImageView *imgv2=[[[UIImageView alloc] initWithFrame:CGRectMake(imgv.frame.size.width, 0, imgv.frame.size.width, imgv.frame.size.height)] autorelease];
-    //    imgv2.tag=2;
-    //    [self.topScrollView addSubview:imgv2];
-    //
-    //    UIImageView *imgv3=[[[UIImageView alloc] initWithFrame:CGRectMake(imgv2.frame.size.width*2, 0, imgv.frame.size.width, imgv.frame.size.height)] autorelease];
-    //    imgv3.tag=3;
-    //    [self.topScrollView addSubview:imgv3];
-    
-    //    UIImage *image=[UIImage imageNamed:@"pressleft"];
-    //    image=[image stretchableImageWithLeftCapWidth:18 topCapHeight:0];
-    //    self.btnBgImageView.image=image;
     self.oriTableViewFrame=self.myTableView.frame;
     float offsetY=self.topAppBtn.frame.origin.y-self.btnBgImageView.frame.origin.y;
     
@@ -202,6 +189,7 @@
     
     self.myTableView.frame=CGRectMake(self.myTableView.frame.origin.x, newFrame.origin.y+newFrame.size.height, self.myTableView.frame.size.width, self.view.frame.size.height-newFrame.origin.y-newFrame.size.height);
     
+    //设置按钮被选中或者没有被选中时候的一个样式
     [self.topAppBtn setBackgroundImage:[self getImage:@"leftnormal" StartX:7 StartY:37] forState:UIControlStateNormal];
     [self.freeBtn setBackgroundImage:[self getImage:@"middlenormal" StartX:5 StartY:36] forState:UIControlStateNormal];
     [self.topGameBtn setBackgroundImage:[self getImage:@"rightnormal" StartX:3 StartY:36] forState:UIControlStateNormal];
@@ -231,6 +219,7 @@
     
     [self setExtraCellLineHidden:self.myTableView];
     
+    //删除BannerImageUtil的图片
     [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"BannerImageUtil"];
     
     //请求scrollView显示的图片

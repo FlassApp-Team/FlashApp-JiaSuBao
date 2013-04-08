@@ -160,20 +160,20 @@
     
     if ( picQsLevel == PIC_ZL_LOW ) {
         picutureImageView.image = [UIImage imageNamed:@"si_image60.jpg"];
-        radioLabel.text = @"图片质量低,很模糊,最高可节省80%流量";
+        radioLabel.text = @"图片质量低，很模糊，最高可节省80%流量";
     }
     else if ( picQsLevel == PIC_ZL_HIGH ) {
         picutureImageView.image = [UIImage imageNamed:@"si_image15.jpg"];
-        radioLabel.text = @"图片质量高,较清晰,最高可节省30%流量";
+        radioLabel.text = @"图片质量高，较清晰，最高可节省30%流量";
     }
     else if ( picQsLevel == PIC_ZL_NOCOMPRESS ) {
         //picutureImageView.image = [UIImage imageNamed:@"si_image.jpg"];
         picutureImageView.image = [UIImage imageNamed:@"si_image15.jpg"];
-        radioLabel.text = @"图片质量不变,但无法节省流量";
+        radioLabel.text = @"图片质量不变，但无法节省流量";
     }
     else {
         picutureImageView.image = [UIImage imageNamed:@"si_image25.jpg"];
-        radioLabel.text = @"图片质量中,较模糊,最高节省50%流量";
+        radioLabel.text = @"图片质量中，较模糊，最高节省50%流量";
     }
     [picutureImageView setNeedsDisplay];
     

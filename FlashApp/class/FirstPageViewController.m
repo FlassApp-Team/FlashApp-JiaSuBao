@@ -104,8 +104,6 @@
         [self.view addSubview:self.goLineModleViewController.view];
         self.goLineModleViewController.view.frame=CGRectMake(149, 53, self.goLineModleViewController.view.frame.size.width, self.goLineModleViewController.view.frame.size.height);
         
-        
-        
         self.taoCanModleViewController=[[[TaoCanModleViewController alloc]init] autorelease];
         [self.view addSubview:self.taoCanModleViewController.view];
         self.taoCanModleViewController.view.frame=CGRectMake(17, 182, self.taoCanModleViewController.view.frame.size.width, self.taoCanModleViewController.view.frame.size.height);
@@ -126,9 +124,24 @@
 
     }
 
-    
-    
+    [self hiddenAndChangeViews];
 }
+
+/*
+ *用来隐藏应用推荐，因为有的渠道审核的时候是不能带有应用推荐这个模块的所以为了审核通过就隐藏掉应用推荐
+ */
+-(void)hiddenAndChangeViews
+{
+    UserSettings *user = [UserSettings currentUserSettings];    
+    if ( user.rcen == 0 ) {
+        CGRect newFrame = self.tuiJianModleViewController.view.frame;
+        
+        self.tuiJianModleViewController.view.hidden = YES;
+        
+        self.tellFriendModleViewController.view.frame = newFrame;
+    }
+}
+
 -(void)initLabel
 {
 //    self.jieshenLabelTitle.text=NSLocalizedString(nil, @"本月节省");

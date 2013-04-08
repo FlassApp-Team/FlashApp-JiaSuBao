@@ -282,6 +282,7 @@
     
     UIDevice* device = [UIDevice currentDevice];
     if ( [device isJailbroken] ) {
+        
         //对于越狱的手机，上传安装的应用信息
         [self uploadAppInfo];
     }
@@ -344,10 +345,10 @@
     //    time(&now);
     //    time_t peroid[2];
     //    [TCUtils getPeriodOfTcMonth:peroid time:now];
-    ViewController *viewController =  [[[ViewController alloc]init] autorelease];
-    self.navController=[[[UINavigationController alloc]initWithRootViewController:viewController] autorelease];
+    ViewController *viewController =  [ViewController getSelfViewController];
+    self.navController=[[UINavigationController alloc]initWithRootViewController:viewController];
     self.window.rootViewController = self.navController;
-    
+    [navController release];
 }
 
 
@@ -538,8 +539,10 @@
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     
+    [self timerTask];
+    
     //这里就不要发送通知了，这个通知叫 viewController 的 - viewDidAppear 去发送吧。错误，这里还是要发送，应为我程序运行到后台再起来的时候要接收通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
     UIViewController* controller = [self currentViewController];
     if ( [controller isKindOfClass:[FlowJiaoZhunViewController class]] ) {
         FlowJiaoZhunViewController* flowJiaoZhunViewController = (FlowJiaoZhunViewController*) controller;
@@ -883,6 +886,7 @@
 
 - (void) timerTask
 {
+//    UIViewController *viewConttroll = (UIViewController *)[ViewController getSelfViewController];
     if ( timerTaskDoing ) return;
     if ( [networkReachablity currentReachabilityStatus] != NotReachable ) {
         @synchronized (timerTaskLock) {
@@ -1255,6 +1259,7 @@
     [self performSelector:@selector(productLoadFailed) withObject:nil afterDelay:30.0];
     
 }
+
 -(void)hideLockView
 {
     [MBProgressHUD hideHUDForView:self.navController.topViewController.view animated:YES];//add 2012-12-07

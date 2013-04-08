@@ -526,14 +526,22 @@ static int shareArrayPage ;
     StatsDetail* topStats = [shareArray objectAtIndex:shareArrayPage];
     NSString* deviceId = [OpenUDID value];
     NSString* date = [DateUtils stringWithDateFormat:currentStats.startTime format:@"yyyy-MM"];
-    NSString* content = [NSString stringWithFormat:@"#%@用加速宝#我正在使用加速宝，本月已经节省了%@，实际使用%@，压缩总比例为%.1f%%，其中%@压缩比例高达%.1f%%，加速宝流量，省钱，快速。 下载地址：http://jiasu.flashapp.cn/social/%@.html %@", date,
-                         [NSString stringForByteNumber:(currentStats.bytesBefore - currentStats.bytesAfter)],
-                         [NSString stringForByteNumber:currentStats.bytesAfter],
-                         ((float) (currentStats.bytesBefore - currentStats.bytesAfter)) / currentStats.bytesBefore * 100,
-                         [topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,
-                         ((float)(topStats.before - topStats.after)) / topStats.before * 100,
-                         deviceId,@"(@加速宝)"];
+    
+    //带百分比的分享话语暂时不用
+//    NSString* content = [NSString stringWithFormat:@"#%@用加速宝#我正在使用加速宝，本月已经节省了%@，实际使用%@，压缩总比例为%.1f%%，其中%@压缩比例高达%.1f%%，加速宝流量，省钱，快速。 下载地址：http://jiasu.flashapp.cn/social/%@.html %@", date,
+//                         [NSString stringForByteNumber:(currentStats.bytesBefore - currentStats.bytesAfter)],
+//                         [NSString stringForByteNumber:currentStats.bytesAfter],
+//                         ((float) (currentStats.bytesBefore - currentStats.bytesAfter)) / currentStats.bytesBefore * 100,
+//                         [topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,
+//                         ((float)(topStats.before - topStats.after)) / topStats.before * 100,
+//                         deviceId,@"(@加速宝)"];
     //content = @"Very Good!";
+
+    NSString* content = [NSString stringWithFormat:@"#%@用加速宝#我正在使用加速宝，本月已经节省了%@，实际使用%@，其中%@节省达到%@以上，加速宝流量，省钱，快速。 下载地址：http://jiasu.flashapp.cn/social/%@.html %@",         date,[NSString stringForByteNumber:(currentStats.bytesBefore - currentStats.bytesAfter)],
+                         [NSString stringForByteNumber:currentStats.bytesAfter],
+                         [topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,
+                         [NSString stringForByteNumber:(topStats.before - topStats.after)],
+                         deviceId,@"(@加速宝)"];
     
     NSData* image = [self captureScreen];
     

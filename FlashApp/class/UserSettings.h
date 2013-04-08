@@ -93,6 +93,8 @@ PictureQsLevel;
     
     NSString* idcList;          //idc list
     
+    NSString *profileType; //用户安装描述文件类型
+    
     PictureQsLevel pictureQsLevel; 
 }
 @property (nonatomic, assign) int lvxpcur;//升级当前第几天
@@ -140,6 +142,8 @@ PictureQsLevel;
 
 @property(nonatomic,retain) NSData *headImageData;
 @property (nonatomic, retain) NSString* idcList;
+@property (nonatomic ,retain) NSString *profileType; //add guangtao 判断用户安装的描述文件是VPN还是APN
+@property (nonatomic , assign) int rcen ; //add guangtao 用来控制应用推荐是否显示
 
 @property (nonatomic, assign) PictureQsLevel pictureQsLevel; 
 //add jianfei han 01/28/2013

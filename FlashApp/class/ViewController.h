@@ -38,8 +38,7 @@ typedef enum {
 @property (nonatomic, retain) StageStats* totalStats;
 @property (nonatomic, retain) StageStats* monthStats;
 
-
-
+@property (nonatomic ,retain) IBOutlet UIButton *refreshBtn;
 
 @property (nonatomic, assign) IBOutlet DDPageControl *pageControl;
 
@@ -48,7 +47,6 @@ typedef enum {
 @property(nonatomic,retain)IBOutlet UIButton *questionBtn;
 @property(nonatomic,retain)IBOutlet UIButton *gameStyleBtn;
 @property(nonatomic,retain)IBOutlet UIImageView *gameStyleImageView;
-\
 
 @property(nonatomic,retain)NoLoginViewController*noLoginViewController;
 @property(nonatomic,retain)FirstPageViewController *firstPageViewController;
@@ -60,4 +58,6 @@ typedef enum {
 -(IBAction)questionBtnPress:(id)sender;
 -(IBAction)gameStyleBtnPress:(id)sender;
 -(IBAction)refreshBtnPress:(id)sender;
+
++(id)getSelfViewController;
 @end

@@ -301,6 +301,11 @@
         user.capacity = [value floatValue];
     }
     
+    value = [dic objectForKey:@"rcen"];
+    if (value && value != [NSNull null]) {
+        user.rcen = [value intValue];
+    }
+    
     value = [dic objectForKey:@"imgq"];
     PictureQsLevel pictureQsLevel = user.pictureQsLevel;
     NSUserDefaults *userDefault=[NSUserDefaults standardUserDefaults];
@@ -344,7 +349,10 @@
             user.idcName = value;//add jianfei han 
         }
     
-        
+        value = [proxyDic objectForKey:@"stype"];
+        if (value && value != [NSNull null]) {
+            user.profileType = value; //add guangtao；
+        }
         
         //hist
     }

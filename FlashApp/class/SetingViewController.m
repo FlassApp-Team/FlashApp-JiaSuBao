@@ -235,10 +235,11 @@
         }
         if([indexPath row]==1)
         {
+            UserSettings *user = [UserSettings currentUserSettings];
             cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
             cell.textLabel. textColor=[UIColor darkGrayColor];
             cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-            if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+            if ([CHANNEL compare:@"appstore"] == NSOrderedSame && [user.profileType isEqualToString:@"vpn"] ) {
                 cell.textLabel.text = @"  VPN设置";
             }
             else{
@@ -340,7 +341,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if([indexPath row]==1)
     {
-        if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+        UserSettings *user = [UserSettings currentUserSettings];
+        if ([CHANNEL compare:@"appstore"] == NSOrderedSame && [user.profileType isEqualToString:@"vpn"]) {
             VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
             [self.navigationController pushViewController:vpnHelp animated:YES];
             [vpnHelp release];
