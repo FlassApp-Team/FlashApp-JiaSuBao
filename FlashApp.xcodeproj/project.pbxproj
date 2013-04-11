@@ -537,6 +537,10 @@
 		B1E9ECBD16895462006DD353 /* FeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1E9ECBB1689545C006DD353 /* FeedbackViewController.xib */; };
 		B1F980C116E5AED10057261E /* LoadMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F980BF16E5AED10057261E /* LoadMoreViewController.m */; };
 		B1F980C216E5AED10057261E /* LoadMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1F980C016E5AED10057261E /* LoadMoreViewController.xib */; };
+		B35687721714F92F00627616 /* images8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B35687711714F92F00627616 /* images8.jpg */; };
+		B35687751714FEE900627616 /* CLO.html in Resources */ = {isa = PBXBuildFile; fileRef = B35687741714FEE900627616 /* CLO.html */; };
+		B3568779171503CB00627616 /* VPNCloseHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3568777171503CB00627616 /* VPNCloseHelpViewController.m */; };
+		B356877A171503CB00627616 /* VPNCloseHelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3568778171503CB00627616 /* VPNCloseHelpViewController.xib */; };
 		B391BE3C1709446F00825495 /* AppDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B391BE3A1709446F00825495 /* AppDetailsViewController.m */; };
 		B391BE3D1709446F00825495 /* AppDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B391BE3B1709446F00825495 /* AppDetailsViewController.xib */; };
 		B391BE41170958AF00825495 /* 横条.png in Resources */ = {isa = PBXBuildFile; fileRef = B391BE3F170958AF00825495 /* 横条.png */; };
@@ -1302,6 +1306,11 @@
 		B1F980BE16E5AED10057261E /* LoadMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMoreViewController.h; sourceTree = "<group>"; };
 		B1F980BF16E5AED10057261E /* LoadMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreViewController.m; sourceTree = "<group>"; };
 		B1F980C016E5AED10057261E /* LoadMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadMoreViewController.xib; sourceTree = "<group>"; };
+		B35687711714F92F00627616 /* images8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images8.jpg; sourceTree = "<group>"; };
+		B35687741714FEE900627616 /* CLO.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CLO.html; sourceTree = "<group>"; };
+		B3568776171503CA00627616 /* VPNCloseHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VPNCloseHelpViewController.h; sourceTree = "<group>"; };
+		B3568777171503CB00627616 /* VPNCloseHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VPNCloseHelpViewController.m; sourceTree = "<group>"; };
+		B3568778171503CB00627616 /* VPNCloseHelpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VPNCloseHelpViewController.xib; sourceTree = "<group>"; };
 		B391BE391709446F00825495 /* AppDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDetailsViewController.h; sourceTree = "<group>"; };
 		B391BE3A1709446F00825495 /* AppDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDetailsViewController.m; sourceTree = "<group>"; };
 		B391BE3B1709446F00825495 /* AppDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppDetailsViewController.xib; sourceTree = "<group>"; };
@@ -1545,6 +1554,9 @@
 				B3EE05F3170040AD00452226 /* VPNHelpViewController.h */,
 				B3EE05F4170040AD00452226 /* VPNHelpViewController.m */,
 				B3EE05F5170040AD00452226 /* VPNHelpViewController.xib */,
+				B3568776171503CA00627616 /* VPNCloseHelpViewController.h */,
+				B3568777171503CB00627616 /* VPNCloseHelpViewController.m */,
+				B3568778171503CB00627616 /* VPNCloseHelpViewController.xib */,
 			);
 			path = class;
 			sourceTree = "<group>";
@@ -2372,6 +2384,7 @@
 				B3AAE86417007CC100914E52 /* images */,
 				B3AAE8501700794D00914E52 /* css */,
 				B3AAE85A1700794D00914E52 /* YDD.html */,
+				B35687741714FEE900627616 /* CLO.html */,
 			);
 			path = profile;
 			sourceTree = "<group>";
@@ -2387,6 +2400,7 @@
 		B3AAE86417007CC100914E52 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				B35687711714F92F00627616 /* images8.jpg */,
 				B3AAE86517007CC100914E52 /* images1.jpg */,
 				B3AAE86617007CC100914E52 /* images2.jpg */,
 				B3AAE86717007CC100914E52 /* images3.jpg */,
@@ -2843,6 +2857,9 @@
 				B391BE3D1709446F00825495 /* AppDetailsViewController.xib in Resources */,
 				B391BE41170958AF00825495 /* 横条.png in Resources */,
 				B391BE42170958AF00825495 /* 立即下载.png in Resources */,
+				B35687721714F92F00627616 /* images8.jpg in Resources */,
+				B35687751714FEE900627616 /* CLO.html in Resources */,
+				B356877A171503CB00627616 /* VPNCloseHelpViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2994,6 +3011,7 @@
 				B3EE05F6170040AD00452226 /* VPNHelpViewController.m in Sources */,
 				B3AAE875170082B100914E52 /* GetAddress.m in Sources */,
 				B391BE3C1709446F00825495 /* AppDetailsViewController.m in Sources */,
+				B3568779171503CB00627616 /* VPNCloseHelpViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -36,6 +36,8 @@
 }
 -(void)nextContorller
 {
+    self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+
     ConnectionType type = [UIDevice connectionType];
     
     

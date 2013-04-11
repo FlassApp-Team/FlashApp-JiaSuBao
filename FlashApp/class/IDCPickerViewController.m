@@ -27,62 +27,6 @@
 @implementation IDCPickerViewController
 @synthesize controller;
 
-#pragma mark - init & destroy
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-
-- (void) dealloc
-{
-    [idcArray release];
-    [speedDic release];
-    [idcOrderArray release];
-    [items release];
-    [children release];
-    self.controller=nil;
-    if ( queue ) {
-        [queue cancelAllOperations];
-        [queue release];
-    }
-    
-    [super dealloc];
-}
-
-
-#pragma mark - view lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    self.tableView.backgroundColor = [UIColor clearColor];
- //   IDCInfo* idc = [idcArray objectAtIndex:selectedRow];
-
-    self.tableView.scrollEnabled=NO;
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"saveName", nil) style:UIBarButtonItemStylePlain target:self action:@selector(saveButtonClick:)] autorelease];
-    
-    self.tableView.separatorColor = [UIColor clearColor];
-    
-    //初始化变量
-    children = [[NSMutableArray array]retain];
-    selectedRow = 0;
-    [self loadData]; //加载速度
-
-    UserSettings* user = [AppDelegate getAppDelegate].user;
-    WangSuViewController *wangSuViewController=(WangSuViewController*)controller;
-    //    IDCInfo *info=(IDCInfo*)[user.idcArray objectAtIndex:0];
-    wangSuViewController.jiFangName.text=user.idcName;
-    //NSLog(@"3333333333333333333%@",user.idcName);
-    //  [self ping];
-}
-
 
 - (void)viewDidUnload
 {
@@ -111,11 +55,284 @@
     }
 }
 
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void) dealloc
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    [idcArray release];
+    [speedDic release];
+    [idcOrderArray release];
+    [items release];
+    [children release];
+    self.controller=nil;
+    if ( queue ) {
+        [queue cancelAllOperations];
+        [queue release];
+    }
+    
+    [super dealloc];
 }
+
+#pragma mark - init & destroy
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+
+#pragma mark - view lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.tableView.backgroundColor = [UIColor clearColor];
+ //   IDCInfo* idc = [idcArray objectAtIndex:selectedRow];
+
+    self.tableView.scrollEnabled=NO;
+//    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"saveName", nil) style:UIBarButtonItemStylePlain target:self action:@selector(saveButtonClick:)] autorelease];
+    
+    self.tableView.separatorColor = [UIColor clearColor];
+    
+    //初始化变量
+    children = [[NSMutableArray array]retain];
+    selectedRow = 0;
+    
+    [self loadData]; //加载速度
+
+    UserSettings* user = [AppDelegate getAppDelegate].user;
+    WangSuViewController *wangSuViewController=(WangSuViewController*)controller;
+    //    IDCInfo *info=(IDCInfo*)[user.idcArray objectAtIndex:0];
+    wangSuViewController.jiFangName.text=user.idcName;
+    //NSLog(@"3333333333333333333%@",user.idcName);
+    //  [self ping];
+}
+
+
+#pragma mark - load Data
+
+- (void) loadData
+{
+    if ( !idcOrderArray ) {
+        [idcOrderArray release];
+        idcOrderArray = [[NSMutableDictionary alloc] init];
+    }
+    
+    [idcOrderArray removeAllObjects];
+    items = [[NSMutableArray array]retain];
+    UserSettings* user = [AppDelegate getAppDelegate].user;
+    if ( [[AppDelegate getAppDelegate].networkReachablity currentReachabilityStatus] != NotReachable ) {
+        if ( client ) return;
+        client = [[TwitterClient alloc] initWithTarget:self action:@selector(didGetIDCList:obj:)];
+        [client getIDCList];
+    }
+    else {
+        NSString* s = user.idcList;
+        if ( s ) {
+            idcArray = [[user idcArray] retain];
+        }
+    }
+}
+
+- (void) didGetIDCList:(TwitterClient*)tc obj:(NSObject*)obj
+{
+    client = nil;
+    
+    if ( tc.hasError ) return;
+    
+    UserSettings* user = [AppDelegate getAppDelegate].user;
+    NSString* s = [obj JSONRepresentation]; //是吧字典还原成 json字符串
+    user.idcList = s;
+    [UserSettings saveUserSettings:user];
+    
+    idcArray = [[user idcArray] retain];  // 程序走到这一步就会返回服务器的机房信息 idcObject
+    
+    //    IDCInfo *info=(IDCInfo*)[user.idcArray objectAtIndex:0];
+    
+        
+    [self ping];
+    
+    // [self.tableView reloadData];
+}
+
+- (void) ping
+{
+    items = nil;
+    [items release];
+    items = [[NSMutableArray array]retain];
+    
+    children = nil;
+    [children release];
+    children = [[NSMutableArray array]retain];
+    
+    [self initSpeedDic];
+    
+    [self.tableView reloadData];
+    
+    if ( !queue ) {
+        queue = [[NSOperationQueue alloc] init];
+        [queue setMaxConcurrentOperationCount:1];
+    }
+    else {
+        [queue cancelAllOperations];
+    }
+    
+    idcCount = 0;
+    
+    if ( !idcOrderArray ) {
+        [idcOrderArray release];
+        idcOrderArray = [[NSMutableDictionary alloc] init];
+    }
+    
+    [idcOrderArray removeAllObjects];
+    
+    
+    for ( IDCInfo* idc in idcArray ) {
+        
+        NSInvocationOperation* operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(connectToHost:) object:idc];
+        [queue addOperation:operation];
+        
+        
+        NSMutableArray *more = [NSMutableArray array];
+        [more addObject:idc];
+        
+        // [idcOrderArray addObject:idc]; //机房算出速度后，放进新数组中
+        [idcOrderArray setObject:idc forKey:idc.code];
+        
+        //单个加载数据
+        [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:more waitUntilDone:YES];
+        
+    }
+    
+}
+
+
+- (void) initSpeedDic
+{
+    if ( !speedDic ) {
+        speedDic = [[NSMutableDictionary alloc] init];
+    }
+    
+    [speedDic removeAllObjects];
+    for ( IDCInfo* info in idcArray ) {
+        [speedDic setObject:[NSNumber numberWithInt:-1] forKey:info.code];
+    }
+}
+
+#pragma mark - network speed methods
+
+
+- (void) connectToHost:(IDCInfo*)idc
+{
+    
+    long long totalTime = 0;
+    int totalLen = 0;
+    
+    for ( int i=0; i<3; i++ ) {
+        long long time1 = [self currentTime];
+        NSString* s = [TFConnection httpGet:idc.host port:80 location:@"/speed.txt"];
+        long long time2 = [self currentTime];
+        
+        if ( time2 > time1 && s ) {
+            totalTime += (time2 - time1);
+            totalLen += s.length;
+        }
+    }
+    
+    float speed = 0;
+    if ( totalTime > 0 ) {
+        speed = 1000.0f * totalLen / totalTime;
+    }
+    
+    idc.speed = speed;
+    [speedDic setObject:[NSNumber numberWithInt:(int)speed] forKey:idc.code];
+    NSLog(@"test %@ OK, speed:%f", idc.name, speed);
+    idcCount ++;
+    [idcOrderArray setObject:idc forKey:idc.code];
+    
+    [self sortTable];
+
+}
+
+/*
+ 机房数据都加载完成后，进行按照速度的降序排序
+ */
+-(void) sortTable
+{
+    NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"speed" ascending:NO];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:&sorter count:1];
+    NSArray *sortedArray = [idcOrderArray allValues];;
+    
+    [idcArray release];
+    idcArray = nil;
+    idcArray = [[sortedArray sortedArrayUsingDescriptors:sortDescriptors]retain];
+    
+    //[sortedArray release];
+    [sortDescriptors release];
+    [sorter release];
+    
+    children = nil;
+    [children release];
+    children = [[NSMutableArray array]retain];
+    
+    selectedRow = 0;
+    
+    [self performSelectorOnMainThread:@selector(refreshTable) withObject:nil waitUntilDone:YES];
+}
+
+
+- (long long) currentTime
+{
+    struct timeb t;
+    ftime( &t );
+    return (long long)1000 * t.time + t.millitm;
+}
+
+
+//添加数据到列表:
+-(void) appendTableWith:(NSMutableArray *)data
+{
+    
+    [self.tableView beginUpdates];
+    for (int i=0;i<[data count];i++) {
+        [items addObject:[data objectAtIndex:i]];
+    }
+    
+    NSMutableArray *insertIndexPaths = [NSMutableArray arrayWithCapacity:10];
+    for (int ind = 0; ind < [data count]; ind++) {
+        
+        NSIndexPath *newPath = [NSIndexPath indexPathForRow:[items indexOfObject:[data objectAtIndex:ind]] inSection:0];
+        
+        [insertIndexPaths addObject:newPath];
+    }
+    if(insertIndexPaths.count > 0){
+        [self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+    }
+    [self.tableView endUpdates];
+    
+}
+
+/*
+ 点击单选按钮，触发该动作
+ */
+-(void)checkboxClick:(id)sender
+{
+    NSInteger tag1 =[(UIButton *)sender tag];
+    selectedRow = tag1;
+    
+    
+    for ( UIButton * each in children ){
+        if(each.tag == tag1){
+            each.selected = YES;
+        }else{
+            each.selected = NO;
+        }
+    }
+}
+
 
 
 #pragma mark - Table view data source
@@ -207,18 +424,6 @@
     [cell.contentView addSubview:checkbox];
     UILabel* nameLabel = (UILabel*) [cell.contentView viewWithTag:TAG_NAMELABEL];
     UILabel* detailLabel = (UILabel*) [cell.contentView viewWithTag:TAG_NAMELABEL+6];
-//    if([indexPath row]==0)
-//    {
-//        detailLabel.text=@"适合北京、山东、江苏等地区用户使用";
-//    }
-//    if([indexPath row]==1)
-//    {
-//        detailLabel.text=@"适合北京、山东、江苏等地区用户使用";
-//    }
-//    if([indexPath row]==2)
-//    {
-//        detailLabel.text=@"适合北京、山东、江苏等地区用户使用";
-//    }
     UIImageView* speedImage = (UIImageView*) [cell.contentView viewWithTag:TAG_SPEEDLABEL];
     UIButton* selectButton = (UIButton*)[cell.contentView viewWithTag:[indexPath row]+1000];
     UIImageView* lineImageView = (UIImageView*) [cell.contentView viewWithTag:TAG_LINEIMAGE];
@@ -256,104 +461,28 @@
         speedImage.hidden = YES;
         speedImage.hidden = YES;
     }
-        
-    
-  //  UserSettings* user = [AppDelegate getAppDelegate].user;
-//    
-//    if ( rowNum==0) {
-//        selectedRow = rowNum;
-//        selectButton.selected = YES;
-//    }
-//    else {    
-//        selectButton.selected = NO;
-//    }
-
     
     UserSettings* user = [AppDelegate getAppDelegate].user;
     
     if ( [idc.host compare:user.idcServer] == NSOrderedSame ) {
+        
         selectedRow = rowNum;
         selectButton.selected = YES;
+        
+        WangSuViewController *wangSuViewController=(WangSuViewController*)controller;
+        //更改 当前- 机房名字
+        wangSuViewController.jiFangName.text=user.idcName;
+
     }
     else {
         selectButton.selected = NO;
     }
-    //cell.backgroundColor = bgColor;
     
     return cell;
 }
 
-/*
- 点击单选按钮，触发该动作
- */
--(void)checkboxClick:(id)sender
-{
-    NSInteger tag1 =[(UIButton *)sender tag];
-    selectedRow = tag1;
-    
-    
-    for ( UIButton * each in children ){
-        if(each.tag == tag1){
-            each.selected = YES;
-        }else{
-            each.selected = NO;
-        }
-    }
-}
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }   
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }   
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
 
 #pragma mark - Table view delegate
-
-
-//- (NSIndexPath*) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    IDCInfo* idc = [idcArray objectAtIndex:indexPath.row];
-//    UserSettings* user = [AppDelegate getAppDelegate].user;
-//    if ( ![idc.host compare:user.idcServer] == NSOrderedSame ) {
-//        return indexPath;
-//    }
-//    else {
-//        return nil;
-//    }
-//}
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -387,59 +516,6 @@
 }
 
 
-//添加数据到列表:
--(void) appendTableWith:(NSMutableArray *)data
-{
-    
-    [self.tableView beginUpdates];
-    for (int i=0;i<[data count];i++) {
-        [items addObject:[data objectAtIndex:i]];
-    }
-    
-    NSMutableArray *insertIndexPaths = [NSMutableArray arrayWithCapacity:10];
-    for (int ind = 0; ind < [data count]; ind++) {
-        
-        NSIndexPath *newPath = [NSIndexPath indexPathForRow:[items indexOfObject:[data objectAtIndex:ind]] inSection:0];
-        
-        [insertIndexPaths addObject:newPath];
-    }
-    if(insertIndexPaths.count > 0){
-        [self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationFade];
-    }
-    [self.tableView endUpdates];
-    
-}
-
-/*
- 机房数据都加载完成后，进行按照速度的降序排序
- */
--(void) sortTable
-{
-    NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"speed" ascending:NO];
-    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:&sorter count:1];
-    NSArray *sortedArray = [idcOrderArray allValues];;
-    
-    [idcArray release];
-    idcArray = nil;
-    idcArray = [[sortedArray sortedArrayUsingDescriptors:sortDescriptors]retain];
-    
-    //[sortedArray release];
-    [sortDescriptors release];
-    [sorter release];
-    
-    children = nil;
-    [children release];
-    children = [[NSMutableArray array]retain];
-    
-    selectedRow = 0;
-    //    if(idcCount == idcArray.count){
-    //        //[self sortTable];
-    //        [button setTitle:@"重新测速" forState:UIControlStateNormal];
-    //    }
-    [self performSelectorOnMainThread:@selector(refreshTable) withObject:nil waitUntilDone:YES];
-}
-
-
 - (void) refreshTable
 {
 
@@ -447,239 +523,7 @@
 }
 
 
-#pragma mark - load Data
 
-- (void) loadData
-{
-    if ( !idcOrderArray ) {
-        [idcOrderArray release];
-        idcOrderArray = [[NSMutableDictionary alloc] init];
-    }
-    
-    [idcOrderArray removeAllObjects];
-    items = [[NSMutableArray array]retain];
-    UserSettings* user = [AppDelegate getAppDelegate].user;
-    if ( [[AppDelegate getAppDelegate].networkReachablity currentReachabilityStatus] != NotReachable ) {
-        if ( client ) return;
-        client = [[TwitterClient alloc] initWithTarget:self action:@selector(didGetIDCList:obj:)];
-        [client getIDCList];
-    }
-    else {
-        NSString* s = user.idcList;
-        if ( s ) {
-            idcArray = [[user idcArray] retain];
-        }
-    }
-}
-
-- (void) didGetIDCList:(TwitterClient*)tc obj:(NSObject*)obj
-{
-    client = nil;
-    
-    if ( tc.hasError ) return;
-    
-    UserSettings* user = [AppDelegate getAppDelegate].user;
-    NSString* s = [obj JSONRepresentation];
-    user.idcList = s;
-    [UserSettings saveUserSettings:user];
-    idcArray = [[user idcArray] retain];
-    WangSuViewController *wangSuViewController=(WangSuViewController*)controller;
-    //    IDCInfo *info=(IDCInfo*)[user.idcArray objectAtIndex:0];
-    wangSuViewController.jiFangName.text=user.idcName;
-    
-    [self ping];
-    
-    // [self.tableView reloadData];
-}
-
-
-- (void) initSpeedDic
-{
-    if ( !speedDic ) {
-        speedDic = [[NSMutableDictionary alloc] init];
-    }
-    
-    [speedDic removeAllObjects];
-    for ( IDCInfo* info in idcArray ) {
-        [speedDic setObject:[NSNumber numberWithInt:-1] forKey:info.code];
-    }
-}
-
-
-#pragma mark - network speed methods
-
-- (void) ping
-{
-    items = nil;
-    [items release];
-    items = [[NSMutableArray array]retain];
-    
-    children = nil;
-    [children release];
-    children = [[NSMutableArray array]retain];
-    
-    [self initSpeedDic];
-    [self.tableView reloadData];
-    
-    if ( !queue ) {
-        queue = [[NSOperationQueue alloc] init];
-        [queue setMaxConcurrentOperationCount:1];
-    }
-    else {
-        [queue cancelAllOperations];
-    }
-    
-    idcCount = 0;
-    
-    if ( !idcOrderArray ) {
-        [idcOrderArray release];
-        idcOrderArray = [[NSMutableDictionary alloc] init];
-    }
-    
-    [idcOrderArray removeAllObjects];
-    
-    
-    for ( IDCInfo* idc in idcArray ) {
-        
-        NSInvocationOperation* operation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(connectToHost:) object:idc];
-        [queue addOperation:operation];
-        
-        
-        NSMutableArray *more = [NSMutableArray array];
-        [more addObject:idc];
-        
-        // [idcOrderArray addObject:idc]; //机房算出速度后，放进新数组中
-        [idcOrderArray setObject:idc forKey:idc.code];
-        
-        //单个加载数据
-        [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:more waitUntilDone:YES];
-        
-    }
-    //  [self sortTable];
-    
-    
-}
-
-
-- (void) connectToHost:(IDCInfo*)idc
-{
-    
-    long long totalTime = 0;
-    int totalLen = 0;
-    
-    for ( int i=0; i<3; i++ ) {
-        long long time1 = [self currentTime];
-        NSString* s = [TFConnection httpGet:idc.host port:80 location:@"/speed.txt"];
-        //NSString* s = [TFConnection httpGet:@"www.flashapp.cn" port:80 location:@"/"];
-        long long time2 = [self currentTime];
-        
-        if ( time2 > time1 && s ) {
-            totalTime += (time2 - time1);
-            totalLen += s.length;
-        }
-    }
-    
-    float speed = 0;
-    if ( totalTime > 0 ) {
-        speed = 1000.0f * totalLen / totalTime;
-    }
-    
-    idc.speed = speed;
-    [speedDic setObject:[NSNumber numberWithInt:(int)speed] forKey:idc.code];
-    NSLog(@"test %@ OK, speed:%f", idc.name, speed);
-    idcCount ++;
-    [idcOrderArray setObject:idc forKey:idc.code];
-    
-    // [idcOrderArray addObject:idc]; //机房算出速度后，放进新数组中
-    
-    //    if(idcCount == idcArray.count){
-    //        //[self sortTable];
-    //        [button setTitle:@"重新测速" forState:UIControlStateNormal];
-    //    }
-    
-    [self sortTable];
-    //     [self performSelectorOnMainThread:@selector(refreshTable) withObject:nil waitUntilDone:YES];
-}
-
-
-
-
-- (long long) currentTime
-{
-    struct timeb t;
-    ftime( &t );
-    return (long long)1000 * t.time + t.millitm;
-}
-
-
-/*
- - (void) ping
- {
- [self initSpeedDic];
- [self.tableView reloadData];
- 
- if ( !queue ) {
- queue = [[ASINetworkQueue alloc] init];
- }
- 
- [queue reset];
- [queue setDownloadProgressDelegate:progressIndicator];
- [queue setRequestDidFinishSelector:@selector(pingComplete:)];
- [queue setRequestDidFailSelector:@selector(pingFailed:)];
- [queue setDelegate:self];
- [queue setShouldCancelAllRequestsOnFailure:NO];
- [queue setMaxConcurrentOperationCount:4];
- 
- for ( IDCInfo* idc in idcArray ) {
- NSString* url = [NSString stringWithFormat:@"http://%@/api/%@", idc.host, API_IDC_SPEED];
- ASIHTTPRequest* request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
- request.userInfo = [NSDictionary dictionaryWithObject:idc forKey:@"idc"];
- [queue addOperation:request];
- }
- 
- if ( idcArray.count > 0 ) {
- [queue go];
- }
- }
- 
- 
- - (void) pingComplete:(ASIHTTPRequest*)request
- {
- IDCInfo* idc = [request.userInfo objectForKey:@"idc"];
- 
- NSString* responseString = request.responseString;
- if ( !responseString || responseString.length == 0 ) {
- [speedDic setObject:[NSNumber numberWithInt:0] forKey:idc.code];
- }
- else {
- NSObject* obj = [responseString JSONValue];
- if ( ![obj isKindOfClass:[NSDictionary class]] ) {
- [speedDic setObject:[NSNumber numberWithInt:0] forKey:idc.code];
- }
- else {
- NSDictionary* dic = (NSDictionary*) obj;
- id value = [dic objectForKey:@"speed"];
- if ( !value || value == [NSNull null] ) {
- [speedDic setObject:[NSNumber numberWithInt:0] forKey:idc.code];
- }
- else {
- int speed = [value intValue];
- [speedDic setObject:[NSNumber numberWithInt:speed] forKey:idc.code];
- }
- }
- }
- 
- [self.tableView reloadData];
- }
- 
- 
- - (void) pingFailed:(ASIHTTPRequest*)request
- {
- IDCInfo* idc = [request.userInfo objectForKey:@"idc"];
- [speedDic setObject:[NSNumber numberWithInt:0] forKey:idc.code];
- [self.tableView reloadData];
- }
- */
 
 #pragma mark - UIAlertView Delegate
 
@@ -696,11 +540,7 @@
         for ( UITableViewCell* c in cells ) {
             c.accessoryType = UITableViewCellAccessoryNone;
         }
-        
-        //        if ( cell ) {
-        //            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        //        }
-        
+                
         //刷新访问数据
         [TwitterClient getStatsData];
     
@@ -711,5 +551,12 @@
         }
     }
 }
+
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
 
 @end

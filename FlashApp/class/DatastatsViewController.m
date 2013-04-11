@@ -314,17 +314,20 @@ static int shareArrayPage ;
     }
     else if(currentPage>page)
     {
-        currentPage=page;
-        [self monthSliderNext];
+//        currentPage=page;
+//        [self monthSliderNext];
+        return;
         
     }
     else
     {
-        [self monthSliderNow];
-        
+//        [self monthSliderNow];
+        return;
     }
     
 }
+
+
 
 // 滚动停止时，触发该函数
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView               //"触摸滑动事件
@@ -351,15 +354,16 @@ static int shareArrayPage ;
     }
     else if(currentPage>page)
     {
-        currentPage = page;
-        [self monthSliderNext];
+//        currentPage = page;
+//        [self monthSliderNext];
         
 //        return;
         
     }
     else
     {
-          [self monthSliderNow];
+//        currentPage = page;
+//          [self monthSliderNow];
 //        return;
         
     }
@@ -523,6 +527,11 @@ static int shareArrayPage ;
     if (shareArrayPage >= [shareArray count]) {
         return; //如果 存放月份里面节省最多的流量app的array 它的长度 小于或者等于 页数那么不对防止崩溃，所以退出
     }
+    
+    for (int i = 0 ; i < [shareArray count]; i ++) {
+        NSLog(@"shareArray name = %@",[[shareArray objectAtIndex: i] userAgent]);
+    }
+    
     StatsDetail* topStats = [shareArray objectAtIndex:shareArrayPage];
     NSString* deviceId = [OpenUDID value];
     NSString* date = [DateUtils stringWithDateFormat:currentStats.startTime format:@"yyyy-MM"];
@@ -534,14 +543,13 @@ static int shareArrayPage ;
 //                         ((float) (currentStats.bytesBefore - currentStats.bytesAfter)) / currentStats.bytesBefore * 100,
 //                         [topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,
 //                         ((float)(topStats.before - topStats.after)) / topStats.before * 100,
-//                         deviceId,@"(@加速宝)"];
+//                         deviceId,@"(@飞速流量压缩仪)"];
     //content = @"Very Good!";
 
-    NSString* content = [NSString stringWithFormat:@"#%@用加速宝#我正在使用加速宝，本月已经节省了%@，实际使用%@，其中%@节省达到%@以上，加速宝流量，省钱，快速。 下载地址：http://jiasu.flashapp.cn/social/%@.html %@",         date,[NSString stringForByteNumber:(currentStats.bytesBefore - currentStats.bytesAfter)],
-                         [NSString stringForByteNumber:currentStats.bytesAfter],
+    NSString* content = [NSString stringWithFormat:@"#%@用加速宝#节省了%@，%@节省达到%@，网速慢？流量少？就用加速宝。免费下载：http://jiasu.flashapp.cn/social/%@.html %@",         date,[NSString stringForByteNumber:(currentStats.bytesBefore - currentStats.bytesAfter)],
                          [topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,
                          [NSString stringForByteNumber:(topStats.before - topStats.after)],
-                         deviceId,@"(@加速宝)"];
+                         deviceId,@"(@飞速流量压缩仪)"];
     
     NSData* image = [self captureScreen];
     

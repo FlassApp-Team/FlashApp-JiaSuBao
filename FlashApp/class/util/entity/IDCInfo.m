@@ -49,8 +49,6 @@
         if ( value && value != [NSNull null] ) shost = value;
         
         value = [dic objectForKey:@"desc"];
-        NSLog(@"Vale======%@",value);
-
         if ( value && value != [NSNull null] ) sdesc = value;
         
         if ( scode && sname && shost &&sdesc&& scode.length > 0 && sname.length > 0 && shost.length > 0 &&sdesc.length>0) {

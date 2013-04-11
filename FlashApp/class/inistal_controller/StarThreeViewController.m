@@ -43,6 +43,11 @@
 }
 -(IBAction)installedBtnPress:(id)sender
 {
+    
+    //这里先要更新下数据，因为默认都是安装上的，如果没有安装上 要改变 user.profileType 和 user.proxyFlag
+    
+//    [TwitterClient getAccessData];
+    
     if(self.viewController==nil)
     {
         if(iPhone5)

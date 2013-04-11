@@ -54,6 +54,8 @@ typedef enum {
 @property(nonatomic,retain)GameStyleViewController *gameStyleViewController;
 @property(nonatomic,retain)UserInfoViewController *userInfoViewController;
 @property(nonatomic,retain)SetingViewController*setingViewController;
+
+
 -(IBAction)settingBtnPress:(id)sender;
 -(IBAction)questionBtnPress:(id)sender;
 -(IBAction)gameStyleBtnPress:(id)sender;

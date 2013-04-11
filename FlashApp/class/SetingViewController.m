@@ -22,6 +22,8 @@
 #import "StarViewController.h"
 #import "AboutFlashViewController.h"
 #import "VPNHelpViewController.h"
+#import "VPNCloseHelpViewController.h"
+
 @interface SetingViewController ()
 
 @end
@@ -215,8 +217,6 @@
                 self.compressionServer=YES;
                 turnLabe.text=@"关";
                 [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_close.png"] forState:UIControlStateNormal];
-
-
             }
             else {
                // cell.textLabel.text = NSLocalizedString(@"set.service.status.opened", nil);
@@ -436,14 +436,23 @@
 -(void)turnServeBtnPress:(id)sender
 {
     if ( self.compressionServer ) {
+        
         ConnectionType type = [UIDevice connectionType];
+        UserSettings *user = [UserSettings currentUserSettings];
+        
         if(type==WIFI)
         {
-            [AppDelegate showAlert:@"wifi下加速宝服务暂停,请先开启移动网络."];
+            [AppDelegate showAlert:@"wifi下无法开启压缩服务"];
         }
         else
         {
-            [self installProfile];
+            if ([user.profileType isEqualToString:@"vpn"]) {
+                VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
+                [self.navigationController pushViewController:vpnHelp animated:YES];
+                [vpnHelp release];
+            }else if([user.profileType isEqualToString:@"apn"]){
+                [self installProfile];
+            }
         }
     }
     else {

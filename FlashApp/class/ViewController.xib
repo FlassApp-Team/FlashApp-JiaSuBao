@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
-		<int key="IBDocument.SystemTarget">1296</int>
+		<int key="IBDocument.SystemTarget">1280</int>
 		<string key="IBDocument.SystemVersion">12D78</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2549</string>
 		<string key="IBDocument.AppKitVersion">1187.37</string>
@@ -184,7 +184,6 @@
 								<string key="NSFrame">{{278, 407}, {30, 27}}</string>
 								<reference key="NSSuperview" ref="627594741"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -524,7 +523,6 @@
 						<string key="gameStyleImageView">UIImageView</string>
 						<string key="pageControl">DDPageControl</string>
 						<string key="questionBtn">UIButton</string>
-						<string key="reflashActivity">UIActivityIndicatorView</string>
 						<string key="refreshBtn">UIButton</string>
 						<string key="scrollview">UIScrollView</string>
 						<string key="settingBtn">UIButton</string>
@@ -545,10 +543,6 @@
 						<object class="IBToOneOutletInfo" key="questionBtn">
 							<string key="name">questionBtn</string>
 							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="reflashActivity">
-							<string key="name">reflashActivity</string>
-							<string key="candidateClassName">UIActivityIndicatorView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="refreshBtn">
 							<string key="name">refreshBtn</string>
@@ -572,10 +566,6 @@
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
-		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
-			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1296" key="NS.object.0"/>
-		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">

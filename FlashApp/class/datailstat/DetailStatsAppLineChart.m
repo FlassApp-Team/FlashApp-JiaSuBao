@@ -95,6 +95,7 @@ NSString *const kAfterLine	 = @"afterLine";
 //	minorGridLineStyle.lineWidth = 0.25;
 //	minorGridLineStyle.lineColor = [[CPTColor blackColor] colorWithAlphaComponent:0.5];
     
+    //Y轴的坐标轴
 	CPTMutableLineStyle *axisLineStyle = [CPTMutableLineStyle lineStyle];
 	axisLineStyle.lineWidth = 1.0;
 	axisLineStyle.lineColor = [CPTColor grayColor];

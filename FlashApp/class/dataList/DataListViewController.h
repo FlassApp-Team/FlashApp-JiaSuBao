@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "StageStats.h"
 #import "TwitterClient.h"
+@class DatastatsViewController;
 #define saveFlag 101;
 #define jiasuFlag 102;
 @interface DataListViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
@@ -40,9 +41,6 @@
 @property(nonatomic,retain)IBOutlet UIView *bgView;
 
 @property (nonatomic ,retain) NSMutableDictionary *JieShengDic;
-
-//本类的代理方法，目的是为了把值传给分享的页面，分享页面要用到这个值来
-@property(nonatomic ,assign) id delegate;
 
 -(void)reloadData;
 - (void) getAccessData;

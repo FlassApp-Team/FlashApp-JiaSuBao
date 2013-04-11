@@ -471,12 +471,28 @@
     NSLog(@"proxyFlag=================%@",[result objectForKey:@"proxyFlag"]);
     
     if ( value && value != [NSNull null] ) {
-        NSDecimalNumber* proxyFlag = (NSDecimalNumber*) value;
+        
+        InstallFlag proxyFlag = [((NSDecimalNumber*) value) intValue];
         ConnectionType connType = [UIDevice connectionType];
-        if ( connType == CELL_2G || connType == CELL_3G || connType == CELL_4G ) {
-            InstallFlag flag = [proxyFlag intValue];
-            if ( flag == INSTALL_FLAG_UNKNOWN ) flag = INSTALL_FLAG_NO;
-            user.proxyFlag = flag;
+        
+        if ( proxyFlag == INSTALL_FLAG_VPN_RIGHT_IDC_PAC || proxyFlag == INSTALL_FLAG_VPN_RIGHT_IDC_NO_PAC ||
+            proxyFlag == INSTALL_FLAG_VPN_WRONG_IDC_PAC || proxyFlag == INSTALL_FLAG_VPN_WRONG_IDC_NO_PAC ) {
+            user.profileType = @"vpn";
+            user.proxyFlag = proxyFlag;
+        }
+        else if ( proxyFlag == INSTALL_FLAG_APN_RIGHT_IDC || proxyFlag == INSTALL_FLAG_APN_WRONG_IDC ) {
+            user.profileType = @"apn";
+            user.proxyFlag = proxyFlag;
+        }
+        else if ( proxyFlag == INSTALL_FLAG_UNKNOWN ) {
+            if ( [@"vpn" isEqualToString:user.profileType] && ![AppDelegate pdVpnIsOpenOrClose] ) {
+                user.proxyFlag = INSTALL_FLAG_NO; //VPN未开启
+            }
+            else {
+                if ( connType == CELL_2G || connType == CELL_3G || connType == CELL_4G ) {
+                    user.proxyFlag = INSTALL_FLAG_NO; //apn未启动
+                }
+            }
         }
     }
     

@@ -574,12 +574,12 @@
         
         datastatsDetailViewController.statsDetail=detail;
     }
-    else if(self.currentBtn==self.jiaSuBtn)
-    {
-        StatsDetail *detail=[self.jiasuAgentArray objectAtIndex:[indexPath row]];
-        
-        datastatsDetailViewController.statsDetail=detail;
-    }
+//    else if(self.currentBtn==self.jiaSuBtn)
+//    {
+//        StatsDetail *detail=[self.jiasuAgentArray objectAtIndex:[indexPath row]];
+//        
+//        datastatsDetailViewController.statsDetail=detail;
+//    }
     datastatsDetailViewController.dataListController=self;
     datastatsDetailViewController.currentStats=self.currentStats;
     datastatsDetailViewController.startTime=self.startTime;

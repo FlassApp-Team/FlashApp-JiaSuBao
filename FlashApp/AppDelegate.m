@@ -30,6 +30,10 @@
 #import "OpenUDID.h"
 #import "MBProgressHUD.h"
 #import "GetAddress.h"
+
+//add guangtao 
+#import "VPNHelpViewController.h"
+
 #define APPID 606803214//addd jianfei han
 
 @implementation AppDelegate
@@ -172,6 +176,9 @@
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 
+/*
+    新接口这个接口带有 自动 和 手动 两种模式
+ */
 + (NSString*) getInstallURL:(NSString*)nextPage install:(BOOL)isInstall vpn:(NSString*)apn idc:(NSString*)idcCode
 {
     DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
@@ -222,14 +229,14 @@
 {
     NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
     
-    if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
-        NSString *vpn = [userDefault objectForKey:@"vpnName"];
-        [self installProfile:nextPage vpn:vpn];
-    }
-    else{
+//    if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
+//        NSString *vpn = [userDefault objectForKey:@"vpnName"];
+//        [self installProfile:nextPage vpn:vpn];
+//    }
+//    else{
         NSString* apn = [userDefault objectForKey:@"apnName"];
         [self installProfile:nextPage apn:apn];
-    }
+//    }
 }
 
 
@@ -354,50 +361,22 @@
 
 - (void) showSetupView
 {
-    LaunchViewController *lanuchController =  [[[LaunchViewController alloc]init] autorelease];
+    LaunchViewController *lanuchController = [[[LaunchViewController alloc]init] autorelease];
     if(self.navController==nil)
     {
-        self.navController=[[[UINavigationController alloc]initWithRootViewController:lanuchController] autorelease];
+        self.navController=[[[UINavigationController alloc]initWithRootViewController:lanuchController]autorelease];
     }
     DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
     float version = [device.version floatValue];
     if ( version >= 4.0 ) {
         self.window.rootViewController =  self.navController;
-        
     }
     else {
         [self.window addSubview: self.navController.view];
     }
-}
-
-
-- (DeviceInfo*) getDeviceInfo
-{
-    DeviceInfo* deviceInfo = [TwitterClient getRegisteredDevice];
-    if ( deviceInfo ) {
-        user.capacity = [deviceInfo.quantity floatValue];
-        user.status = [deviceInfo.status intValue];
-        
-        if ( connType == CELL_2G || connType == CELL_3G || connType == CELL_4G ) {
-            int proxyFlag = [deviceInfo.proxyflag intValue];
-            if ( proxyFlag ) {
-                //安装了profile
-                user.proxyFlag = INSTALL_FLAG_YES;
-            }
-            else {
-                //没有安装profile
-                user.proxyFlag = INSTALL_FLAG_NO;
-            }
-        }
-    }
-    else {
-        user.capacity = QUANTITY_INIT;
-        user.status = STATUS_NEW;
-    }
-    //user.proxyFlag = INSTALL_FLAG_NO;
     
-    return deviceInfo;
 }
+
 
 /*
  *通知网络状态发生改变的时候进入的方法
@@ -522,11 +501,7 @@
         [self performSelector:@selector(processRemoteNotification:) withObject:userInfo afterDelay:0.5f];
         //[self performSelectorOnMainThread:@selector(processRemoteNotification:) withObject:userInfo waitUntilDone:NO];
     }
-    
-
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityWillChanged:)
-//                                                 name:kReachabilityChangedNotification object:nil];
-    
+        
     refreshThread = [[NSThread alloc] initWithTarget:self selector:@selector(runRefresh:) object:nil];
     [refreshThread start];
     
@@ -539,7 +514,7 @@
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     
-    [self timerTask];
+        [self timerTask];
     
     //这里就不要发送通知了，这个通知叫 viewController 的 - viewDidAppear 去发送吧。错误，这里还是要发送，应为我程序运行到后台再起来的时候要接收通知
 //    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
@@ -556,9 +531,11 @@
     NSLog(@"++++++++++++++applicationDidBecomeActive");
     float currentCapacity = [UserSettings currentCapacity];
     if ( currentCapacity > 0 ) {
+        
+        //增加用户限额用的。
         [self incrDayCapacity];
         
-        //访问getMemberInfo接口
+        //访问getMemberInfo接口 ，获取用户限额和级别
         [self getMemberInfo];
     }
 }
@@ -607,7 +584,7 @@
         
         if ( [page length] > 0 )
         {
-            NSDictionary* params = [TwitterClient urlParameters:page];
+            NSDictionary* params = [TwitterClient urlParameters:page]; //跳转回来后 返回给我的一个字典
             NSArray* array = [page componentsSeparatedByString:@"?"];
             NSString* queryString = nil;
             if ( [array count] > 1 )
@@ -618,7 +595,7 @@
             
             //profile已经安装
             if ( queryString ) {
-                NSString* setInstall = [params objectForKey:@"setInstall"];
+                NSString* setInstall = [params objectForKey:@"setInstall"];//setInstall 1:安装服务，0：取消服务
                 NSString* status = [params objectForKey:@"status"];
                 NSString* capacity = [params objectForKey:@"quantity"];
                 
@@ -650,8 +627,24 @@
                 }
                 
                 if ( [@"1" compare:setInstall] == NSOrderedSame ) {
-                    [UserSettings saveCapacity:[capacity floatValue] status:[status intValue] proxyFlag:INSTALL_FLAG_YES];
-                    user.proxyFlag = INSTALL_FLAG_YES;
+                    //设置 stype 这个属性，
+                    NSString *stype = [params objectForKey:@"stype"];
+                    if (stype && stype.length > 0) {
+                        [userDefault setObject:stype forKey:@"stype"];
+                        user.profileType = stype ;
+                    }
+                    
+                    if ([user.profileType isEqualToString:@"vpn"]) {
+                        
+                        user.proxyFlag = INSTALL_FLAG_VPN_RIGHT_IDC_PAC;
+                        
+                    }else if ([user.profileType isEqualToString:@"apn"]){
+                        
+                        user.proxyFlag = INSTALL_FLAG_APN_RIGHT_IDC;
+                        
+                    }
+                    
+                    [UserSettings saveCapacity:[capacity floatValue] status:[status intValue] proxyFlag:user.proxyFlag];
                 }
                 else {
                     [UserSettings saveCapacity:[capacity floatValue] status:[status intValue] proxyFlag:INSTALL_FLAG_NO];
@@ -690,10 +683,22 @@
                 if ( [controller isKindOfClass:[SetingViewController class]] ) {
                     SetingViewController* settingController = (SetingViewController*) controller;
                     [settingController  refresh];
+                    
+                    //如果是安装了VPN (也许没有安装，用户点击取消了。 这个时候呢 进帮主页面。)
+                    if ([user.profileType isEqualToString:@"vpn"] && user.proxyFlag == INSTALL_FLAG_NO) {
+                        VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
+                        [settingController.navigationController pushViewController:vpnHelp animated:YES];
+                        [vpnHelp release];
+                    }
+                    
                 }
                 else if ( [controller isKindOfClass:[WangSuViewController class]] ) {
                     WangSuViewController* wangSuViewController = (WangSuViewController*) controller;
                     [wangSuViewController relfresh];
+                }
+                else if ([controller isKindOfClass:[VPNHelpViewController class]]){
+                    VPNHelpViewController *vpnHelp = (VPNHelpViewController *)controller;
+                    [vpnHelp.navigationController popToRootViewControllerAnimated:YES];
                 }
 //                else if ( [controller isKindOfClass:[HelpNetBadViewController class]] ) {
 //                    HelpNetBadViewController* helpController = (HelpNetBadViewController*) controller;
@@ -898,7 +903,7 @@
                 
                 InstallFlag proxyFlag = user.proxyFlag;
                 connType = [UIDevice connectionType];
-                if ( proxyFlag == INSTALL_FLAG_YES && (connType == CELL_2G || connType == CELL_3G || connType == CELL_4G) ) {
+                if ( (proxyFlag == INSTALL_FLAG_APN_RIGHT_IDC ||proxyFlag == INSTALL_FLAG_VPN_RIGHT_IDC_PAC) && (connType == CELL_2G || connType == CELL_3G || connType == CELL_4G) ) {
                     proxySlow = [self proxyServerSlow];
                 }
                 else {

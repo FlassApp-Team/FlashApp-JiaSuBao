@@ -22,7 +22,11 @@
 #import "UserAgentLockDAO.h"
 #import "NoLoginViewController.h"
 #import "DateUtils.h"
+
+//add guangtao
 #import "VPNHelpViewController.h"
+#import "VPNCloseHelpViewController.h"
+
 #define PageCount 2
 #define PageAllCount 2
 
@@ -87,34 +91,12 @@
     
     [super dealloc];
 }
-- (void)viewWillAppear:(BOOL)animated
-{
-   // [self setLastUpdateDate];
-    [super viewWillAppear:animated];
-}
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
+
+- (void)viewDidUnload {
     
-    
-    //发送通知检查
-    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
-    
-    if ( justLoaded ) {
-        [self performSelector:@selector(getAccessData) withObject:nil afterDelay:0.0];
-        
-        stepStats.bytesBefore = 0;
-        
-        justLoaded = NO;
-    }
-    else {
-        AppDelegate* appDelegate = [AppDelegate getAppDelegate];
-        if ( appDelegate.refreshDatasave ) {
-            [self performSelector:@selector(getAccessData) withObject:nil afterDelay:0.0];
-            appDelegate.refreshDatasave = NO;
-        }
-    }
+    [[NSNotificationCenter defaultCenter ] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [super viewDidUnload];
     
 }
 
@@ -128,7 +110,9 @@
     [self.navigationController setNavigationBarHidden:YES ];
     [self initScrollview];
     [self layoutScrollImages];
-    [self gameStyleBtnShow];
+    
+    //游戏 & 睡眠等模式 ！现在没有用，注释掉
+//    [self gameStyleBtnShow];
     
     
 	[pageControl setNumberOfPages: 2] ;
@@ -173,13 +157,36 @@
     //    //接收套餐数据修改通知
     //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadAndShowData) name:TCChangedNotification object: nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(lineChange) name:kReachabilityChangedNotification object:nil];
+    
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-   // [dialogView close];
-    [super viewWillDisappear:animated];
+    [super viewDidAppear:animated];
+    
+    
+    //发送通知检查
+    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kReachabilityChangedNotification object:nil];
+    
+    if ( justLoaded ) {
+        [self performSelector:@selector(getAccessData) withObject:nil afterDelay:0.0];
+        
+        stepStats.bytesBefore = 0;
+        
+        justLoaded = NO;
+    }
+    else {
+        AppDelegate* appDelegate = [AppDelegate getAppDelegate];
+        if ( appDelegate.refreshDatasave ) {
+            [self performSelector:@selector(getAccessData) withObject:nil afterDelay:0.0];
+            appDelegate.refreshDatasave = NO;
+        }
+    }
+    
 }
 
 +(id)getSelfViewController
@@ -192,46 +199,20 @@
     return viewController;
 }
 
+- (void) getAccessData
+{
+    [self getAccessData:NO];
+}
+
 - (void) getAccessData:(BOOL)dropdownRefresh
 {
     //读已用流量
     [TCUtils readIfData:-1];
-    
-    if ( twitterClient ) {
-        if ( dropdownRefresh ) {
-            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
-        }
-        return;
-    }
-    
-    AppDelegate* app = [AppDelegate getAppDelegate];
-    if ( [app.networkReachablity currentReachabilityStatus] == NotReachable ) {
-        if ( dropdownRefresh ) {
-            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
-        }
-        return;
-    }
-    
-    if ( ![[AppDelegate getAppDelegate].refreshingLock tryLock] ) {
-        if ( dropdownRefresh ) {
-            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.3f];
-        }
-        return;
-    }
-    
-
-    //[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    //self.navigationItem.rightBarButtonItem.enabled = NO;
-    
+        
     time_t lastDayLong = [AppDelegate getLastAccessLogTime];
     twitterClient = [[TwitterClient alloc] initWithTarget:self action:@selector(didGetAccessData:obj:)];
     twitterClient.context = [NSArray arrayWithObjects:[NSNumber numberWithLong:lastDayLong], [NSNumber numberWithBool:dropdownRefresh],nil];
     [twitterClient getAccessData];
-}
-
-- (void) getAccessData
-{
-    [self getAccessData:NO];
 }
 
 - (void) didGetAccessData:(TwitterClient*)client obj:(NSObject*)obj
@@ -261,7 +242,7 @@
     if ( hasData ) {
         //从数据库中加载数据
         [self loadDataFromDB];
-//        [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
     }
     
     //读已用流量
@@ -413,7 +394,7 @@
     [self.scrollview addSubview:self.secondPageViewController.view];
     
     
-    self.scrollview.decelerationRate=0.1;
+//    self.scrollview.decelerationRate=0.1;
 }
 
 -(void)gameStyleBtnShow
@@ -588,47 +569,86 @@
         [[AppDelegate getAppDelegate ]timerTask];
     });
 
-    [self pdVpnAndWifiOrSome];
+//    [self pdVpnAndWifiOrSome];
+}
+
+-(void)lineChange
+{
+    ConnectionType type = [UIDevice connectionType];
+
+    //如果在wifi下 并且没有开启
+    if (type == WIFI && ![AppDelegate pdVpnIsOpenOrClose]) {
+        
+        
+    }else if(type==WIFI && [AppDelegate pdVpnIsOpenOrClose]){   //如果在wifi下开启的是VPN 提示用户去关闭
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您关闭VPN" message:@"已连接wifi网络，无法网络加速及节省流量，建议关闭vpn服务" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 关闭 VPN", nil];
+        alertView.tag = 1111;
+        [alertView show];
+        [alertView release];
+
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+    
+    
+    
 }
 
 /*
  *判断在wifi下 或者在 3G下 VPN 是否开启关闭
  *
- */
+
 -(void)pdVpnAndWifiOrSome
 {
-    UserSettings *user = [UserSettings currentUserSettings];    
-    //如果没有安装描述文件
-    if ([user.profileType isEqualToString:@"vpn"]) {
-        if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
-            ConnectionType type = [UIDevice connectionType];
-            if (type==WIFI && [AppDelegate pdVpnIsOpenOrClose]) {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您关闭VPN" message:@"已连接wifi网络，无法网络加速及节省流量，建议关闭vpn服务" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 关闭 VPN", nil];
-                alertView.tag = 1111;
-                [alertView show];
-                [alertView release];
-            }
-            if (type ==CELL_2G  && ![AppDelegate pdVpnIsOpenOrClose] ) {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您开启VPN" message:@"已连接2G/3G网络，开启vpn服务可上网加速3倍以上，节省流量40-85%" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 开启 VPN", nil];
-                alertView.tag = 1112;
-                [alertView show];
-                [alertView release];
-            }
-        }
-
+    UserSettings *user = [UserSettings currentUserSettings];
+    
+    //判断出来 proxyFlag == 0 && stype = nill
+    //1.用户第一次使用的时候进来就没有安装服务
+    //2.用户关闭了服务。
+    if ( [user.profileType isEqualToString:@"null"] && user.proxyFlag == INSTALL_FLAG_NO) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"服务未开启" message:@"系统检测到您没有开启服务，请您开启服务。" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"立即开启", nil ];
+        alertView.tag = 2222;
+        [alertView show];
+        [alertView release];
     }
+    
+    
+    //如果判断出来 proxyFlag == 0 && stype = apn  ，那么就有一下几种可能
+    //1.vpn安装了 要改 apn 但是没有安装 apn
+    //2.用户选择了自动 但是没有安装 apn ，也没有安装 vpn
+    //3. vpn 安装了，没有开 。
+    //这时候 提示用户去 开启vpn 或者 从新安装 描述文件
+    if ( ([user.profileType isEqualToString:@"apn"] && user.proxyFlag == INSTALL_FLAG_NO)) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"手动开启模式" message:@"系统检测到您是手动模式，请您手动开启服务。" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"切换为自动开启服务", @"如何手动开启服务" , nil ];
+        alertView.tag = 3333;
+        [alertView show];
+        [alertView release];
+    }
+    
+    
+    //如果判断出来 proxyFlag == 0 && stype = vpn
+    //1.vpn按了没有开
+    //2.vpn没有安装
+    if ( [user.profileType isEqualToString:@"vpn"] && user.proxyFlag == INSTALL_FLAG_NO) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"手动开启模式" message:@"系统检测到您是手动模式，请您手动开启服务。" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"切换为自动开启服务", @"如何手动开启服务" , nil ];
+        alertView.tag = 4444;
+        [alertView show];
+        [alertView release];
+    }
+    
 }
+ */
 
 #pragma mark - UIAlertView Delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == 1111 ||alertView.tag ==1112) {
+    if (alertView.tag == 1111 ) {
         if (buttonIndex == 1) {
-            VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
-            [self.navigationController pushViewController:vpnHelp animated:YES];
-            [vpnHelp release];
+            VPNCloseHelpViewController *vpnCloseHelp = [[VPNCloseHelpViewController alloc] init];
+            [self.navigationController pushViewController:vpnCloseHelp animated:YES];
+            [vpnCloseHelp release];
         }
-    }else if (alertView.tag == 1999){
+    }else if (alertView.tag == 2222){
         if (buttonIndex == 1 ) {
             if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
                 [AppDelegate installProfile:nil vpn:nil];
@@ -637,6 +657,24 @@
                 [AppDelegate installProfile:nil apn:nil];
             }
         }
+    }else if (alertView.tag == 3333 ){
+        if (buttonIndex == 1) {
+            [AppDelegate installProfile:nil vpn:nil];
+        }else if (buttonIndex == 2){
+            VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
+            [self.navigationController pushViewController:vpnHelp animated:YES];
+            [vpnHelp release];
+        }
+        
+    }else if (alertView.tag == 4444 ){
+        if (buttonIndex == 1) {
+            [AppDelegate installProfile:nil vpn:nil];
+        }else if (buttonIndex == 2){
+            VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
+            [self.navigationController pushViewController:vpnHelp animated:YES];
+            [vpnHelp release];
+        }
+
     }
     
 }
@@ -660,8 +698,4 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidUnload {
-    [self setReflashActivity:nil];
-    [super viewDidUnload];
-}
 @end

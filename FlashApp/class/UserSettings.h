@@ -17,6 +17,8 @@
 
 #define TC_TOTAL 30
 
+#define STYPEINCLIENT @"apn"
+
 typedef enum {
     LEVEL_0,    //
     LEVEL_1,    //自行车
@@ -28,12 +30,22 @@ typedef enum {
     LEVEL_7     //飞机
 } UserLevel;
 
-typedef enum {
-    INSTALL_FLAG_UNKNOWN,
-    INSTALL_FLAG_YES,
-    INSTALL_FLAG_NO
-} InstallFlag;
+//typedef enum {
+//    INSTALL_FLAG_UNKNOWN,
+//    INSTALL_FLAG_YES,
+//    INSTALL_FLAG_NO
+//} InstallFlag;
 
+typedef enum {
+    INSTALL_FLAG_UNKNOWN = 0,
+    INSTALL_FLAG_NO = 1, //服务停止
+    INSTALL_FLAG_APN_RIGHT_IDC = 11,
+    INSTALL_FLAG_APN_WRONG_IDC = 13,
+    INSTALL_FLAG_VPN_RIGHT_IDC_PAC = 21,
+    INSTALL_FLAG_VPN_WRONG_IDC_PAC = 23,
+    INSTALL_FLAG_VPN_RIGHT_IDC_NO_PAC = 31,
+    INSTALL_FLAG_VPN_WRONG_IDC_NO_PAC = 33
+} InstallFlag;
 
 typedef enum {
     STATUS_NEW,
@@ -142,8 +154,9 @@ PictureQsLevel;
 
 @property(nonatomic,retain) NSData *headImageData;
 @property (nonatomic, retain) NSString* idcList;
-@property (nonatomic ,retain) NSString *profileType; //add guangtao 判断用户安装的描述文件是VPN还是APN
+@property (nonatomic ,retain) NSString *profileType; //add guangtao 获得服务器记录的用户的描述文件是VPN还是APN
 @property (nonatomic , assign) int rcen ; //add guangtao 用来控制应用推荐是否显示
+//@property (nonatomic ,retain) NSString *stype; // add guangtao 记录用户第一次安装的时候 客户端是VPN 还是 APN
 
 @property (nonatomic, assign) PictureQsLevel pictureQsLevel; 
 //add jianfei han 01/28/2013

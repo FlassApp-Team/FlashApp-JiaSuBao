@@ -48,6 +48,8 @@
     CGRect makeSize = [[UIScreen mainScreen] applicationFrame];
     
     webView.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, makeSize.size.width, makeSize.size.height-self.navigationController.navigationBar.frame.size.height);
+    
+    webView.delegate = self;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -69,6 +71,25 @@
 -(IBAction)backBtn:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)changeAutoBtn:(id)sender {
+    [AppDelegate installProfile:nil vpn:nil];
+}
+
+#pragma mark - webViewDelegate
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
+{
+    NSURL *requestURL =[ [ request URL ] retain ];
+    NSString *srt1 = [NSString stringWithFormat:@"%@",[requestURL absoluteString]];
+    NSString *str2 = @"restart";
+    NSRange range = [srt1 rangeOfString:str2];
+    if (range.location > 0 && range.length > 0)  {
+        [AppDelegate installProfile:nil vpn:nil];
+        return NO;
+    }
+    [ requestURL release ];
+    return YES;
 }
 
 

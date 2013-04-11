@@ -88,41 +88,41 @@
     img1=[img1 stretchableImageWithLeftCapWidth:7 topCapHeight:8];
     
     [self.refleshBtn setBackgroundImage:img1 forState:UIControlStateNormal];
+    
+    //可以更换的几个机房
     self.idcPickerViewController=[[[IDCPickerViewController alloc]init] autorelease];
     self.idcPickerViewController.view.frame=CGRectMake(0, 169, 320, self.view.frame.size.height);
     self.idcPickerViewController.controller=self;
     [self.bgView addSubview:self.idcPickerViewController.view];
-  //  self.idcPickerViewController.view.frame
-    //[self.bgView sendSubviewToBack:self.idcPickerViewController.view];
-    // Do any additional setup after loading the view from its nib.
-    [AppDelegate buttonTopShadow:self.saveBtn shadowColor:[UIColor grayColor]];
-
     
-
-    // Do any additional setup after loading the view from its nib.
+    [AppDelegate buttonTopShadow:self.saveBtn shadowColor:[UIColor grayColor]];
 }
 -(void)relfresh
 {
     [self.idcPickerViewController loadData];
-
 }
+
 -(IBAction)refleshPress:(id)sender
 {
     [self relfresh];
 }
+
 -(IBAction)turnBrnPress:(id)sender
 {
     [[sysdelegate navController  ] popViewControllerAnimated:YES];
 }
+
 -(IBAction)saveBtnPress:(id)sender
 {
     [self.idcPickerViewController saveButtonClick:sender];
 }
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

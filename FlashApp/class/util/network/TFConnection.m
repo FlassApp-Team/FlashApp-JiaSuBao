@@ -200,6 +200,7 @@ NSString *TWITTERFON_FORM_BOUNDARY = @"0194784892923";
 + (NSString*) httpGet:(NSString*)host port:(int)port location:(NSString*)location 
 {
     char response[204800],http_request[2048];  //接收数据的缓冲区大小200k 请求内容缓冲区2k
+    
     memset(http_request,'\0',sizeof(http_request));  //将请求内容的内存空间置空
     
     memset(response,'\0',sizeof(response));  //将请求内容的内存空间置空

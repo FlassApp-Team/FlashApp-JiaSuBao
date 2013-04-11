@@ -47,14 +47,14 @@
 #define URL_SHARE @"/loginsns/share/device.jsp"
 
 #define API_KEY @"30efb1a621c4bd711652ecafb7cbd3673a062b3f"
-#define API_VER @"1.5"
+#define API_VER @"1.5.4"
 
 #define RefreshNotification @"refreshNotification"
 #define TCChangedNotification @"TCChangedNotification"
 #define RefreshAppLockedNotification @"refreshAppLockedNotification"
 #define RefreshLoginNotification @"refreshLoginNotification"
 
-//#define CHANNEL @"appstore"
+#define CHANNEL @"appstore"
 
 //#define CHANNEL @"jasubao_market"
 
@@ -62,7 +62,9 @@
 
 //#define CHANNEL @"zhuguangtao_market"
 
-#define CHANNEL @"yulei_market"
+//#define CHANNEL @"yulei_market"
+
+//#define CHANNEL @"wanghui_market"
 
 //#define CHANNEL @"91_market"
 //#define CHANNEL @"weiphone_market"

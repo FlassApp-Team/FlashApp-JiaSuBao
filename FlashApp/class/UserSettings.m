@@ -121,7 +121,8 @@
     
     settings.status = [userDefaults integerForKey:@"status"];
     settings.proxyFlag = [userDefaults integerForKey:@"proxyFlag"];
-    if ( settings.proxyFlag == INSTALL_FLAG_UNKNOWN ) settings.proxyFlag = INSTALL_FLAG_NO;
+    if ( settings.proxyFlag == INSTALL_FLAG_UNKNOWN )
+        settings.proxyFlag = INSTALL_FLAG_NO;
 
     settings.proxyServer = [userDefaults objectForKey:@"proxyServer"];
     settings.proxyPort = [userDefaults integerForKey:@"proxyPort"];
@@ -179,9 +180,18 @@
     
     settings.pictureQsLevel = [userDefaults integerForKey:@"pictureQsLevel"];
     
-    //add guangtao 
-    settings.profileType = [userDefaults objectForKey:@"profileType"];
+    //add guangtao
     settings.rcen = [userDefaults integerForKey:@"rcen" ];
+    settings.profileType = [userDefaults objectForKey:@"profileType"];
+    if ( !settings.profileType || settings.profileType.length == 0 ) {
+        if ( [@"appstore" isEqualToString:CHANNEL] )
+        {
+            settings.profileType = @"vpn";
+        }
+        else {
+            settings.profileType = @"apn";
+        }
+    }
     
     return settings;
 }

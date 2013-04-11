@@ -98,72 +98,7 @@
     }
     return self;
 }
--(void)showFirstLockMessage
-{
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    int firstLock=[userDefaults integerForKey:@"firstLock"];
-    if(firstLock!=0)
-    {
-        //bgView=[UIView alloc]initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
-        [self.bgView removeFromSuperview];
-    }
-    else
-    {
-        UserAgentLock*agentL = [UserAgentLockDAO getUserAgentLock:[self.statsDetail.uaStr trim]];
 
-        if ( agentL && agentL.isLock )
-        {
-            UIImage *image1=[UIImage imageNamed:@"detail_first2.png"];
-            image1=[image1 stretchableImageWithLeftCapWidth:0 topCapHeight:215.0];
-            self.bgImageView.image=image1;
-        }
-        else
-        {
-            UIImage *image1=[UIImage imageNamed:@"detail_first.png"];
-            image1=[image1 stretchableImageWithLeftCapWidth:0 topCapHeight:215.0];
-            self.bgImageView.image=image1;
-        }
-        [self.bgView setHidden:NO];
-    }
-    
-
-}
--(void)viewWillAppear:(BOOL)animated
-{
-    [self showFirstLockMessage];
-       self.titleLabel.text=self.statsDetail.userAgent;
-//    CGSize mbDataFrame = [titleLabel.text sizeWithFont:titleLabel.font constrainedToSize:CGSizeMake(320, 999) lineBreakMode:UILineBreakModeWordWrap];
-//    titleLabel.frame =CGRectMake(titleLabel.frame.origin.x,titleLabel.frame.origin.y,mbDataFrame.width,titleLabel.frame.size.height);
-    [self loadData];
-    [self showLockStatus];
-    [self averageUse];
-    [super viewWillAppear:YES];
-}
--(void)averageUse
-{
-    time_t now;
-    time(&now);
-    int currentDay = [[DateUtils stringWithDateFormat:now format:@"dd"] intValue];
-    int jiesunDay=[[UserSettings  currentUserSettings].ctDay intValue];
-    int cha=currentDay-jiesunDay;
-    if(cha==0)
-        cha=1;
-    float count=self.statsDetail.after/cha;
-    NSArray*countsss=[NSString bytesAndUnitString:count decimal:2];
-
- 
-    NSString*str=[countsss objectAtIndex:0];
-   
-    str=[NSString stringWithFormat:@"日均使用%@%@",str,[countsss objectAtIndex:1]];
-        
-  
-    self.MessageLabel.text=str;
-    
-    NSArray*array=[NSString bytesAndUnitString:(self.statsDetail.before - self.statsDetail.after) decimal:2];    
-    self. countLabel.text=[array objectAtIndex:0];
-    self.unitLabel.text=[array objectAtIndex:1];
-    [AppDelegate setLabelFrame:self.countLabel label2:self.unitLabel];
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -178,7 +113,7 @@
     
     UITapGestureRecognizer *tapgester=[[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHandle)] autorelease];
     [self.bgView addGestureRecognizer:tapgester];
-
+    
     
     loadingView = [[LoadingView alloc] initWithFrame:CGRectMake(95, 150, 130, 100)];
     loadingView.message = NSLocalizedString(@"set.accountView.loading.message", nil);
@@ -186,71 +121,46 @@
     [self.view addSubview:loadingView];
     [loadingView release];
     
-
+    
     
     UIImage* img=[UIImage imageNamed:@"unlock_btn_bg.png"];
     img=[img stretchableImageWithLeftCapWidth:img.size.width/2 topCapHeight:0];
     [self.lockOrUnlockBtn setBackgroundImage:img forState:UIControlStateNormal];
     
     [AppDelegate labelShadow:self.lockOrUnlockBtn.titleLabel];
-
+    
     chart = [[DetailStatsAppLineChart alloc] init];
     chart.userAgent = self.statsDetail.userAgent;
     chart.linColor=[UIColor colorWithRed:0.0/255 green:191.0/255 blue:232.0/255 alpha:1.0];
     chart.arColor=[UIColor colorWithRed:191.0/255 green:239.0/255 blue:249.0/255 alpha:1.0];
-
-   // [AppDelegate ]
-     // Do any additional setup after loading the view from its nib.
-}
--(void)tapHandle
-{
-    [self.bgView removeFromSuperview];
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setInteger:1 forKey:@"firstLock"];
-}
--(IBAction)turnBtn:(id)sender
-{
-    DataListViewController*dataController=(DataListViewController*)self.dataListController;
-    [dataController reloadData];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
--(IBAction)shareBtnPress:(id)sender
-{
-    if(self.shareWeiBoViewController!=nil)
-    {
-        [self.shareWeiBoViewController.view removeFromSuperview];
-    }
-    self.shareWeiBoViewController=[[[ShareWeiBoViewController alloc ]init] autorelease];
-    [self.view addSubview:self.shareWeiBoViewController.view];
-    self.shareWeiBoViewController.backView.frame=CGRectMake(self.shareWeiBoViewController.backView.frame.origin.x, self.shareBtn.frame.size.height+self.shareBtn.frame.origin.y-10, self.shareWeiBoViewController.backView.frame.size.width, self.shareWeiBoViewController.backView.frame.size.height);
     
+    // [AppDelegate ]
+    // Do any additional setup after loading the view from its nib.
 }
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+
+    [self showFirstLockMessage];
+       self.titleLabel.text=self.statsDetail.userAgent;
+//    CGSize mbDataFrame = [titleLabel.text sizeWithFont:titleLabel.font constrainedToSize:CGSizeMake(320, 999) lineBreakMode:UILineBreakModeWordWrap];
+//    titleLabel.frame =CGRectMake(titleLabel.frame.origin.x,titleLabel.frame.origin.y,mbDataFrame.width,titleLabel.frame.size.height);
+    [self loadData];
+    [self showLockStatus];
+    [self averageUse];
+}
+
 -(void)loadData
 {
     self.agentLock = [UserAgentLockDAO getUserAgentLock:[self.statsDetail.uaStr trim]];
-   // NSLog(@"FFFFFFFFFFFFFFFFFFFFF%@",[UserAgentLockDAO getAllLockedApps]);
-
+    
     [self getUserAgentLock];
     
-//
-//    time_t today = [DateUtils getLastTimeOfToday];
-//    time_t now;
-//    time(&now);
-//    time_t peroid[2];
-//    [TCUtils getPeriodOfTcMonth:peroid time:now];
-//   long startTime=peroid[0];
-//
-//    long endTime = (self.currentStats.endTime > today ? today : self.currentStats.endTime);
-    
-//    long startTime=1356969600;
-//    long endTime=1359647999
     NSArray*userAgentData = [StatsDayDAO getUserAgentData:self.statsDetail.userAgent start:startTime end:endTime];
-
-   // NSArray*userAgentData = [StatsDayDAO getUserAgentData:self.statsDetail.userAgent start:peroid[0] end:peroid[1]];
-
-    NSLog(@"rrrrrrrrrrrrrrrr%@",self.agentLock.userAgent);
-
+    
+//    NSLog(@"rrrrrrrrrrrrrrrr%@",self.agentLock.userAgent);
+    
     NSMutableArray* arr = (NSMutableArray*) userAgentData;
     if ( [userAgentData count] > 0 ) {
         StatsDetail* firstStats = [userAgentData objectAtIndex:0];
@@ -282,8 +192,6 @@
     nextMonthTimes[0] = 0;
     nextMonthTimes[1] = 0;
     
-
-    
     if ( prevStats && prevStats.before > 0 ) {
         [TCUtils getPeriodOfTcMonth:prevMonthTimes time:prevStats.accessDay];
     }
@@ -299,8 +207,6 @@
     }
     else {
     }
-
-    
     
     chart.userAgentData = userAgentData;
     
@@ -314,9 +220,79 @@
     //NSString* byteUnit = [ retain];
     self.chartUnitLabel.text = [arr1 objectAtIndex:1];
     NSLog(@"ussssssssss%d",self.statsDetail.uaStr.length);
-
+    
     [chart renderInView:self.renderLine withTheme:nil];
 }
+
+-(void)showFirstLockMessage
+{
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    int firstLock=[userDefaults integerForKey:@"firstLock"];
+    if(firstLock!=0)
+    {
+        [self.bgView removeFromSuperview];
+    }
+    else
+    {
+        UserAgentLock*agentL = [UserAgentLockDAO getUserAgentLock:[self.statsDetail.uaStr trim]];
+        
+        if ( agentL && agentL.isLock )
+        {
+            UIImage *image1=[UIImage imageNamed:@"detail_first2.png"];
+            image1=[image1 stretchableImageWithLeftCapWidth:0 topCapHeight:215.0];
+            self.bgImageView.image=image1;
+        }
+        else
+        {
+            UIImage *image1=[UIImage imageNamed:@"detail_first.png"];
+            image1=[image1 stretchableImageWithLeftCapWidth:0 topCapHeight:215.0];
+            self.bgImageView.image=image1;
+        }
+        [self.bgView setHidden:NO];
+    }
+    
+    
+}
+
+-(void)averageUse
+{
+    time_t now;
+    time(&now);
+    int currentDay = [[DateUtils stringWithDateFormat:now format:@"dd"] intValue];
+    int jiesunDay=[[UserSettings  currentUserSettings].ctDay intValue];
+    int cha=currentDay-jiesunDay;
+    if(cha==0)
+        cha=1;
+    float count=self.statsDetail.after/cha;
+    NSArray*countsss=[NSString bytesAndUnitString:count decimal:2];
+
+ 
+    NSString*str=[countsss objectAtIndex:0];
+   
+    str=[NSString stringWithFormat:@"日均使用%@%@",str,[countsss objectAtIndex:1]];
+        
+  
+    self.MessageLabel.text=str;
+    
+    NSArray*array=[NSString bytesAndUnitString:(self.statsDetail.before - self.statsDetail.after) decimal:2];    
+    self. countLabel.text=[array objectAtIndex:0];
+    self.unitLabel.text=[array objectAtIndex:1];
+    [AppDelegate setLabelFrame:self.countLabel label2:self.unitLabel];
+}
+
+-(void)tapHandle
+{
+    [self.bgView removeFromSuperview];
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:1 forKey:@"firstLock"];
+}
+-(IBAction)turnBtn:(id)sender
+{
+    DataListViewController*dataController=(DataListViewController*)self.dataListController;
+    [dataController reloadData];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 - (void) getUserAgentLock
 {
@@ -370,6 +346,17 @@
     [UserAgentLockDAO updateUserAgentLock:agentLock];
 }
 
+-(IBAction)shareBtnPress:(id)sender
+{
+    if(self.shareWeiBoViewController!=nil)
+    {
+        [self.shareWeiBoViewController.view removeFromSuperview];
+    }
+    self.shareWeiBoViewController=[[[ShareWeiBoViewController alloc ]init] autorelease];
+    [self.view addSubview:self.shareWeiBoViewController.view];
+    self.shareWeiBoViewController.backView.frame=CGRectMake(self.shareWeiBoViewController.backView.frame.origin.x, self.shareBtn.frame.size.height+self.shareBtn.frame.origin.y-10, self.shareWeiBoViewController.backView.frame.size.width, self.shareWeiBoViewController.backView.frame.size.height);
+    
+}
 
 
 #pragma mark - disable/enable network connect

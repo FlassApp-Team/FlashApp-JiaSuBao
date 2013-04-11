@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface VPNHelpViewController : UIViewController
+@interface VPNHelpViewController : UIViewController<UIWebViewDelegate>
 @property (retain, nonatomic) IBOutlet UIWebView *webView;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activity;
 @property (retain, nonatomic) IBOutlet UILabel *pointLabel;

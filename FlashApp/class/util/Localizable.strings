@@ -235,7 +235,7 @@
 "set.IDCView.navItem.title" = "网速优化";
 "set.IDCView.header.message" =  "加速宝可以根据您所在地区及所属运营商优化您的上网速度。请您从下面的机房中选择速度最快的一个。";
 "set.IDCView.footerButton.title" =  "重新测速";
-"set.IDCView.saveButton.message" =  "您是否将上网代理更换到";
+"set.IDCView.saveButton.message" =  "您是否要更换到";
 
 "netflow.DataLogView.send" = "发送";
 "netflow.DataLogView.receive" = "接收";
