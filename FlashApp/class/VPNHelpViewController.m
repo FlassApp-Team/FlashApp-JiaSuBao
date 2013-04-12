@@ -74,7 +74,7 @@
 }
 
 - (IBAction)changeAutoBtn:(id)sender {
-    [AppDelegate installProfile:nil vpn:nil];
+    [AppDelegate installProfile:nil vpnn:nil];
 }
 
 #pragma mark - webViewDelegate
@@ -85,7 +85,7 @@
     NSString *str2 = @"restart";
     NSRange range = [srt1 rangeOfString:str2];
     if (range.location > 0 && range.length > 0)  {
-        [AppDelegate installProfile:nil vpn:nil];
+        [AppDelegate installProfile:nil vpnn:nil];
         return NO;
     }
     [ requestURL release ];

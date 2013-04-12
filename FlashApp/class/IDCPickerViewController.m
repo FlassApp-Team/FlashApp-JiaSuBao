@@ -133,6 +133,8 @@
         NSString* s = user.idcList;
         if ( s ) {
             idcArray = [[user idcArray] retain];
+        }else{
+            [AppDelegate showAlert:@"网络连接异常" message:@"网络连接异常，请检查您的网络。"];
         }
     }
 }

@@ -263,7 +263,7 @@
     NSString* username = user.username;
     NSString* tcUsed = user.ctUsed;
     
-    NSString* url = [NSString stringWithFormat:@"%@/%@.json?username=%@&useVal=%@&startQuantity=%.1f&shareQuantity=%.1f&currTime=%lld%&platform=%@&osversion=%@", 
+    NSString* url = [NSString stringWithFormat:@"%@/%@.json?username=%@&useVal=%@&startQuantity=%.1f&shareQuantity=%.1f&currTime=%lld&platform=%@&osversion=%@", 
                      API_BASE, API_LOG_MEMBERINFO, 
                      username ? [username encodeAsURIComponent] : @"", 
                      tcUsed ? tcUsed : @"",

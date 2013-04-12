@@ -560,7 +560,7 @@
     
     if(type==NONE)
     {
-        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请链接网络"];
+//        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请链接网络"];
         return;
     }
     
@@ -588,7 +588,12 @@
 
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [TwitterClient getStatsData];
+        [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+    }) ;
+    
+    
     
     
     
@@ -642,40 +647,7 @@
 #pragma mark - UIAlertView Delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == 1111 ) {
-        if (buttonIndex == 1) {
-            VPNCloseHelpViewController *vpnCloseHelp = [[VPNCloseHelpViewController alloc] init];
-            [self.navigationController pushViewController:vpnCloseHelp animated:YES];
-            [vpnCloseHelp release];
-        }
-    }else if (alertView.tag == 2222){
-        if (buttonIndex == 1 ) {
-            if ([CHANNEL compare:@"appstore"] == NSOrderedSame) {
-                [AppDelegate installProfile:nil vpn:nil];
-            }
-            else{
-                [AppDelegate installProfile:nil apn:nil];
-            }
-        }
-    }else if (alertView.tag == 3333 ){
-        if (buttonIndex == 1) {
-            [AppDelegate installProfile:nil vpn:nil];
-        }else if (buttonIndex == 2){
-            VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
-            [self.navigationController pushViewController:vpnHelp animated:YES];
-            [vpnHelp release];
-        }
-        
-    }else if (alertView.tag == 4444 ){
-        if (buttonIndex == 1) {
-            [AppDelegate installProfile:nil vpn:nil];
-        }else if (buttonIndex == 2){
-            VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
-            [self.navigationController pushViewController:vpnHelp animated:YES];
-            [vpnHelp release];
-        }
-
-    }
+    
     
 }
 

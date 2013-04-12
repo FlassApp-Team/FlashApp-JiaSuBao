@@ -7,117 +7,13 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "FlashApp/class/LockNetWorkViewController.m"
-         timestampString = "386237013.924359"
+         filePath = "FlashApp/class/util/network/TwitterClient.m"
+         timestampString = "387478577.03822"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "603"
-         endingLineNumber = "603"
-         landmarkName = "-unlockButtonPress:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/class/LockNetWorkViewController.m"
-         timestampString = "386239878.666135"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "619"
-         endingLineNumber = "619"
-         landmarkName = "-disableUserAgentNetwork:lockMinutes:usStrIndex:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/class/dataList/DataListViewController.m"
-         timestampString = "387113248.570781"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "570"
-         endingLineNumber = "570"
-         landmarkName = "-tableView:didSelectRowAtIndexPath:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/class/datailstat/DetailStatsAppLineChart.m"
-         timestampString = "387196946.21258"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "273"
-         endingLineNumber = "273"
-         landmarkName = "-numberForPlot:field:recordIndex:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/AppDelegate.m"
-         timestampString = "387374053.263503"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "677"
-         endingLineNumber = "677"
-         landmarkName = "-application:handleOpenURL:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/class/util/device/DeviceInfo.m"
-         timestampString = "387296423.216788"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "82"
-         endingLineNumber = "82"
-         landmarkName = "-initWithJSON:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/AppDelegate.m"
-         timestampString = "387374053.263503"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "628"
-         endingLineNumber = "628"
-         landmarkName = "-application:handleOpenURL:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/class/ViewController.m"
-         timestampString = "387375013.112321"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "241"
-         endingLineNumber = "241"
-         landmarkName = "-didGetAccessData:obj:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/AppDelegate.m"
-         timestampString = "387375130.045699"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "892"
-         endingLineNumber = "892"
-         landmarkName = "-timerTask"
+         startingLineNumber = "251"
+         endingLineNumber = "251"
+         landmarkName = "-getMemberInfo"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

@@ -38,9 +38,10 @@
 {
     self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
 
+    UIView *view=(UIView*)[self.view viewWithTag:101];
+    [view removeFromSuperview];
+    
     ConnectionType type = [UIDevice connectionType];
-    
-    
     UserSettings* user = [AppDelegate getAppDelegate].user;
 
     if ( user.proxyFlag == INSTALL_FLAG_NO )

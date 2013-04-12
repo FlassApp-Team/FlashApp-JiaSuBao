@@ -183,15 +183,16 @@
     //add guangtao
     settings.rcen = [userDefaults integerForKey:@"rcen" ];
     settings.profileType = [userDefaults objectForKey:@"profileType"];
-    if ( !settings.profileType || settings.profileType.length == 0 ) {
-        if ( [@"appstore" isEqualToString:CHANNEL] )
-        {
-            settings.profileType = @"vpn";
-        }
-        else {
-            settings.profileType = @"apn";
-        }
-    }
+    
+//    if ( !settings.profileType || settings.profileType.length == 0 ) {
+//        if ( [@"appstore" isEqualToString:CHANNEL] )
+//        {
+//            settings.profileType = @"vpn";
+//        }
+//        else {
+//            settings.profileType = @"apn";
+//        }
+//    }
     
     return settings;
 }
@@ -260,12 +261,13 @@
 }
 
 
-+ (void) saveCapacity:(float)capacity status:(int)status proxyFlag:(int)proxyFlag
++ (void) saveCapacity:(float)capacity status:(int)status proxyFlag:(int)proxyFlag profileType:(NSString *)stype
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setFloat:capacity forKey:@"capacity"];
     [userDefaults setInteger:status forKey:@"status"];
     [userDefaults setInteger:proxyFlag forKey:@"proxyFlag"];
+    [userDefaults setObject:stype forKey:@"profileType"];
     [userDefaults synchronize];
 }
 

@@ -202,7 +202,7 @@
 -(IBAction)turnBtnPress:(id)sender
 {
     done=YES;
-    GoLineModleViewController*golineController=(GoLineModleViewController*)self.controller;
+//    GoLineModleViewController *golineController=(GoLineModleViewController*)self.controller;
 
 
 //    [golineController judegServerOpen ];

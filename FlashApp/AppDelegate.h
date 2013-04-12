@@ -147,9 +147,11 @@
 + (BOOL) networkReachable;
 + (void) showHelp;
 + (void) showUserReviews;
++(void)installProfile;
++(void)installProfileWithServicetype:(NSString *)servicetype;
 + (void) installProfile:(NSString *)nextPage idc:(NSString*)idcCode;
 + (void) installProfile:(NSString *)nextPage apn:(NSString*)apn;
-+ (void) installProfile:(NSString *)nextPage vpn:(NSString*)vpn;
++ (void) installProfile:(NSString *)nextPage vpnn:(NSString*)voaName;
 + (void) installProfile:(NSString*)nextPage;
 + (void) uninstallProfile:(NSString*)nextPage;
 - (void) startLocationManager;

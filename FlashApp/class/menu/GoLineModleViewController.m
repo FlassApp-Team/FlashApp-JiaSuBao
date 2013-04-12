@@ -13,6 +13,7 @@
 #import "TwitterClient.h"
 #import "VPNHelpViewController.h"
 #import "ViewController.h"
+#import "OpenServeViewController.h"
 
 @interface GoLineModleViewController ()
 
@@ -104,16 +105,19 @@ self.golingMessLabel=nil;
     else
     {
         if ([user.profileType isEqualToString:@"vpn"] ) {
-            VPNHelpViewController *vpnHelp = [[VPNHelpViewController alloc] init];
-            [[sysdelegate navController] pushViewController:vpnHelp animated:YES];
-            [vpnHelp release];
+            
+            //iOS 5.1+ 以后不可以用
+//            NSURL*url=[NSURL URLWithString:@"prefs:root=General&path=Network/VPN"];
+//            [[UIApplication sharedApplication] openURL:url];
+            
+            OpenServeViewController *openSCV = [[OpenServeViewController alloc] init];
+            [[sysdelegate navController  ] pushViewController:openSCV animated:YES];
+            [openSCV release];
+            
         }else{
-            if ([user.profileType isEqualToString:@"vpn"]) {
-                [AppDelegate installProfile:nil vpn:nil];
-            }
-            else{
-                [AppDelegate installProfile:nil apn:nil];
-            }
+            
+                [AppDelegate installProfile:nil vpnn:nil];
+            
         }
     }
 }

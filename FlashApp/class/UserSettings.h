@@ -172,7 +172,7 @@ PictureQsLevel;
 + (UserSettings*) currentUserSettings;
 + (void) saveUserSettings:(UserSettings*)settings;
 + (void) saveCapacity:(float)capacity status:(int)status;
-+ (void) saveCapacity:(float)capacity status:(int)status proxyFlag:(int)proxyFlag;
++ (void) saveCapacity:(float)capacity status:(int)status proxyFlag:(int)proxyFlag profileType:(NSString *)stype;
 + (void) saveProxyFlag:(int)proxyFlag;
 + (void) saveNickname:(NSString*)nickname;
 + (void) savePassword:(NSString*)password;

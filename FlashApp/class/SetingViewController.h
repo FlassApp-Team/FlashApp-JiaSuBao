@@ -12,6 +12,7 @@
 @class BoundPhoneiewController;
 @interface SetingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
+    BOOL pdserviceorvpn;
 }
 @property(nonatomic,assign)    BOOL compressionServer;
 @property(nonatomic,retain)IBOutlet UIImageView *bigImageView;

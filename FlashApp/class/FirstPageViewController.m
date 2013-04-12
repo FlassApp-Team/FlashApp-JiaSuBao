@@ -133,7 +133,7 @@
 -(void)hiddenAndChangeViews
 {
     UserSettings *user = [UserSettings currentUserSettings];    
-    if ( user.rcen == 0 ) {
+    if ([CHANNEL isEqualToString:@"91_market"] && user.rcen == 0 ) {
         CGRect newFrame = self.tuiJianModleViewController.view.frame;
         
         self.tuiJianModleViewController.view.hidden = YES;

@@ -537,6 +537,8 @@
 		B1E9ECBD16895462006DD353 /* FeedbackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1E9ECBB1689545C006DD353 /* FeedbackViewController.xib */; };
 		B1F980C116E5AED10057261E /* LoadMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F980BF16E5AED10057261E /* LoadMoreViewController.m */; };
 		B1F980C216E5AED10057261E /* LoadMoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1F980C016E5AED10057261E /* LoadMoreViewController.xib */; };
+		B32DF67917182C3F0071BC3A /* OpenServeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B32DF67717182C3F0071BC3A /* OpenServeViewController.m */; };
+		B32DF67A17182C3F0071BC3A /* OpenServeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B32DF67817182C3F0071BC3A /* OpenServeViewController.xib */; };
 		B35687721714F92F00627616 /* images8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B35687711714F92F00627616 /* images8.jpg */; };
 		B35687751714FEE900627616 /* CLO.html in Resources */ = {isa = PBXBuildFile; fileRef = B35687741714FEE900627616 /* CLO.html */; };
 		B3568779171503CB00627616 /* VPNCloseHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3568777171503CB00627616 /* VPNCloseHelpViewController.m */; };
@@ -557,6 +559,14 @@
 		B3AAE87117007CC100914E52 /* images6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE86A17007CC100914E52 /* images6.jpg */; };
 		B3AAE87217007CC100914E52 /* images7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AAE86B17007CC100914E52 /* images7.jpg */; };
 		B3AAE875170082B100914E52 /* GetAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = B3AAE874170082B100914E52 /* GetAddress.m */; };
+		B3AF0A8617181E0A00ED186D /* openvpn1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AF0A7E17181E0A00ED186D /* openvpn1.jpg */; };
+		B3AF0A8717181E0A00ED186D /* openvpn2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AF0A7F17181E0A00ED186D /* openvpn2.jpg */; };
+		B3AF0A8817181E0A00ED186D /* openvpn3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AF0A8017181E0A00ED186D /* openvpn3.jpg */; };
+		B3AF0A8917181E0A00ED186D /* openvpn4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AF0A8117181E0A00ED186D /* openvpn4.jpg */; };
+		B3AF0A8A17181E0A00ED186D /* openvpn5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AF0A8217181E0A00ED186D /* openvpn5.jpg */; };
+		B3AF0A8B17181E0A00ED186D /* 描述文件.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3AF0A8317181E0A00ED186D /* 描述文件.jpg */; };
+		B3AF0A8C17181E0A00ED186D /* 白框.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AF0A8417181E0A00ED186D /* 白框.png */; };
+		B3AF0A8D17181E0A00ED186D /* 重新设置.png in Resources */ = {isa = PBXBuildFile; fileRef = B3AF0A8517181E0A00ED186D /* 重新设置.png */; };
 		B3CD677616F9A5C600070417 /* LockNetWorkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3CD677516F9A5C600070417 /* LockNetWorkViewController.xib */; };
 		B3CD677816F9A64300070417 /* suowanganniu.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CD677716F9A64300070417 /* suowanganniu.png */; };
 		B3CD677A16F9A67900070417 /* jiesuoanniu.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CD677916F9A67900070417 /* jiesuoanniu.png */; };
@@ -1306,6 +1316,9 @@
 		B1F980BE16E5AED10057261E /* LoadMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMoreViewController.h; sourceTree = "<group>"; };
 		B1F980BF16E5AED10057261E /* LoadMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreViewController.m; sourceTree = "<group>"; };
 		B1F980C016E5AED10057261E /* LoadMoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadMoreViewController.xib; sourceTree = "<group>"; };
+		B32DF67617182C3F0071BC3A /* OpenServeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenServeViewController.h; path = menu/OpenServeViewController.h; sourceTree = "<group>"; };
+		B32DF67717182C3F0071BC3A /* OpenServeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenServeViewController.m; path = menu/OpenServeViewController.m; sourceTree = "<group>"; };
+		B32DF67817182C3F0071BC3A /* OpenServeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OpenServeViewController.xib; path = menu/OpenServeViewController.xib; sourceTree = "<group>"; };
 		B35687711714F92F00627616 /* images8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images8.jpg; sourceTree = "<group>"; };
 		B35687741714FEE900627616 /* CLO.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CLO.html; sourceTree = "<group>"; };
 		B3568776171503CA00627616 /* VPNCloseHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VPNCloseHelpViewController.h; sourceTree = "<group>"; };
@@ -1329,6 +1342,14 @@
 		B3AAE86B17007CC100914E52 /* images7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images7.jpg; sourceTree = "<group>"; };
 		B3AAE873170082B100914E52 /* GetAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetAddress.h; sourceTree = "<group>"; };
 		B3AAE874170082B100914E52 /* GetAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetAddress.m; sourceTree = "<group>"; };
+		B3AF0A7E17181E0A00ED186D /* openvpn1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = openvpn1.jpg; sourceTree = "<group>"; };
+		B3AF0A7F17181E0A00ED186D /* openvpn2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = openvpn2.jpg; sourceTree = "<group>"; };
+		B3AF0A8017181E0A00ED186D /* openvpn3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = openvpn3.jpg; sourceTree = "<group>"; };
+		B3AF0A8117181E0A00ED186D /* openvpn4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = openvpn4.jpg; sourceTree = "<group>"; };
+		B3AF0A8217181E0A00ED186D /* openvpn5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = openvpn5.jpg; sourceTree = "<group>"; };
+		B3AF0A8317181E0A00ED186D /* 描述文件.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "描述文件.jpg"; sourceTree = "<group>"; };
+		B3AF0A8417181E0A00ED186D /* 白框.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "白框.png"; sourceTree = "<group>"; };
+		B3AF0A8517181E0A00ED186D /* 重新设置.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "重新设置.png"; sourceTree = "<group>"; };
 		B3CD677516F9A5C600070417 /* LockNetWorkViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LockNetWorkViewController.xib; path = ../LockNetWorkViewController.xib; sourceTree = "<group>"; };
 		B3CD677716F9A64300070417 /* suowanganniu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = suowanganniu.png; sourceTree = "<group>"; };
 		B3CD677916F9A67900070417 /* jiesuoanniu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jiesuoanniu.png; sourceTree = "<group>"; };
@@ -1551,6 +1572,9 @@
 				B13253B916B9218300B917F9 /* AboutServiceViewController.h */,
 				B13253BA16B9218400B917F9 /* AboutServiceViewController.m */,
 				B13253BB16B9218400B917F9 /* AboutServiceViewController.xib */,
+				B32DF67617182C3F0071BC3A /* OpenServeViewController.h */,
+				B32DF67717182C3F0071BC3A /* OpenServeViewController.m */,
+				B32DF67817182C3F0071BC3A /* OpenServeViewController.xib */,
 				B3EE05F3170040AD00452226 /* VPNHelpViewController.h */,
 				B3EE05F4170040AD00452226 /* VPNHelpViewController.m */,
 				B3EE05F5170040AD00452226 /* VPNHelpViewController.xib */,
@@ -2011,6 +2035,7 @@
 		B1672D4D16A505330095889C /* image */ = {
 			isa = PBXGroup;
 			children = (
+				B3AF0A7D17181E0A00ED186D /* vpnhelpImage */,
 				B391BE3F170958AF00825495 /* 横条.png */,
 				B391BE40170958AF00825495 /* 立即下载.png */,
 				B3A7734C1703F645008CBC4A /* daosanjiao.png */,
@@ -2410,6 +2435,21 @@
 				B3AAE86B17007CC100914E52 /* images7.jpg */,
 			);
 			path = images;
+			sourceTree = "<group>";
+		};
+		B3AF0A7D17181E0A00ED186D /* vpnhelpImage */ = {
+			isa = PBXGroup;
+			children = (
+				B3AF0A7E17181E0A00ED186D /* openvpn1.jpg */,
+				B3AF0A7F17181E0A00ED186D /* openvpn2.jpg */,
+				B3AF0A8017181E0A00ED186D /* openvpn3.jpg */,
+				B3AF0A8117181E0A00ED186D /* openvpn4.jpg */,
+				B3AF0A8217181E0A00ED186D /* openvpn5.jpg */,
+				B3AF0A8317181E0A00ED186D /* 描述文件.jpg */,
+				B3AF0A8417181E0A00ED186D /* 白框.png */,
+				B3AF0A8517181E0A00ED186D /* 重新设置.png */,
+			);
+			path = vpnhelpImage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2860,6 +2900,15 @@
 				B35687721714F92F00627616 /* images8.jpg in Resources */,
 				B35687751714FEE900627616 /* CLO.html in Resources */,
 				B356877A171503CB00627616 /* VPNCloseHelpViewController.xib in Resources */,
+				B3AF0A8617181E0A00ED186D /* openvpn1.jpg in Resources */,
+				B3AF0A8717181E0A00ED186D /* openvpn2.jpg in Resources */,
+				B3AF0A8817181E0A00ED186D /* openvpn3.jpg in Resources */,
+				B3AF0A8917181E0A00ED186D /* openvpn4.jpg in Resources */,
+				B3AF0A8A17181E0A00ED186D /* openvpn5.jpg in Resources */,
+				B3AF0A8B17181E0A00ED186D /* 描述文件.jpg in Resources */,
+				B3AF0A8C17181E0A00ED186D /* 白框.png in Resources */,
+				B3AF0A8D17181E0A00ED186D /* 重新设置.png in Resources */,
+				B32DF67A17182C3F0071BC3A /* OpenServeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3012,6 +3061,7 @@
 				B3AAE875170082B100914E52 /* GetAddress.m in Sources */,
 				B391BE3C1709446F00825495 /* AppDetailsViewController.m in Sources */,
 				B3568779171503CB00627616 /* VPNCloseHelpViewController.m in Sources */,
+				B32DF67917182C3F0071BC3A /* OpenServeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
