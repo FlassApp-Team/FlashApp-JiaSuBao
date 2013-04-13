@@ -100,6 +100,8 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self.setTableView reloadData];
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
