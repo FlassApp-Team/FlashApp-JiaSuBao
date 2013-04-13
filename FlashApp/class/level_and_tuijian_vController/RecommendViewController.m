@@ -93,8 +93,6 @@
     self.images=nil;
     self.currentappsPage=nil;
     self.pageControl=nil;
-    [_scrollShowImage release];
-    [_scrollShowBtn release];
     [super dealloc];
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil

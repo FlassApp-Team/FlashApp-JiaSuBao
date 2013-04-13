@@ -56,6 +56,8 @@
 @synthesize nologinTime;
 @synthesize sleepStyleFlag;
 @synthesize profileType;
+@synthesize rcen;
+
 - (void) dealloc
 {
     self.nologinTime=nil;

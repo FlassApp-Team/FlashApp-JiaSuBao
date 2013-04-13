@@ -13,11 +13,23 @@
 @end
 
 @implementation StarTwoViewController
+
+@synthesize ativty;
+@synthesize bgView;
+@synthesize imageView;
 @synthesize starBtn;
 @synthesize installBtn;
-@synthesize bgView;
-@synthesize ativty;
-@synthesize imageView;
+@synthesize shoudongBtn;
+@synthesize zidongBtn;
+@synthesize apnLabel;
+@synthesize vpnLabel;
+@synthesize zidonghelpLabel;
+@synthesize shoudongHelpLabel;
+@synthesize zidongLabel;
+@synthesize shoudongLabel;
+@synthesize miaoshuimageView;
+
+
 -(void)dealloc
 {
     self.imageView=nil;
@@ -25,14 +37,6 @@
     self.ativty=nil;
     self.installBtn=nil;
     self.starBtn=nil;
-    [_shoudongLabel release];
-    [_zidongLabel release];
-    [_apnLabel release];
-    [_vpnLabel release];
-    [_zidonghelpLabel release];
-    [_shoudongHelpLabel release];
-    [_zidongBtn release];
-    [_shoudongBtn release];
     [super dealloc];
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
