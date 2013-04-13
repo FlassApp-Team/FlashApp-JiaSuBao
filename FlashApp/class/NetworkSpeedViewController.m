@@ -197,7 +197,7 @@
 -(void)loadData
 {
     UserSettings* user = [AppDelegate getAppDelegate].user;
-    self.idcName.text=[NSString stringWithFormat:@"当前网络: 3G-加速宝%@",user.idcName];
+    self.idcName.text=[NSString stringWithFormat:@"当前网络: 2G/3G-加速宝%@",user.idcName];
 }
 -(IBAction)turnBtnPress:(id)sender
 {

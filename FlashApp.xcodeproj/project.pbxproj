@@ -570,6 +570,9 @@
 		B3CD677616F9A5C600070417 /* LockNetWorkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3CD677516F9A5C600070417 /* LockNetWorkViewController.xib */; };
 		B3CD677816F9A64300070417 /* suowanganniu.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CD677716F9A64300070417 /* suowanganniu.png */; };
 		B3CD677A16F9A67900070417 /* jiesuoanniu.png in Resources */ = {isa = PBXBuildFile; fileRef = B3CD677916F9A67900070417 /* jiesuoanniu.png */; };
+		B3D107B0171967CA00AC9D85 /* CloseServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3D107AE171967CA00AC9D85 /* CloseServiceViewController.m */; };
+		B3D107B1171967CA00AC9D85 /* CloseServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3D107AF171967CA00AC9D85 /* CloseServiceViewController.xib */; };
+		B3D107B417196A7600AC9D85 /* closevpn.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B3D107B317196A7600AC9D85 /* closevpn.jpg */; };
 		B3EE05F6170040AD00452226 /* VPNHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3EE05F4170040AD00452226 /* VPNHelpViewController.m */; };
 		B3EE05F7170040AD00452226 /* VPNHelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3EE05F5170040AD00452226 /* VPNHelpViewController.xib */; };
 /* End PBXBuildFile section */
@@ -1353,6 +1356,10 @@
 		B3CD677516F9A5C600070417 /* LockNetWorkViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LockNetWorkViewController.xib; path = ../LockNetWorkViewController.xib; sourceTree = "<group>"; };
 		B3CD677716F9A64300070417 /* suowanganniu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = suowanganniu.png; sourceTree = "<group>"; };
 		B3CD677916F9A67900070417 /* jiesuoanniu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jiesuoanniu.png; sourceTree = "<group>"; };
+		B3D107AD171967CA00AC9D85 /* CloseServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloseServiceViewController.h; sourceTree = "<group>"; };
+		B3D107AE171967CA00AC9D85 /* CloseServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloseServiceViewController.m; sourceTree = "<group>"; };
+		B3D107AF171967CA00AC9D85 /* CloseServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CloseServiceViewController.xib; sourceTree = "<group>"; };
+		B3D107B317196A7600AC9D85 /* closevpn.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = closevpn.jpg; path = ../../profile/images/closevpn.jpg; sourceTree = "<group>"; };
 		B3EE05F3170040AD00452226 /* VPNHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VPNHelpViewController.h; sourceTree = "<group>"; };
 		B3EE05F4170040AD00452226 /* VPNHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VPNHelpViewController.m; sourceTree = "<group>"; };
 		B3EE05F5170040AD00452226 /* VPNHelpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VPNHelpViewController.xib; sourceTree = "<group>"; };
@@ -1575,6 +1582,9 @@
 				B32DF67617182C3F0071BC3A /* OpenServeViewController.h */,
 				B32DF67717182C3F0071BC3A /* OpenServeViewController.m */,
 				B32DF67817182C3F0071BC3A /* OpenServeViewController.xib */,
+				B3D107AD171967CA00AC9D85 /* CloseServiceViewController.h */,
+				B3D107AE171967CA00AC9D85 /* CloseServiceViewController.m */,
+				B3D107AF171967CA00AC9D85 /* CloseServiceViewController.xib */,
 				B3EE05F3170040AD00452226 /* VPNHelpViewController.h */,
 				B3EE05F4170040AD00452226 /* VPNHelpViewController.m */,
 				B3EE05F5170040AD00452226 /* VPNHelpViewController.xib */,
@@ -2440,6 +2450,7 @@
 		B3AF0A7D17181E0A00ED186D /* vpnhelpImage */ = {
 			isa = PBXGroup;
 			children = (
+				B3D107B317196A7600AC9D85 /* closevpn.jpg */,
 				B3AF0A7E17181E0A00ED186D /* openvpn1.jpg */,
 				B3AF0A7F17181E0A00ED186D /* openvpn2.jpg */,
 				B3AF0A8017181E0A00ED186D /* openvpn3.jpg */,
@@ -2909,6 +2920,8 @@
 				B3AF0A8C17181E0A00ED186D /* 白框.png in Resources */,
 				B3AF0A8D17181E0A00ED186D /* 重新设置.png in Resources */,
 				B32DF67A17182C3F0071BC3A /* OpenServeViewController.xib in Resources */,
+				B3D107B1171967CA00AC9D85 /* CloseServiceViewController.xib in Resources */,
+				B3D107B417196A7600AC9D85 /* closevpn.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3062,6 +3075,7 @@
 				B391BE3C1709446F00825495 /* AppDetailsViewController.m in Sources */,
 				B3568779171503CB00627616 /* VPNCloseHelpViewController.m in Sources */,
 				B32DF67917182C3F0071BC3A /* OpenServeViewController.m in Sources */,
+				B3D107B0171967CA00AC9D85 /* CloseServiceViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

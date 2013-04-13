@@ -18,7 +18,6 @@
 @synthesize bgView;
 @synthesize imageView;
 @synthesize starBtn;
-@synthesize installBtn;
 @synthesize shoudongBtn;
 @synthesize zidongBtn;
 @synthesize apnLabel;
@@ -28,6 +27,8 @@
 @synthesize zidongLabel;
 @synthesize shoudongLabel;
 @synthesize miaoshuimageView;
+@synthesize appstoreView;
+@synthesize elseView;
 
 
 -(void)dealloc
@@ -35,8 +36,9 @@
     self.imageView=nil;
     self.bgView=nil;
     self.ativty=nil;
-    self.installBtn=nil;
     self.starBtn=nil;
+    [appstoreView release];
+    [elseView release];
     [super dealloc];
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -59,6 +61,13 @@
     UIImage *miaoshuBianKuang = [UIImage imageNamed:@"white_box.png"];
     miaoshuBianKuang = [miaoshuBianKuang stretchableImageWithLeftCapWidth:miaoshuBianKuang.size.width/2 topCapHeight:miaoshuBianKuang.size.width/2];
     self.miaoshuimageView.image = miaoshuBianKuang;
+    
+    if ([CHANNEL isEqualToString:@"appstore"]) {
+        elseView.hidden = YES;
+    }else{
+        appstoreView.hidden = YES;
+    }
+    
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -138,6 +147,8 @@
     [self setShoudongHelpLabel:nil];
     [self setZidongBtn:nil];
     [self setShoudongBtn:nil];
+    [self setAppstoreView:nil];
+    [self setElseView:nil];
     [super viewDidUnload];
 }
 @end

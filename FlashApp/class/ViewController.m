@@ -26,6 +26,7 @@
 //add guangtao
 #import "VPNHelpViewController.h"
 #import "VPNCloseHelpViewController.h"
+#import "CloseServiceViewController.h"
 
 #define PageCount 2
 #define PageAllCount 2
@@ -576,16 +577,15 @@
 {
     ConnectionType type = [UIDevice connectionType];
 
-    //如果在wifi下 并且没有开启
-    if (type == WIFI && ![AppDelegate pdVpnIsOpenOrClose]) {
-        
-        
-    }else if(type==WIFI && [AppDelegate pdVpnIsOpenOrClose]){   //如果在wifi下开启的是VPN 提示用户去关闭
+    //如果在wifi下 并且开启vpn
+    if (type == WIFI && [AppDelegate pdVpnIsOpenOrClose]) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请您关闭VPN" message:@"已连接wifi网络，无法网络加速及节省流量，建议关闭vpn服务" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"如何 关闭 VPN", nil];
         alertView.tag = 1111;
         [alertView show];
         [alertView release];
-
+        
+    }else{   //如果在wifi下开启的是VPN 提示用户去关闭
+        
     }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -647,7 +647,13 @@
 #pragma mark - UIAlertView Delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    
+    if (alertView.tag == 1111) {
+        if (buttonIndex == 1) {
+            CloseServiceViewController *closeService = [[CloseServiceViewController alloc] init];
+            [self.navigationController pushViewController:closeService animated:YES];
+            [closeService release];
+        }
+    }
     
 }
 
