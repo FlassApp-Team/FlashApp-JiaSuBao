@@ -30,6 +30,7 @@
 @synthesize MessageLabel;
 @synthesize countLabel;
 @synthesize youLikeLabel;
+@synthesize suoWangView;
 @synthesize jieshengLabel;
 //@synthesize button1,button2,button3,button4;
 @synthesize shareBtn;
@@ -88,6 +89,7 @@
     self.lockOrUnlockBtn=nil;
     
     self.statsDetail=nil;
+    [suoWangView release];
     [super dealloc];
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -134,6 +136,7 @@
     chart.linColor=[UIColor colorWithRed:0.0/255 green:191.0/255 blue:232.0/255 alpha:1.0];
     chart.arColor=[UIColor colorWithRed:191.0/255 green:239.0/255 blue:249.0/255 alpha:1.0];
     
+    
     // [AppDelegate ]
     // Do any additional setup after loading the view from its nib.
 }
@@ -153,6 +156,13 @@
 
 -(void)loadData
 {
+    
+    if ([titleLabel.text isEqualToString:@"网页"] || [titleLabel.text isEqualToString:@"iOS(系统服务、通知等)"]) {
+        suoWangView.hidden = YES;
+    }else{
+        suoWangView.hidden = NO;
+    }
+    
     self.agentLock = [UserAgentLockDAO getUserAgentLock:[self.statsDetail.uaStr trim]];
     
     [self getUserAgentLock];
@@ -535,4 +545,8 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidUnload {
+    [self setSuoWangView:nil];
+    [super viewDidUnload];
+}
 @end

@@ -52,6 +52,9 @@
 @property(nonatomic,retain)IBOutlet UILabel*unitLabel;
 @property(nonatomic,retain)IBOutlet CGLabel*jieshengLabel;
 @property(nonatomic,retain)IBOutlet UILabel *youLikeLabel;
+
+@property (retain, nonatomic) IBOutlet UIView *suoWangView;
+
 //@property(nonatomic,retain)IBOutlet UILabel *label1;
 //@property(nonatomic,retain)IBOutlet UILabel *label2;
 //@property(nonatomic,retain)IBOutlet UILabel *label3;

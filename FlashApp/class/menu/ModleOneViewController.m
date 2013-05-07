@@ -117,6 +117,7 @@
     NSString* item1Number = [self initView:number];
     self.countLabel.text=item1Number;
 }
+
 -(NSString*)initView:(float)count
 {
     NSString *str=nil;

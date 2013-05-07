@@ -13,6 +13,10 @@
 @end
 
 @implementation CloseServiceViewController
+@synthesize headImageView;
+@synthesize scrollView;
+@synthesize helpView;
+@synthesize henxianImageView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -27,10 +31,15 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
 }
 
 - (void)viewDidUnload
 {
+    [self setScrollView:nil];
+    [self setHelpView:nil];
+    [self setHeadImageView:nil];
+    [self setHenxianImageView:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -45,4 +54,11 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (void)dealloc {
+    [scrollView release];
+    [helpView release];
+    [headImageView release];
+    [henxianImageView release];
+    [super dealloc];
+}
 @end

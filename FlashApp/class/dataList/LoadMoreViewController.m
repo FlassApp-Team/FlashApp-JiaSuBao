@@ -227,6 +227,7 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         cell.accessoryType=UITableViewCellAccessoryNone;
+        cell.userInteractionEnabled =NO;
         //  cell.selectionStyle=UITableViewCellSelectionStyleBlue;
         
         //        UIColor* color=[UIColor blueColor];//cell选中后的效果

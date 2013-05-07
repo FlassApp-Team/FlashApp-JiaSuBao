@@ -67,6 +67,8 @@ self.golingMessLabel=nil;
     self.wifiBtn.controller=self;
     self.warningBtn.controller=self;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(judegServerOpen) name:RefreshNotification object: nil];
+    
+    [self judegServerOpen];
   //  self.speedLabel.font = [UIFont fontWithName:@"count" size:44.0];
 
 //    [self judegServerOpen];
@@ -140,8 +142,6 @@ self.golingMessLabel=nil;
         [self.warningView setHidden:YES];
         [self.wigiView setHidden:NO];
         
-        [self.wifiBtn setBackgroundImage:[UIImage imageNamed:@"wifibackground.jpg"] forState:UIControlStateNormal];
-        
         self.wigiTitleLabel.text=@"WIFI测速";
         self.wifiLabel.text=@"暂停压缩加速服务 \n点击测速";
         self.flag=101;
@@ -170,9 +170,7 @@ self.golingMessLabel=nil;
         [self.normalView setHidden:YES];
         [self.warningView setHidden:YES];
         [self.wigiView setHidden:NO];
-            
-        [self.wifiBtn setBackgroundImage:nil forState:UIControlStateNormal];
-            
+        
         self.wigiTitleLabel.text=@"网络异常";
         self.wifiLabel.text=@"网络连接异常,请检查网络设置";
 
@@ -189,7 +187,6 @@ self.golingMessLabel=nil;
         [self.persentLabel setHidden:NO ];
         [self.golingMessLabel setHidden:YES];
     }
-
 
 }
 

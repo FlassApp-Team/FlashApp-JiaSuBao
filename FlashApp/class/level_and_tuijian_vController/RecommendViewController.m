@@ -6,8 +6,11 @@
 //  Copyright (c) 2012年 lidiansen. All rights reserved.
 //
 
+#import <CoreTelephony/CTCall.h>
+#import <CoreTelephony/CTCallCenter.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import "AppDelegate.h"
 #import "RecommendViewController.h"
-#import "RecommendDetailViewController.h"
 #import "DeviceInfo.h"
 #import "StringUtil.h"
 #import "JSON.h"
@@ -15,12 +18,11 @@
 #import "BannerImageUtil.h"
 #import "ASIDownloadCache.h"
 #import "UpdataNumber.h"
-#import "AppDetailsViewController.h"
+#import "AppDetailClass.h"
+#import "DetailViewController.h"
 
 @interface RecommendViewController ()
-@property(nonatomic,retain)IBOutlet UIScrollView *topScrollView;
-@property(nonatomic,retain)IBOutlet UIButton *freeBtn;
-@property(nonatomic,retain)IBOutlet UIPageControl *pageControl;
+
 @property(nonatomic,readonly)NSArray *catesArr;
 @property(nonatomic,retain)NSMutableArray *bannerInfo;
 @property(nonatomic,readonly)NSDictionary *appsDic;
@@ -29,11 +31,7 @@
 @property(nonatomic,assign)NSTimeInterval timestamp;
 @property(nonatomic,retain)NSString *currentappsPage;
 
-@property(nonatomic,retain)UpdataNumber *freenumberView;
-@property(nonatomic,retain)UpdataNumber *gamenumberView;
-
-@property(nonatomic)CGRect oriTableViewFrame;
-
+@property (nonatomic ,retain)NSMutableArray *bannerImageArr;
 
 
 -(void)startAPPSRequest:(NSString *)cateid Page:(NSString *)page;
@@ -46,41 +44,42 @@
 @end
 
 @implementation RecommendViewController
-@synthesize freenumberView;
 @synthesize timestamp;
 @synthesize explainBtn;
-@synthesize btnBgImageView;
 @synthesize titleLabel;
 @synthesize topAppBtn;
 @synthesize topGameBtn;
 @synthesize myTableView;
+@synthesize headView;
+@synthesize scrollActivity;
+@synthesize sectionView;
 @synthesize recommendDetailViewController;
 @synthesize topScrollView;
 @synthesize freeBtn;
+@synthesize xianMianRedDian;
+@synthesize gamesRedDian;
 @synthesize catesArr;
 @synthesize bannerInfo;
 @synthesize appsDic;
 @synthesize appsArr;
-@synthesize oriTableViewFrame;
 @synthesize images;
 @synthesize currentappsPage;
 @synthesize pageControl;
-@synthesize gamenumberView;
 @synthesize requestArray;
+@synthesize bannerImageArr;
+
 -(void)dealloc
 {
     //    self.imageDatas=nil;
-    self.freenumberView=nil;
-    self.gamenumberView=nil;
     self.myTableView=nil;
     self.topAppBtn=nil;
     self.topGameBtn=nil;
     self.titleLabel=nil;
-    self.btnBgImageView=nil;
     self.explainBtn=nil;
     self.recommendDetailViewController=nil;
     self.topScrollView=nil;
     self.freeBtn=nil;
+    [self.bannerImageArr release];
     if(catesArr)
         [catesArr release];
     if(bannerInfo)
@@ -93,76 +92,44 @@
     self.images=nil;
     self.currentappsPage=nil;
     self.pageControl=nil;
+    [sectionView release];
+    [headView release];
+    [scrollActivity release];
+    [xianMianRedDian release];
+    [gamesRedDian release];
     [super dealloc];
 }
+
+-(void)viewDidUnload
+{
+    [self setSectionView:nil];
+    [self setHeadView:nil];
+    [self setScrollActivity:nil];
+    [self setXianMianRedDian:nil];
+    [self setGamesRedDian:nil];
+    [super viewDidUnload];
+    if (scrollTimer){
+        [scrollTimer invalidate];
+    }
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self. requestArray=[[[NSMutableArray alloc]initWithCapacity:3] autorelease];
         self.appsArr=[[[NSMutableArray alloc] initWithCapacity:3] autorelease];
         self.images=[[[NSMutableDictionary alloc] initWithCapacity:3] autorelease];
+        self.bannerImageArr = [[[NSMutableArray alloc] initWithCapacity:3] autorelease];
     }
     return self;
-}
-
--(IBAction)turnBrnPress:(id)sender
-{
-    [[sysdelegate navController  ] popViewControllerAnimated:YES];
-}
-
-- (IBAction)scrollShowBtn:(id)sender
-{
-    [self moveBottomViewToo];
-}
-
--(IBAction)topAppBtnPress:(id)sender
-{
-    self.topGameBtn.enabled=YES;
-    self.topAppBtn.enabled=NO;
-    self.freeBtn.enabled=YES;
-    [self.appsArr removeAllObjects];
-    [self.myTableView reloadData];
-    self.currentappsPage=@"0";
-    [self startAPPSRequest:@"1" Page:@"0"];
-    
-}
-
--(IBAction)freeBtnPress:(id)sender
-{
-    self.topGameBtn.enabled=YES;
-    self.topAppBtn.enabled=YES;
-    self.freeBtn.enabled=NO;
-    self.freenumberView.hidden=YES;
-    
-    [self.appsArr removeAllObjects];
-    [self.myTableView reloadData];
-    self.currentappsPage=@"0";
-    [self startAPPSRequest:@"2" Page:@"0"];
-    
-}
-
--(IBAction)topGameBtnPress:(id)sender
-{
-    self.topGameBtn.enabled=NO;
-    self.topAppBtn.enabled=YES;
-    self.freeBtn.enabled=YES;
-    [self.appsArr removeAllObjects];
-    self.gamenumberView.hidden=YES;
-    [self.myTableView reloadData];
-    self.currentappsPage=@"0";
-    [self startAPPSRequest:@"3" Page:@"0"];
-    
-}
--(IBAction)explainBtnPress:(id)sender
-{
-    
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self. requestArray=[[[NSMutableArray alloc]init] autorelease];
+    
     UITapGestureRecognizer*tapGestures=[[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pressBanner)] autorelease];
     tapGestures.delegate=self;
     [self.topScrollView addGestureRecognizer:tapGestures];
@@ -174,18 +141,6 @@
     [self.topGameBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
     [self.topAppBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [self.topGameBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    self.oriTableViewFrame=self.myTableView.frame;
-    float offsetY=self.topAppBtn.frame.origin.y-self.btnBgImageView.frame.origin.y;
-    
-    CGRect newFrame=CGRectMake(self.btnBgImageView.frame.origin.x, self.topScrollView.frame.origin.y, self.btnBgImageView.frame.size.width, self.btnBgImageView.frame.size.height);
-    
-    self.btnBgImageView.frame=newFrame;
-    
-    self.topAppBtn.frame=CGRectMake(self.topAppBtn.frame.origin.x, newFrame.origin.y+offsetY, self.topAppBtn.frame.size.width, self.topAppBtn.frame.size.height);
-    self.topGameBtn.frame=CGRectMake(self.topGameBtn.frame.origin.x, newFrame.origin.y+offsetY, self.topGameBtn.frame.size.width+2, self.topGameBtn.frame.size.height); //加 2 是为了叫按钮填充满屏幕
-    self.freeBtn.frame=CGRectMake(self.freeBtn.frame.origin.x, newFrame.origin.y+offsetY, self.freeBtn.frame.size.width, self.freeBtn.frame.size.height);
-    
-    self.myTableView.frame=CGRectMake(self.myTableView.frame.origin.x, newFrame.origin.y+newFrame.size.height, self.myTableView.frame.size.width, self.view.frame.size.height-newFrame.origin.y-newFrame.size.height);
     
     //设置按钮被选中或者没有被选中时候的一个样式
     [self.topAppBtn setBackgroundImage:[self getImage:@"leftnormal" StartX:7 StartY:37] forState:UIControlStateNormal];
@@ -200,52 +155,44 @@
     [self.freeBtn setBackgroundImage:[self getImage:@"middlepress" StartX:5 StartY:36] forState:UIControlStateDisabled];
     [self.topGameBtn setBackgroundImage:[self getImage:@"rightpress" StartX:3 StartY:36] forState:UIControlStateDisabled];
     
+    self.myTableView.tableHeaderView = headView;
     
-    self.freenumberView=[UpdataNumber creatUpdataNumberView];
-    self.freenumberView.frame=CGRectMake(self.freeBtn.frame.origin.x+self.freeBtn.frame.size.width-20, self.freeBtn.frame.origin.y, 20, 20);
-    
-    self.gamenumberView=[UpdataNumber creatUpdataNumberView];
-    self.gamenumberView.frame=CGRectMake(self.topGameBtn.frame.origin.x+self.topGameBtn.frame.size.width-20, self.freeBtn.frame.origin.y, 20, 20);
-    [self.freenumberView setHidden:YES];
-    [self.gamenumberView setHidden:YES];
-    [self.view addSubview:self.freenumberView];
-    [self.view addSubview:self.gamenumberView];
-    
+    self.headView.userInteractionEnabled = NO;
+        
     [self startAPPSRequest:@"1" Page:@"0"];
     
-    // Do any additional setup after loading the view from its nib.
-    
-    [self setExtraCellLineHidden:self.myTableView];
-    
-    //删除BannerImageUtil的图片
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"BannerImageUtil"];
-    
-    //请求scrollView显示的图片
-    [self startBannerRequest];
-    
-    NSMutableArray *arr=[BannerImageUtil  getBanners];
-    self.bannerInfo=arr;
-    if(![self.bannerInfo count])
-    {
-        return;
-    }
-    [self moveBottomView];
-    for (int i=[arr count]-1; i>=0; i--)
-    {
-        UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:i+1];
-        imgv.image=[UIImage imageWithData:[[arr objectAtIndex:i] objectForKey:@"imageData"]];
-    }
-
+    self.topScrollView.delegate = self;
     
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    //    self.imageDatas=[[[NSMutableArray alloc] initWithCapacity:3] autorelease];
-//    ConnectionType type = [UIDevice connectionType];
-    [self startRequest];
     
-    scrollTimer=[NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollViewAnimate) userInfo:nil repeats:YES];
+    [scrollActivity startAnimating];
+    //删除BannerImageUtil的图片
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"BannerImageUtil"];
+    //请求scrollView显示的图片
+    if ([bannerImageArr count] ==0 ) {
+        [self startBannerRequest];
+    }
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:XSMF_APP]) {
+        
+        xianMianRedDian.hidden = NO;
+        
+    }else{
+        
+        xianMianRedDian.hidden = YES;
+        
+    }
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:RMYX_APP]) {
+        
+        gamesRedDian.hidden  = NO ;
+
+    }else{
+        
+        gamesRedDian.hidden = YES;
+    }
 
 }
 
@@ -256,116 +203,14 @@
         [request clearDelegatesAndCancel];
     }
     [self.requestArray removeAllObjects];
-    if (scrollTimer)
-        [scrollTimer invalidate];
+
 }
 
--(void)viewDidUnload
-{
-    [self setScrollShowImage:nil];
-    [self setScrollShowBtn:nil];
-    [super viewDidUnload];
-    if (scrollTimer)
-        [scrollTimer invalidate];
-}
-
--(void)setExtraCellLineHidden: (UITableView *)tableView
-{
-    UIView *view = [UIView new];
-    view.backgroundColor = [UIColor blackColor];
-    [tableView setTableFooterView:view];
-    [view release];
-}
-
-
-
-
+#pragma mark -- self method
 -(UIImage *)getImage:(NSString *)path StartX:(NSInteger)x StartY:(NSInteger)y{
     UIImage *img=[UIImage imageNamed:path];
     img=[img stretchableImageWithLeftCapWidth:x topCapHeight:y];
     return img;
-}
-
-
--(void)moveBottomView{
-    
-    pdSanJiao = YES;
-    
-    CGRect newFrame=CGRectMake(self.btnBgImageView.frame.origin.x, self.topScrollView.frame.origin.y+self.topScrollView.frame.size.height, self.btnBgImageView.frame.size.width, self.btnBgImageView.frame.size.height);
-    
-    NSLog(@"newFrame = %f,%f，%f,%f",self.btnBgImageView.frame.origin.x,self.oriTableViewFrame.origin.y-self.topScrollView.frame.size.height,self.btnBgImageView.frame.size.width,self.btnBgImageView.frame.size.height);
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        self.btnBgImageView.frame=newFrame;
-        
-        self.topAppBtn.frame=CGRectMake(self.topAppBtn.frame.origin.x, self.oriTableViewFrame.origin.y-self.topAppBtn.frame.size.height, self.topAppBtn.frame.size.width, self.topAppBtn.frame.size.height);
-        self.topGameBtn.frame=CGRectMake(self.topGameBtn.frame.origin.x, self.oriTableViewFrame.origin.y-self.topGameBtn.frame.size.height, self.topGameBtn.frame.size.width, self.topGameBtn.frame.size.height);
-        self.freeBtn.frame=CGRectMake(self.freeBtn.frame.origin.x, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, self.freeBtn.frame.size.width, self.freeBtn.frame.size.height);
-        self.freenumberView.frame=CGRectMake(self.freeBtn.frame.origin.x+self.freeBtn.frame.size.width-20, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, 20, 20);
-        self.gamenumberView.frame=CGRectMake(self.topGameBtn.frame.origin.x+self.topGameBtn.frame.size.width-20, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, 20, 20);
-        self.myTableView.frame=CGRectMake(0, self.oriTableViewFrame.origin.y, self.oriTableViewFrame.size.width, self.view.frame.size.height-self.oriTableViewFrame.origin.y);
-    } completion:^(BOOL finished) {
-        [self performSelector:@selector(moveBottomViewToo) withObject:self afterDelay:10.0f];
-    }];
-    
-        [self initScrollView];
-}
-
--(void)moveBottomViewToo
-{
-    
-    //第一次广告位弹上来的时候出现可以点击出现或者消失的按钮
-    self.scrollShowBtn.hidden = NO;
-    self.scrollShowImage.hidden = NO;
-    
-    CGRect newRect = CGRectMake(self.topScrollView.frame.origin.x, self.topScrollView.frame.origin.y, self.btnBgImageView.frame.size.width, self.btnBgImageView.frame.size.height);
-    
-    if (pdSanJiao) {
-        
-        //如果是横三角就是NO , 如果是倒三角就是YES；
-        pdSanJiao = NO;
-        
-        //先改变右上角 按钮上图片的样式
-        self.scrollShowImage.image = [UIImage imageNamed:@"hengsanjiao.png"];
-        
-        //将scrollView隐藏.改变页面上其他控件的位置其实就是
-        [UIView animateWithDuration:0.5 animations:^{
-            self.btnBgImageView.frame = newRect;
-            self.topAppBtn.frame = CGRectMake(self.topAppBtn.frame.origin.x, self.btnBgImageView.frame.origin.y, self.topAppBtn.frame.size.width, self.topAppBtn.frame.size.height);
-            self.topGameBtn.frame=CGRectMake(self.topGameBtn.frame.origin.x, self.btnBgImageView.frame.origin.y, self.topGameBtn.frame.size.width, self.topGameBtn.frame.size.height);
-            self.freeBtn.frame=CGRectMake(self.freeBtn.frame.origin.x, self.btnBgImageView.frame.origin.y, self.freeBtn.frame.size.width, self.freeBtn.frame.size.height);
-            self.freenumberView.frame=CGRectMake(self.freeBtn.frame.origin.x+self.freeBtn.frame.size.width-20, self.btnBgImageView.frame.origin.y, 20, 20);
-            self.gamenumberView.frame=CGRectMake(self.topGameBtn.frame.origin.x+self.topGameBtn.frame.size.width-20, self.btnBgImageView.frame.origin.y, 20, 20);
-            self.myTableView.frame=CGRectMake(0, self.btnBgImageView.frame.origin.y+self.btnBgImageView.frame.size.height, self.oriTableViewFrame.size.width, self.view.frame.size.height-self.btnBgImageView.frame.origin.y-self.btnBgImageView.frame.size.height);
-            
-        } completion:^(BOOL finished) {
-
-        }];
-        
-    }else{
-        
-        //如果是横三角就是NO , 如果是倒三角就是YES；
-        pdSanJiao = YES;
-        
-        //先改变右上角 按钮上图片的样式
-        self.scrollShowImage.image = [UIImage imageNamed:@"daosanjiao.png"];
-    
-        //显示ScrollView
-        //将scrollView隐藏
-        [UIView animateWithDuration:0.5 animations:^{
-            
-            self.topAppBtn.frame=CGRectMake(self.topAppBtn.frame.origin.x, self.oriTableViewFrame.origin.y-self.topAppBtn.frame.size.height, self.topAppBtn.frame.size.width, self.topAppBtn.frame.size.height);
-            self.topGameBtn.frame=CGRectMake(self.topGameBtn.frame.origin.x, self.oriTableViewFrame.origin.y-self.topGameBtn.frame.size.height, self.topGameBtn.frame.size.width, self.topGameBtn.frame.size.height);
-            self.freeBtn.frame=CGRectMake(self.freeBtn.frame.origin.x, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, self.freeBtn.frame.size.width, self.freeBtn.frame.size.height);
-            self.freenumberView.frame=CGRectMake(self.freeBtn.frame.origin.x+self.freeBtn.frame.size.width-20, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, 20, 20);
-            self.gamenumberView.frame=CGRectMake(self.topGameBtn.frame.origin.x+self.topGameBtn.frame.size.width-20, self.oriTableViewFrame.origin.y-self.freeBtn.frame.size.height, 20, 20);
-            self.myTableView.frame=CGRectMake(0, self.oriTableViewFrame.origin.y, self.oriTableViewFrame.size.width, self.view.frame.size.height-self.oriTableViewFrame.origin.y);
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
-    
-    
 }
 
 -(void)initScrollView
@@ -374,32 +219,75 @@
     {
         [view removeFromSuperview];
     }
-    for (int i=[self.bannerInfo count]-1;i>=0;i--)
+    for (int i = [self.bannerInfo count]-1;i >= 0; i--)
     {
-        
         UIImageView *imgv3=[[[UIImageView alloc] initWithFrame:CGRectMake(320*(i), 0, 320, 130)] autorelease];
         imgv3.tag=i+1;
         [self.topScrollView addSubview:imgv3];
-        
     }
-    currentPageForPage=0;
-    self.topScrollView.contentSize=CGSizeMake(320*[self.bannerInfo count], self.topScrollView.frame.size.height);
-    self.pageControl. numberOfPages=[self.bannerInfo count];
-    self.pageControl.currentPage=currentPageForPage;
-    
 }
 
-#pragma mark  ASIHTTP Method
+-(void)setBannerImg
+{
+    [self startImageRequestWithUrl:[[self.bannerInfo lastObject] objectForKey:@"pic"] FinishMethod:@selector(changeBannerImg:)];
+}
+
+-(void)reloadApps{
+    [currentCateID release];
+    currentCateID=[[self.appsDic objectForKey:@"cateid"] retain];
+    [self.appsArr addObjectsFromArray:[self.appsDic objectForKey:@"apps"]];
+    self.currentappsPage=[self.appsDic objectForKey:@"page"];
+    [self.myTableView reloadData];
+}
+
+-(void)scrollViewAnimate{
+    CGSize viewSize=self.topScrollView.frame.size;
+    
+    if(currentPageForPage>[self.bannerInfo count])
+    {
+        currentPageForPage=0;
+        self.pageControl.currentPage=currentPageForPage;
+        CGRect rect=CGRectMake(viewSize.width*currentPageForPage, 0, viewSize.width, viewSize.height);
+        [self.topScrollView scrollRectToVisible:rect animated:NO];
+    }
+    else
+    {
+        self.pageControl.currentPage=currentPageForPage;
+        CGRect rect=CGRectMake(viewSize.width*currentPageForPage, 0, viewSize.width, viewSize.height);
+        [self.topScrollView scrollRectToVisible:rect animated:YES];
+    }
+    currentPageForPage++;
+}
+
+-(void)setCates{
+    [self.topAppBtn setTitle:[[self.catesArr objectAtIndex:0] objectForKey:@"name"] forState:UIControlStateNormal];
+    [self.freeBtn setTitle:[[self.catesArr objectAtIndex:1] objectForKey:@"name"] forState:UIControlStateNormal];
+    [self.topGameBtn setTitle:[[self.catesArr objectAtIndex:2] objectForKey:@"name"] forState:UIControlStateNormal];
+}
+
+#pragma mark -- request Method
+
+-(void)getImageByRequest:(ASIHTTPRequest *)request{
+    [self.images setObject:[request responseData] forKey:[request.url absoluteString]];
+    [self.myTableView reloadData];
+}
+
 
 -(void)startAPPSRequest:(NSString *)cateid Page:(NSString *)page{
-    DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
-    NSString *str=[NSString stringWithFormat:@"http://apps.flashapp.cn/api/rcapp/apps?deviceId=%@&platform=%@&cateid=%@&pageNo=%@",device.deviceId,[device.platform encodeAsURIComponent],cateid,page];
-    NSLog(@"str=====%@",str);
+    DeviceInfo *device = [DeviceInfo deviceInfoWithLocalDevice];
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    NSString *src =[NSString stringWithFormat:@"%.0f_%.0f",rect.size.width,rect.size.height];
+    //获得Sim卡运行商
+    CTTelephonyNetworkInfo* tni = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier* carrier = tni.subscriberCellularProvider;
+    [tni release];
+    NSString* version = [[NSUserDefaults standardUserDefaults] objectForKey:@"version"];
+    
+    NSString *str = [NSString stringWithFormat:@"http://apps.flashapp.cn/api/vapp/apps?deviceId=%@&platform=%@&cateid=%@&pageNo=%@&appid=%d&osversion=%@&dwname=%@&scr=%@&mnc=%@&mcc=%@&vr=%@&chl=%@&ver=%@",device.deviceId,[device.platform encodeAsURIComponent],cateid,page,APP_ID,[device.version encodeAsURIComponent],[device.hardware encodeAsURIComponent],src,carrier ? carrier.mobileNetworkCode : @"",carrier ? carrier.mobileCountryCode : @"",version,CHANNEL,API_VER];
+    
     NSURL *url=[NSURL URLWithString:str];
     
     ASIHTTPRequest *request=[ASIHTTPRequest requestWithURL:url];
-    //request.userAgentString=@"flashapp/1.0 speedit CFNetwork/548.1.4 Darwin/11.0.0";
-    
     request.timeOutSeconds=60;
     request.delegate=self;
     [request startAsynchronous];
@@ -408,10 +296,18 @@
 
 //请求scrollView显示的图片
 -(void)startBannerRequest{
-    DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
-    NSString *str=[NSString stringWithFormat:@"http://apps.flashapp.cn/api/rcapp/banner?deviceId=%@&platform=%@&cp=%d",device.deviceId,[device.platform encodeAsURIComponent],[BannerImageUtil getTimeStamp]];
-    NSLog(@"str=====%@",str);
+    DeviceInfo *device = [DeviceInfo deviceInfoWithLocalDevice];
+    //获得Sim卡运行商
+    CTTelephonyNetworkInfo* tni = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier* carrier = tni.subscriberCellularProvider;
+    [tni release];
+    //获得版本信息
+    NSString* version = [[NSUserDefaults standardUserDefaults] objectForKey:@"version"];
+    //获得屏幕尺寸 width * height
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    NSString *scr =[NSString stringWithFormat:@"%.0f*%.0f",rect.size.width,rect.size.height];
     
+    NSString *str = [NSString stringWithFormat:@"http://apps.flashapp.cn/api/vapp/banner?deviceId=%@&platform=%@&cpi=%d&appid=%d&osversion=%@&dwname=%@&scr=%@&mnc=%@&mcc=%@&vr=%@&chl=%@&ver=%@",device.deviceId,[device.platform encodeAsURIComponent],[BannerImageUtil getTimeStamp] ,APP_ID,[device.version encodeAsURIComponent],[device.hardware encodeAsURIComponent],scr,carrier?carrier.mobileNetworkCode:@"",carrier?carrier.mobileCountryCode:@"",version,CHANNEL,API_VER ];    
     NSURL *url=[NSURL URLWithString:str];
     
     ASIHTTPRequest *request=[ASIHTTPRequest requestWithURL:url];
@@ -419,7 +315,6 @@
     request.delegate=self;
     [request startAsynchronous];
     [self.requestArray addObject:request];
-    
 }
 
 -(void)startRequest{
@@ -442,142 +337,43 @@
     
 }
 
--(void)startImageRequestWithUrl:(NSString *)url FinishMethod:(SEL)sel{
+-(void)startImageRequestWithUrl:(NSString *)url FinishMethod:(SEL)sel
+{
     ASIHTTPRequest *request=[ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
     NSLog(@"banner------url=======%@",url);
     request.timeOutSeconds=40;
     request.delegate=self;
     [request setDidFinishSelector:sel];
     [request startAsynchronous];
-    [self.requestArray addObject:request];
-    
+//    [self.requestArray addObject:request];
 }
-
--(void)setCates{
-//    NSLog(@"TTTTTTTTTTTTTT%@",[[self.catesArr objectAtIndex:0] objectForKey:@"name"] );
-    [self.topAppBtn setTitle:[[self.catesArr objectAtIndex:0] objectForKey:@"name"] forState:UIControlStateNormal];
-    [self.freeBtn setTitle:[[self.catesArr objectAtIndex:1] objectForKey:@"name"] forState:UIControlStateNormal];
-    [self.topGameBtn setTitle:[[self.catesArr objectAtIndex:2] objectForKey:@"name"] forState:UIControlStateNormal];
-    if([[[self.catesArr objectAtIndex:1] objectForKey:@"new"] intValue]>0){
-        self.freenumberView.hidden=NO;
-        NSLog(@"free update number count%@",[[self.catesArr objectAtIndex:1] objectForKey:@"new"] );
-        self.freenumberView.numLabel.text=[[[self.catesArr objectAtIndex:1] objectForKey:@"new"] stringValue];
-    }
-    if([[[self.catesArr objectAtIndex:2] objectForKey:@"new"] intValue]>0){
-        self.gamenumberView.hidden=NO;
-        NSLog(@"game update number count%@",[[[self.catesArr objectAtIndex:1] objectForKey:@"new"] stringValue]);
-        
-        self.gamenumberView.numLabel.text=[[[self.catesArr objectAtIndex:2] objectForKey:@"new"] stringValue];
-    }
-    
-    
-}
-
--(void)setBannerImg{
-    
-    scrollTimer=[NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollViewAnimate) userInfo:nil repeats:YES];
-    
-    // [self startImageRequestWithUrl:[[self.bannerInfo objectAtIndex:2] objectForKey:@"pic"] FinishMethod:@selector(changeBannerImg3:)];
-    [self startImageRequestWithUrl:[[self.bannerInfo lastObject] objectForKey:@"pic"] FinishMethod:@selector(changeBannerImg:)];
-    
-}
-
--(void)scrollViewAnimate{
-    CGSize viewSize=self.topScrollView.frame.size;
-    
-    if(currentPageForPage>[self.bannerInfo count])
-    {
-        currentPageForPage=0;
-        self.pageControl.currentPage=currentPageForPage;
-        CGRect rect=CGRectMake(viewSize.width*currentPageForPage, 0, viewSize.width, viewSize.height);
-        [self.topScrollView scrollRectToVisible:rect animated:NO];
-        
-    }
-    else
-    {
-        self.pageControl.currentPage=currentPageForPage;
-        CGRect rect=CGRectMake(viewSize.width*currentPageForPage, 0, viewSize.width, viewSize.height);
-        [self.topScrollView scrollRectToVisible:rect animated:YES];
-    }
-    currentPageForPage++;
-    //    switch (pageNum) {
-    //        case 0:{
-    //            self.pageControl.currentPage=1;
-    //            CGRect rect=CGRectMake(viewSize.width, 0, viewSize.width, viewSize.height);
-    //            [self.topScrollView scrollRectToVisible:rect animated:YES];
-    //        }
-    //            break;
-    //        case 1:{
-    //            self.pageControl.currentPage=2;
-    //            CGRect rect=CGRectMake(2*viewSize.width, 0, viewSize.width, viewSize.height);
-    //            [self.topScrollView scrollRectToVisible:rect animated:YES];
-    //        }
-    //            break;
-    //        case 2:{
-    //            CGRect rect=CGRectMake(0, 0, viewSize.width, viewSize.height);
-    //            [self.topScrollView scrollRectToVisible:rect animated:NO];
-    //            self.pageControl.currentPage=0;
-    //        }
-    //            break;
-    //
-    //        default:
-    //            break;
-    //    }
-}
-
--(void)pressBanner{
-    
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[[self.bannerInfo objectAtIndex:self.pageControl.currentPage] objectForKey:@"link"]]];
-}
-
-
-
--(void)reloadApps{
-    [currentCateID release];
-    currentCateID=[[self.appsDic objectForKey:@"cateid"] retain];
-    [self.appsArr addObjectsFromArray:[self.appsDic objectForKey:@"apps"]];
-    self.currentappsPage=[self.appsDic objectForKey:@"page"];
-   // NSLog(@"sasdasdasdsadadasdasd%d",[self.appsArr count]);
-    [self.myTableView reloadData];
-    moring=NO;
-}
-
-//-(void)changeBannerImg1:(ASIHTTPRequest *)request{
-//    UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:1];
-//    imgv.image=[UIImage imageWithData:[request responseData]];
-//    NSLog(@"imgv.image======%@",imgv.image);
-//    [[BannerImageUtil getBannerUtil] saveBannerWithImage1:[request responseData] Link:[[self.bannerInfo objectAtIndex:0] objectForKey:@"link"]];
-//}
-//
-//-(void)changeBannerImg2:(ASIHTTPRequest *)request{
-//    UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:2];
-//    imgv.image=[UIImage imageWithData:[request responseData]];
-//    NSLog(@"imgv.image======%@",imgv.image);
-//    [[BannerImageUtil getBannerUtil] saveBannerWithImage1:[request responseData] Link:[[self.bannerInfo objectAtIndex:1] objectForKey:@"link"]];
-//    [self startImageRequestWithUrl:[[self.bannerInfo objectAtIndex:0] objectForKey:@"pic"] FinishMethod:@selector(changeBannerImg1:)];
-//}
-//
-//-(void)changeBannerImg3:(ASIHTTPRequest *)request{
-//    UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:3];
-//    imgv.image=[UIImage imageWithData:[request responseData]];
-//    NSLog(@"imgv.image======%@",imgv.image);
-//    [[BannerImageUtil getBannerUtil] saveBannerWithImage1:[request responseData] Link:[[self.bannerInfo objectAtIndex:2] objectForKey:@"link"]];
-//    [self startImageRequestWithUrl:[[self.bannerInfo objectAtIndex:1] objectForKey:@"pic"] FinishMethod:@selector(changeBannerImg2:)];
-//}
 
 -(void)changeBannerImg:(ASIHTTPRequest *)request
 {
     UIImageView *imgv=(UIImageView *)[self.topScrollView viewWithTag:currentCount];
     imgv.image=[UIImage imageWithData:[request responseData]];
-//    NSLog(@"imgv.image======%@",imgv);
+    [bannerImageArr addObject:[request responseData]];
     if(currentCount-1<0||!imgv)
     {
-        currentCount--;
+//        currentCount--;
         return;
     }
-    [[BannerImageUtil getBannerUtil] saveBannerWithImage1:[request responseData] Link:[[self.bannerInfo objectAtIndex:currentCount-1] objectForKey:@"link"]];
+    [[BannerImageUtil getBanerImageUtil] saveBannerWithImage1:[request responseData] Link:[[self.bannerInfo objectAtIndex:currentCount-1] objectForKey:@"link"]];
     if(currentCount-2<0)
     {
+        scrollTimer=[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(scrollViewAnimate) userInfo:nil repeats:YES];
+        
+        self.headView.userInteractionEnabled = YES;
+        
+        [scrollActivity stopAnimating];
+        scrollActivity.hidden =YES;
+        
+        currentPageForPage=0;
+        self.topScrollView.contentSize=CGSizeMake(320*[self.bannerInfo count], self.topScrollView.frame.size.height);
+        self.pageControl.hidden =NO;
+        self.pageControl. numberOfPages=[self.bannerInfo count];
+        self.pageControl.currentPage=currentPageForPage;
+        
         currentCount--;
         return;
     }
@@ -585,9 +381,97 @@
     currentCount--;
 }
 
+#pragma mark -- button pressed
+-(void)pressBanner{
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[[self.bannerInfo objectAtIndex:self.pageControl.currentPage] objectForKey:@"link"]]];
+}
 
-#pragma mark - asiRequestDelegate
+-(IBAction)turnBrnPress:(id)sender
+{
+    if (self.showNewsAppAnimation != nil) {
+        BOOL xianmian = [[NSUserDefaults standardUserDefaults] boolForKey:XSMF_APP];
+        BOOL games = [[NSUserDefaults standardUserDefaults] boolForKey:RMYX_APP];
+        if (xianmian ||games) {
+            self.showNewsAppAnimation(YES);
+        }else{
+            self.showNewsAppAnimation(NO);
+        }
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(IBAction)topAppBtnPress:(id)sender
+{
+    self.topGameBtn.enabled=YES;
+    self.topAppBtn.enabled=NO;
+    self.freeBtn.enabled=YES;
+    [self.appsArr removeAllObjects];
+    [self.myTableView reloadData];
+    self.currentappsPage=@"0";
+    [self startAPPSRequest:@"1" Page:@"0"];
+    
+}
+
+-(IBAction)freeBtnPress:(id)sender
+{
+    [[NSUserDefaults standardUserDefaults] setDouble:NO forKey:XSMF_APP];
+    
+    self.topGameBtn.enabled=YES;
+    self.topAppBtn.enabled=YES;
+    self.freeBtn.enabled=NO;
+    self.xianMianRedDian.hidden=YES;
+    
+    [self.appsArr removeAllObjects];
+    [self.myTableView reloadData];
+    self.currentappsPage=@"0";
+    [self startAPPSRequest:@"2" Page:@"0"];
+    
+}
+
+-(IBAction)topGameBtnPress:(id)sender
+{
+    [[NSUserDefaults standardUserDefaults] setDouble:NO forKey:RMYX_APP];
+    
+    self.topGameBtn.enabled=NO;
+    self.topAppBtn.enabled=YES;
+    self.freeBtn.enabled=YES;
+    [self.appsArr removeAllObjects];
+    self.gamesRedDian.hidden=YES;
+    [self.myTableView reloadData];
+    self.currentappsPage=@"0";
+    [self startAPPSRequest:@"3" Page:@"0"];
+    
+}
+
+-(void)loadMore:(id)sender
+{
+    UIButton *button=(UIButton*)sender;
+    button.enabled=NO;
+    [button setTitle:@"正在加载请稍后..." forState:UIControlStateDisabled];
+    if([self.appsArr count]>=[self.appsArr count]-1){
+        [self startAPPSRequest:currentCateID Page:self.currentappsPage];
+    }
+}
+
+
+-(void)lockButtonPress:(id)sender
+{
+    AppButton *button=(AppButton*)sender;
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:button.linkUrl]];
+    
+}
+
+
+-(IBAction)explainBtnPress:(id)sender
+{
+    
+}
+
+#pragma mark -- ASIHttpRequest Delegate
 - (void)requestFinished:(ASIHTTPRequest *)request{
+    
     id response=[[request responseString] JSONValue];
     
     NSString *requestUrl=[request.url absoluteString];
@@ -600,22 +484,16 @@
     if([requestUrl rangeOfString:@"banner"].length){
         self.bannerInfo=[response objectForKey:@"banner"];
         currentCount= [self.bannerInfo count];
-        
-        NSLog(@"bannerInfobannerInfobannerI===%@",bannerInfo);
-        
         if(self.bannerInfo){
-            [self moveBottomView];
+            [self initScrollView];
             [self setBannerImg];
         }
-        
         self.timestamp=[[response objectForKey:@"cp"] integerValue];
         [BannerImageUtil saveTimeStamp:self.timestamp];
     }
-    if([requestUrl rangeOfString:@"rcapp/apps"].length){
+    if([requestUrl rangeOfString:@"vapp/apps"].length){
         [appsDic release];
         appsDic=[response retain];
-        
-//        NSLog(@"appDic =%@",appsDic);
         [self reloadApps];
     }
     
@@ -629,18 +507,13 @@
     //    [alert show];
 }
 
-#pragma mark - tableView Delegate
+#pragma mark - UITableView datasource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if([self.appsArr count])
         return [self.appsArr count]+1;
     else
         return  [self.appsArr count];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 76;
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -656,67 +529,59 @@
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:MoreCellId] autorelease];
         }
         
-        
         for(UIView *subView in cell.contentView.subviews){
             [subView removeFromSuperview];
         }
+        
+        //添加cell后面的线
+        UIImageView *lineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_tab_xian.png"]];
+        lineView.frame = CGRectMake(0, 75, 320, 1);
+        [cell.contentView addSubview:lineView];
+        [lineView release];
+        
         UIButton *button1=[UIButton buttonWithType:UIButtonTypeCustom];
         button1.tag=110;
         button1.frame=CGRectMake(23, 12, 274, 52);
         [button1 addTarget:self action:@selector(loadMore:) forControlEvents:UIControlEventTouchUpInside];
-        button1.enabled=YES;
         [button1 setTitleColor:BgTextColor forState:UIControlStateNormal];
         [[button1 titleLabel] setFont:[UIFont systemFontOfSize:15.0]];
-        [button1 setTitle:@"点击加载更多" forState:UIControlStateNormal   ];
+        button1.enabled=YES;
+        [button1 setTitle:@"点击加载更多..." forState:UIControlStateNormal ];
+        [button1 setTitle:@"正在加载请稍后..." forState:UIControlStateDisabled];
         UIImage*image=[UIImage imageNamed:@"loadmore.png"];
         image=[image stretchableImageWithLeftCapWidth:image.size.width/2 topCapHeight:0];
         [button1 setBackgroundImage:image forState:UIControlStateNormal];
         [cell.contentView addSubview:button1];
         return cell;
-
     }
-    else
-    {
-        UITableViewCell *cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    else{
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
             cell.backgroundColor=[UIColor grayColor];
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+            
+            //添加cell后面的线
+            UIImageView *lineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_tab_xian.png"]];
+            lineView.frame = CGRectMake(0, 64, 320, 1);
+            [cell.contentView addSubview:lineView];
+            [lineView release];
             
             for(int i=0;i<5;i++)
             {
-                starImageView[i]=[[[UIImageView alloc]initWithFrame:CGRectMake(75+i*17, 31, 17, 17)] autorelease];
+                starImageView[i]=[[[UIImageView alloc]initWithFrame:CGRectMake(65+i*17, 38, 15, 15)] autorelease];
                 starImageView[i].tag=200+i;
                 [cell.contentView addSubview:starImageView[i]];
-                
             }
-            UIImageView *imageView=[[[UIImageView alloc]initWithFrame:CGRectMake(7, 7, 62, 62)] autorelease];
+            UIImageView *imageView=[[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 55, 55)] autorelease];
             imageView.tag=100;
             
             UILabel *nameLabel=[[[UILabel alloc]init] autorelease];
-            nameLabel.frame=CGRectMake(76, 8, 140, 21);
+            nameLabel.frame=CGRectMake(65, 10, 150, 25);
             nameLabel.tag=101;
             nameLabel.textAlignment=UITextAlignmentLeft;
             nameLabel.textColor=[UIColor darkGrayColor];
             nameLabel.font=[UIFont systemFontOfSize:17.0];
-            // nameLabel.text=[self.dataArray objectAtIndex:[indexPath row]];
-            
-            UILabel *detailLabel=[[[UILabel alloc]init] autorelease];
-            detailLabel.frame=CGRectMake(76, 48, 180, 21);
-            detailLabel.tag=102;
-            detailLabel.textAlignment=UITextAlignmentLeft;
-            detailLabel.textColor=[UIColor darkGrayColor];
-            detailLabel.font=[UIFont systemFontOfSize:12.0];
-            
-            UILabel *sizeLabel=[[[UILabel alloc]init] autorelease];
-            sizeLabel.frame=CGRectMake(173, 29, 63, 21);
-            sizeLabel.tag=103;
-            sizeLabel.textAlignment=UITextAlignmentRight;
-            sizeLabel.textColor=[UIColor darkGrayColor];
-            sizeLabel.font=[UIFont systemFontOfSize:12.0];
-            sizeLabel.text=@"流量充足请放心使用";
-            
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
             
             AppButton*button=[AppButton buttonWithType:UIButtonTypeCustom];
             button.tag=105;
@@ -731,8 +596,6 @@
             [cell.contentView addSubview:button];
             [cell.contentView addSubview:imageView];
             [cell.contentView addSubview:nameLabel];
-            [cell.contentView addSubview:detailLabel];
-            [cell.contentView addSubview:sizeLabel];
             
         }
         NSDictionary *dic=[self.appsArr objectAtIndex: [indexPath row]];
@@ -746,16 +609,12 @@
             UIImage *image=[UIImage imageNamed:@"tuijian_loading.png"];
             imageview.image=image;
             NSURL *url=[NSURL URLWithString:[dic objectForKey:@"icon"]];
-            // NSLog(@"icon url=======%@",[dic objectForKey:@"icon"]);
             ASIHTTPRequest *asiRequest=[ASIHTTPRequest requestWithURL:url];
-            //[asiRequest setDownloadCache:[ASIDownloadCache sharedCache]];
             asiRequest.timeOutSeconds=30;
             [asiRequest setDidFinishSelector:@selector(getImageByRequest:)];
             [asiRequest setDelegate:self];
-            
             [asiRequest startAsynchronous];
             [self.requestArray addObject:asiRequest];
-            
         }
         UILabel *nameLabel=(UILabel*)[cell.contentView viewWithTag:101];
         nameLabel.text=[dic objectForKey:@"apname"];
@@ -773,7 +632,10 @@
         button.appSize=[dic objectForKey:@"fsize"];
         button.appStar=[[dic objectForKey:@"star"] integerValue];
         button.appDescibe=[dic objectForKey:@"apdesc"];
-        [button setTitle:@"安装" forState:UIControlStateNormal];
+        [button setTitle:@"免费" forState:UIControlStateNormal];
+        if (![[dic objectForKey:@"oprice"] isEqualToString:@"0.00000"]) {
+            [button setTitle:[NSString stringWithFormat:@"￥%.2f",[[dic objectForKey:@"oprice"] floatValue]] forState:UIControlStateNormal];
+        }
         
         NSInteger stars=[[dic objectForKey:@"star"] integerValue]/2;
         NSInteger halfstars=[[dic objectForKey:@"star"] integerValue]%2;
@@ -792,87 +654,70 @@
             starImageView[i].image=[UIImage imageNamed:@"recommend_none_star.png"];
         }
         
-        
         return cell;
-
     }
 }
 
+#pragma mark -- UITableView delegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if([indexPath row] == ([appsArr count]))
         return;
+    
     NSDictionary *dic=[self.appsArr objectAtIndex: [indexPath row]];
-    
-    if(iPhone5)
-    {
-        self.recommendDetailViewController=[[[RecommendDetailViewController alloc]initWithNibName:@"RecommendDetailViewController_iphone5" bundle:nil] autorelease];
-    }
-    else
-    {
-        
-        self.recommendDetailViewController=[[[RecommendDetailViewController alloc]initWithNibName:@"RecommendDetailViewController" bundle:nil] autorelease];
-    }
-    
-    self.recommendDetailViewController.appName=[dic objectForKey:@"apname"];
-    self.recommendDetailViewController.appDescibe=[dic objectForKey:@"apdesc"];
-    self.recommendDetailViewController.appSize=[dic objectForKey:@"fsize"];
-    self.recommendDetailViewController.appIcon=[UIImage imageWithData:[self.images objectForKey:[dic objectForKey:@"icon"]]];
-    self.recommendDetailViewController.linkUrl=[dic objectForKey:@"link"];
-    self.recommendDetailViewController.appStar=[[dic objectForKey:@"star"] integerValue];
-    [self.view addSubview:recommendDetailViewController.view];
-    
-//    AppDetailsViewController *appDetail = [[AppDetailsViewController alloc] init];
-//    appDetail.appImages = [UIImage imageWithData:[self.images objectForKey:[dic objectForKey:@"icon"]]];
-//    appDetail.appDic = [dic mutableCopy];
-//    [self.navigationController pushViewController:appDetail animated:YES];
-//    [appDetail release];
-//    [dic release];
-
+    AppDetailClass *detailClass = [AppDetailClass getAppDetailClass];
+    detailClass.apid = [dic objectForKey:@"apid"];
+    detailClass.apname = [dic objectForKey:@"apname"];
+    detailClass.apdesc = @"";
+    //    detailClass.rkm = [dic objectForKey:@"rkm"];
+    detailClass.rkm = @"我是推荐理由哦";
+    //    detailClass.picslen = [dic objectForKey:@"picslen"];
+    detailClass.picslen = @"(3.5MB)";
+    detailClass.star = [[dic objectForKey:@"star"] integerValue];
+    detailClass.fsize = [dic objectForKey:@"fsize"];
+    detailClass.icon = [dic objectForKey:@"icon"];
+    detailClass.link = [dic objectForKey:@"link"];
+    detailClass.oprice = [dic objectForKey:@"oprice"];
+    detailClass.cprice = [dic objectForKey:@"cprice"];
+    detailClass.limFree = [dic objectForKey:@"limfree"];
+    DetailViewController *detailVC = [[DetailViewController alloc] init];
+    detailVC.appImgDic = self.images;
+    [self.navigationController pushViewController:detailVC animated:YES];
+    [detailVC release];
     
 }
 
--(void)loadMore:(id)sender
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIButton *button=(UIButton*)sender;
-    button.enabled=NO;
-    if(!moring&&[self.appsArr count]>=[self.appsArr count]-1){
-        
-        moring=YES;
-        
-        [self startAPPSRequest:currentCateID Page:self.currentappsPage];
-        
-        
-    }
+    return 65;
 }
-
-//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    if(!moring&&[indexPath row]>=[self.appsArr count]-1){
-//        moring=YES;
-//        [self startAPPSRequest:currentCateID Page:self.currentappsPage];
-//    }
-//}
-
--(void)getImageByRequest:(ASIHTTPRequest *)request{
-    [self.images setObject:[request responseData] forKey:[request.url absoluteString]];
-    [self.myTableView reloadData];
-}
-
-
--(void)lockButtonPress:(id)sender
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    AppButton *button=(AppButton*)sender;
+    if ([appsArr count] == indexPath.row) {
+        return nil;
+    }
+    return indexPath;
+}
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
     
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:button.linkUrl]];
-    
-    //    self.recommendDetailViewController=[[[RecommendDetailViewController alloc]init] autorelease];
-    //    self.recommendDetailViewController.appName=button.appName;
-    //    self.recommendDetailViewController.appDescibe=button.appDescibe;
-    //    self.recommendDetailViewController.appSize=button.appSize;
-    //    self.recommendDetailViewController.appIcon=[UIImage imageWithData:[self.images objectForKey:button.appIcon]];
-    //    self.recommendDetailViewController.linkUrl=button.linkUrl;
-    //    self.recommendDetailViewController.appStar=button.appStar;
-    //    [self.view addSubview:recommendDetailViewController.view];
-    
+    if ( section == 0 ) {
+        
+        return 38;
+    }
+    return 0;
+}
+- (UIView*) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return  sectionView;
+}
+
+#pragma mark -- scrollView delegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat pageWidth = self.topScrollView.frame.size.width;
+    int page = floor((self.topScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    self.pageControl.currentPage = page;
+    currentPageForPage += page;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

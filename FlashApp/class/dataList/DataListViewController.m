@@ -93,9 +93,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.myTableView.separatorColor=[UIColor clearColor];
     
     self.currentBtn=self.monthSaveBtn;
+    
     [AppDelegate labelShadow:self.monthSaveBtn.titleLabel];
     [AppDelegate labelShadow:self.jiaSuBtn.titleLabel];
     // [self reloadData];
@@ -504,12 +506,6 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         cell.accessoryType=UITableViewCellAccessoryNone;
         cell.userInteractionEnabled = NO;
-        //  cell.selectionStyle=UITableViewCellSelectionStyleBlue;
-        
-        //        UIColor* color=[UIColor blueColor];//cell选中后的效果
-        //        cell.selectedBackgroundView=[[[UIView alloc]initWithFrame:cell.frame]autorelease];
-        //        cell.selectedBackgroundView.backgroundColor=color;
-        
     }
     
     for ( UIView* v in cell.contentView.subviews )

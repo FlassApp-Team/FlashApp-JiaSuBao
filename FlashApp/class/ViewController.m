@@ -22,6 +22,7 @@
 #import "UserAgentLockDAO.h"
 #import "NoLoginViewController.h"
 #import "DateUtils.h"
+#import "TwitterClient.h"
 
 //add guangtao
 #import "VPNHelpViewController.h"
@@ -105,7 +106,7 @@
 {
     [super viewDidLoad];
     
-    [self refreshBtnPress:nil];
+//    [self refreshBtnPress:nil];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     [self.navigationController setNavigationBarHidden:YES ];
@@ -168,8 +169,8 @@
     [super viewDidAppear:animated];
     
     
-    //发送通知检查
-    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+//    //发送通知检查
+//    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
     
 //    [[NSNotificationCenter defaultCenter] postNotificationName:kReachabilityChangedNotification object:nil];
     
@@ -238,7 +239,7 @@
     
     StageStats* mstats = [monthStats retain];
     
-    //处理返回的数据
+    //处理返回的数据 。写入数据库
     BOOL hasData = [TwitterClient procecssAccessData:obj time:t];
     if ( hasData ) {
         //从数据库中加载数据
@@ -566,8 +567,10 @@
     }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        //先刷新，刷新完成后在去判断是否安装描述文件
-        [[AppDelegate getAppDelegate ]timerTask];
+        [TwitterClient getStatsData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+        });
     });
 
 //    [self pdVpnAndWifiOrSome];
@@ -590,12 +593,10 @@
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [TwitterClient getStatsData];
-        [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
+        });
     }) ;
-    
-    
-    
-    
     
 }
 

@@ -11,7 +11,7 @@
 @interface BannerImageUtil : NSObject
 
 +(NSInteger)getTimeStamp;
-+(BannerImageUtil *)getBannerUtil;
++(BannerImageUtil *)getBanerImageUtil;
 -(void)saveBannerWithImage1:(NSData *)data1 Link:(NSString *)link;
 +(NSMutableArray *)getBanners;
 +(void)saveTimeStamp:(NSInteger)timestamp;

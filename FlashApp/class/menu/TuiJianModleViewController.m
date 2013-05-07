@@ -15,6 +15,7 @@
 @implementation TuiJianModleViewController
 @synthesize recommendViewController;
 @synthesize tuijianBtn;
+@synthesize animationImgView;
 -(void)dealloc
 {
     self.tuijianBtn=nil;
@@ -34,10 +35,25 @@
 {
     [super viewDidLoad];
     self.tuijianBtn.controller=self;
+    
+    animationImgView = [[UIImageView alloc] initWithFrame:CGRectMake(34, 32, 55, 55)];
+    [self.view addSubview:animationImgView];
+    
+    NSArray *animationArr = [NSArray arrayWithObjects:[UIImage imageNamed:@"app_new_up.png"],[UIImage imageNamed:@"app_new_middle.png"],[UIImage imageNamed:@"app_new_down.png"], nil];
+    animationImgView.animationImages = animationArr;
+    animationImgView.animationDuration = 2;
+    
+    BOOL newsApp = [[NSUserDefaults standardUserDefaults] boolForKey:NEWS_APP];
+    if (newsApp) {
+        [animationImgView startAnimating];
+    }
+    
     // Do any additional setup after loading the view from its nib.
 }
+
 -(void)nextContorller
 {
+//    [self.animationImgView stopAnimating];
     self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
     
     UIView *view=(UIView*)[self.view viewWithTag:101];
@@ -45,12 +61,17 @@
     if(self.recommendViewController==nil)
         self.recommendViewController=[[[RecommendViewController alloc]init] autorelease];
     
+    self.recommendViewController.showNewsAppAnimation = ^(BOOL shows){
+        if (shows) {
+            [self.animationImgView startAnimating];
+        }else
+        {
+            [self.animationImgView stopAnimating];
+        }
+    };
+    
     [[sysdelegate navController  ] pushViewController:self.recommendViewController animated:YES];
     
-    
-//    RecommendViewController*RRRConnretooler=[[[RecommendViewController alloc]init] autorelease];
-//    [[sysdelegate navController  ] pushViewController:RRRConnretooler animated:YES];
-
 }
 
 - (void)didReceiveMemoryWarning

@@ -58,9 +58,9 @@
     image=[image stretchableImageWithLeftCapWidth:image.size.width/2 topCapHeight:image.size.height/2];
     self.imageView.image=image;
     
-    UIImage *miaoshuBianKuang = [UIImage imageNamed:@"white_box.png"];
-    miaoshuBianKuang = [miaoshuBianKuang stretchableImageWithLeftCapWidth:miaoshuBianKuang.size.width/2 topCapHeight:miaoshuBianKuang.size.width/2];
-    self.miaoshuimageView.image = miaoshuBianKuang;
+    UIImage *img = [UIImage imageNamed:@"white_box.png"];
+    img = [img stretchableImageWithLeftCapWidth:img.size.width/2 topCapHeight:img.size.width/2];
+    self.miaoshuimageView.image = img;
     
     if ([CHANNEL isEqualToString:@"appstore"]) {
         elseView.hidden = YES;

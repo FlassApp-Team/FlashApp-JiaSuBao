@@ -30,9 +30,14 @@
 #import "OpenUDID.h"
 #import "MBProgressHUD.h"
 #import "GetAddress.h"
+#import "NSString+SBJson.h"
 
 //add guangtao 
 #import "VPNHelpViewController.h"
+#import "OpenServeViewController.h"
+#import "ASIHttpRequest.h"
+#import "AppClasses.h"
+#import "AppRecommendDao.h"
 
 #define APPID 606803214//addd jianfei han
 
@@ -64,6 +69,103 @@
     self.navController=nil;
     [window release];
     [super dealloc];
+}
+
+-(void)ifNewApp
+{
+    DeviceInfo *device = [DeviceInfo deviceInfoWithLocalDevice];
+    
+    CTTelephonyNetworkInfo *tni = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *ccar = tni.subscriberCellularProvider;
+    [tni release];
+    
+    NSString *version = [[NSUserDefaults standardUserDefaults] objectForKey:@"version"];
+    
+    double cpi = [[NSUserDefaults standardUserDefaults] doubleForKey:@"catsucp"];
+    
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    NSString *scr =[NSString stringWithFormat:@"%.0f*%.0f",rect.size.width,rect.size.height];
+    
+    NSString *str = [NSString stringWithFormat:@"http://apps.flashapp.cn/api/vapp/catsu?deviceId=%@&platform=%@&cpi=%.0f&appid=%d&osversion=%@&dwname=%@&scr=%@&mnc=%@&mcc=%@&vr=%@&chl=%@&ver=%@",device.deviceId,[device.platform encodeAsURIComponent],cpi,APP_ID,[device.version encodeAsURIComponent],[device.hardware encodeAsURIComponent],scr,ccar ?ccar.mobileNetworkCode:@"",ccar?ccar.mobileCountryCode:@"",version,CHANNEL,API_VER];
+    
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:str]];
+    [request setCompletionBlock:^{
+        //请求返回的 应用分类 的结果集
+        NSDictionary *result = [NSDictionary dictionaryWithDictionary:[[request responseString] JSONValue]]; 
+        //结果集解析成array
+        NSMutableArray *categoryArray = [NSMutableArray arrayWithCapacity:3];
+        [categoryArray addObjectsFromArray:[result objectForKey:@"catsu"]];
+        //查询数据库中 应用分类 的结果集
+        NSDictionary *databasedic = [AppRecommendDao fondAllAppRecommend];
+        
+         //如果查询的结果集是空， 那么我们就把请求来的结果 插入数据库表中
+        if ([databasedic count] == 0) {
+            
+            [DBConnection beginTransaction];
+            
+            [AppRecommendDao insertAllAppRecommend:categoryArray];
+            
+            [DBConnection commitTransaction];
+            
+        }else{
+            for (NSString *str in [databasedic allKeys]) {
+                if ([str isEqualToString:@"精品推荐"]) {
+                    AppClasses *appClasses = [databasedic objectForKey:@"精品推荐"];
+                    
+                   long long new_tim = [[[categoryArray objectAtIndex:0] objectForKey:@"tim"] longLongValue];
+                    
+                    long long old_tim = appClasses.appClass_tim;
+                    
+                    if (new_tim >old_tim) {
+                        appClasses.appClass_tim = new_tim;
+                        [AppRecommendDao updateAppRecommend:appClasses];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:NEWS_APP];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:JPTJ_APP];
+                    }
+                    
+                    NSLog(@"%@ 's NEW_TIM IS %lld , OLD_TIM IS %lld",appClasses.appClasses_name,new_tim , old_tim);
+                    
+                }
+                if ([str isEqualToString:@"限时免费"]) {
+                    AppClasses *appClasses = [databasedic objectForKey:@"限时免费"];
+                    
+                    long long new_tim = [[[categoryArray objectAtIndex:1] objectForKey:@"tim"] longLongValue];
+                    
+                    long long old_tim = appClasses.appClass_tim;
+                    
+                    if (new_tim >old_tim) {
+                        appClasses.appClass_tim = new_tim;
+                        [AppRecommendDao updateAppRecommend:appClasses];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:NEWS_APP];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:XSMF_APP];
+                    }
+                    
+                     NSLog(@"%@ 'sNEW_TIM IS %lld , OLD_TIM IS %lld",appClasses.appClasses_name,new_tim , old_tim);
+                    
+                }
+                if ([str isEqualToString:@"热门游戏"]) {
+                    AppClasses *appClasses = [databasedic objectForKey:@"热门游戏"];
+                    
+                    long long new_tim = [[[categoryArray objectAtIndex:2] objectForKey:@"tim"] longLongValue];
+                    
+                    long long old_tim = appClasses.appClass_tim;
+                    
+                    if (new_tim >old_tim) {
+                        appClasses.appClass_tim = new_tim;
+                        [AppRecommendDao updateAppRecommend:appClasses];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:NEWS_APP];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:RMYX_APP];
+                    }
+                    
+                    NSLog(@"%@ 'sNEW_TIM IS %lld , OLD_TIM IS %lld",appClasses.appClasses_name,new_tim , old_tim);
+                }
+            }
+        }
+        
+
+    }];
+    [request startAsynchronous];
+    
 }
 
 + (void) installProfile:(NSString *)nextPage idc:(NSString*)idcCode
@@ -187,7 +289,7 @@
     NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
     UserSettings *user = [UserSettings currentUserSettings];
     
-    NSLog(@"user.profileType = %@",user.profileType);
+    NSLog(@"user.profileType ===================== %@",user.profileType);
     
     if ([user.profileType isEqualToString:@"apn"]) {
         if ( voaName && [voaName length] > 0 ) {
@@ -403,26 +505,12 @@
     
 }
 
-
-/*
- *通知网络状态发生改变的时候进入的方法
- *
- */
-//- (void)reachabilityWillChanged:(NSNotification *)note {
-//    
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络状态改变"
-//                                                    message:@"您的网络状态发生改变。"
-//                                                   delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//    [alert show];
-//    [alert release];
-//}
-
 #pragma mark - application delegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     timerTaskLock = [[NSObject alloc] init];
-    timerTaskDoing = false;
+    timerTaskDoing = NO;
     
     refreshingLock = [[NSLock alloc] init];
     
@@ -431,6 +519,12 @@
     
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
     [WXApi registerApp:@"wxd1be1f55db841585"];
+    
+    //创建应用推荐分类的数据库
+    [AppRecommendDao createAppRecommendTable];
+    
+     //查看是否有新的应用推荐
+    [self ifNewApp];
     
     
     BOOL versionUpgrade = NO;
@@ -497,11 +591,9 @@
     [self showSetupView];
     
     [self.window makeKeyAndVisible];
-    
-    if ( connType == CELL_2G || connType == CELL_3G || connType == CELL_4G || connType == WIFI || connType == ETHERNET ) {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
-    }
-    
+
+    //注册通知
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];    
     
     locationManager = [[TCLocationManager alloc] init];
     BOOL b = [[NSUserDefaults standardUserDefaults] boolForKey:UD_LOCATION_ENABLED];
@@ -539,8 +631,6 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-    
-        [self timerTask];
     
     //这里就不要发送通知了，这个通知叫 viewController 的 - viewDidAppear 去发送吧。错误，这里还是要发送，应为我程序运行到后台再起来的时候要接收通知
 //    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
@@ -721,9 +811,9 @@
                     WangSuViewController* wangSuViewController = (WangSuViewController*) controller;
                     [wangSuViewController relfresh];
                 }
-                else if ([controller isKindOfClass:[VPNHelpViewController class]]){
-                    VPNHelpViewController *vpnHelp = (VPNHelpViewController *)controller;
-                    [vpnHelp.navigationController popToRootViewControllerAnimated:YES];
+                else if ([controller isKindOfClass:[OpenServeViewController class]]){
+                    OpenServeViewController *vpnHelp = (OpenServeViewController *)controller;
+                    [vpnHelp.navigationController popViewControllerAnimated:NO];
                 }
 //                else if ( [controller isKindOfClass:[HelpNetBadViewController class]] ) {
 //                    HelpNetBadViewController* helpController = (HelpNetBadViewController*) controller;
@@ -782,6 +872,7 @@
 }
 
 
+#pragma mark -- APNS Notification
 - (void) application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [self performSelectorOnMainThread:@selector(processRemoteNotification:) withObject:userInfo waitUntilDone:NO];

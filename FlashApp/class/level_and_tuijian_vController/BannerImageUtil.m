@@ -30,7 +30,7 @@
 }
 
 
-+(BannerImageUtil *)getBannerUtil{
++(BannerImageUtil *)getBanerImageUtil{
     static id sharedInstance;
     static dispatch_once_t once;
     dispatch_once(&once, ^{
@@ -63,7 +63,7 @@
     if([arr count])
         [arr1 addObjectsFromArray:arr];
 
-    NSLog(@"banfnfnfnffn===%d",[arr count]);
+//    NSLog(@"banfnfnfnffn===%d",[arr count]);
 
     [[NSUserDefaults standardUserDefaults] setValue:arr1 forKey:@"BannerImageUtil"];
     [[NSUserDefaults  standardUserDefaults]synchronize];

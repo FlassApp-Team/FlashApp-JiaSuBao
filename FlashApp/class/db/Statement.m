@@ -16,6 +16,7 @@
 - (id) initWithDB : (sqlite3*) db sql : (char*) sql
 {
     self=[super init];
+    
 	if ( self ) {
 		if ( sqlite3_prepare_v2(db, sql, -1, &stmt, nil)!=SQLITE_OK ) {
 			NSAssert2( 0, @"Fail to prepare statement: %s (%s)", sql, sqlite3_errmsg(db) );

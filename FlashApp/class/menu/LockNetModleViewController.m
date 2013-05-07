@@ -46,6 +46,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadData) name:RefreshNotification object: nil];
     // Do any additional setup after loading the view from its nib.
 }
+
 -(void)loadData
 {
     NSDictionary*allLockDic = [UserAgentLockDAO getAllLockedApps ];

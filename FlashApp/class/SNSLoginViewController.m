@@ -121,7 +121,7 @@
     url = [url decodeFromPercentEscapeString];
     NSString* scheme = request.URL.scheme;
     NSDictionary* params = [TwitterClient urlParameters:url];
-    //NSLog(@"AAAAAAAAAAAAAAAAAAAAAAAA%@",params);
+    NSLog(@"AAAAAAAAAAAAAAAAAAAAAAAA%@",params);
     if ( [@"regist" compare:scheme] == NSOrderedSame ) {
         NSMutableDictionary* dic = [NSMutableDictionary dictionary];
         NSString* userId = [params objectForKey:@"id"];

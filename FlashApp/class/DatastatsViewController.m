@@ -151,7 +151,7 @@ static int shareArrayPage ;
         self.monthSliderViewController=[[[MonthSliderViewController alloc]init] autorelease];
         self.monthSliderViewController.superScrollView=self.scrollView;
         [self.backView addSubview:self.monthSliderViewController.view];
-        self.monthSliderViewController.view.frame=CGRectMake(0.0, 45, 35, 57);
+        self.monthSliderViewController.view.frame=CGRectMake(0.0, 45, 65, 57);
     }
     
     if(self.currentStats)

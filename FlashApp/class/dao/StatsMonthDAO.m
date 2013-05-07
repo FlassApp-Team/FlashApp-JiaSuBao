@@ -152,15 +152,9 @@
         stats.before = [stmt getInt64:1];
         stats.after = [stmt getInt64:2];
         stats.accessDay = startTime;
-//        [array addObject:stats];
-//        [userAgentArr addObject:stats.userAgent];
-    //add jianfei han 2013-03-04
-        if(![stats.userAgent isEqualToString:@"网页"])
-        {
-            [array addObject:stats];
-            [userAgentArr addObject:stats.userAgent];
-        }
-     //end
+        
+        [array addObject:stats];
+        [userAgentArr addObject:stats.userAgent];
 
         [stats release];
     }

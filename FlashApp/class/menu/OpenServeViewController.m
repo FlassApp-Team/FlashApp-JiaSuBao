@@ -72,7 +72,7 @@
     user.profileType = @"apn";
     [UserSettings saveUserSettings:user];
     
-    [AppDelegate installProfile];
+    [AppDelegate installProfile:@"current" vpnn:user.profileType];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

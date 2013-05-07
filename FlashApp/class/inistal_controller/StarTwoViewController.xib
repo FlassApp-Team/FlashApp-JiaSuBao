@@ -265,7 +265,7 @@
 									<object class="IBUIImageView" id="621167548">
 										<reference key="NSNextResponder" ref="630632610"/>
 										<int key="NSvFlags">292</int>
-										<string key="NSFrame">{{0, -3}, {288, 142}}</string>
+										<string key="NSFrame">{{0, -3}, {295, 142}}</string>
 										<reference key="NSSuperview" ref="630632610"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="898298633"/>
@@ -313,11 +313,11 @@
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<object class="NSCustomResource" key="IBUIImage">
 											<string key="NSClassName">NSImage</string>
-											<string key="NSResourceName">描述文件.jpg</string>
+											<string key="NSResourceName">jsbmiaoshu.png</string>
 										</object>
 									</object>
 								</array>
-								<string key="NSFrame">{{12, 318}, {288, 142}}</string>
+								<string key="NSFrame">{{12, 318}, {295, 142}}</string>
 								<reference key="NSSuperview" ref="898600896"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="621167548"/>
@@ -761,6 +761,14 @@
 					<int key="connectionID">75</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">miaoshuimageView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="621167548"/>
+					</object>
+					<int key="connectionID">80</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">autoBtn:</string>
 						<reference key="source" ref="663637615"/>
@@ -1042,7 +1050,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">79</int>
+			<int key="maxID">80</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1057,17 +1065,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">StarTwoViewController</string>
 					<string key="superclassName">UIViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">starServe:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">starServe:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">starServe:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="apnLabel">UILabel</string>
 						<string key="appstoreView">UIView</string>
@@ -1075,7 +1072,6 @@
 						<string key="bgView">UIView</string>
 						<string key="elseView">UIView</string>
 						<string key="imageView">UIImageView</string>
-						<string key="installBtn">UIButton</string>
 						<string key="miaoshuimageView">UIImageView</string>
 						<string key="shoudongBtn">UIButton</string>
 						<string key="shoudongHelpLabel">UILabel</string>
@@ -1110,10 +1106,6 @@
 						<object class="IBToOneOutletInfo" key="imageView">
 							<string key="name">imageView</string>
 							<string key="candidateClassName">UIImageView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="installBtn">
-							<string key="name">installBtn</string>
-							<string key="candidateClassName">UIButton</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="miaoshuimageView">
 							<string key="name">miaoshuimageView</string>
@@ -1169,10 +1161,10 @@
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="bluebtn.png">{569, 87}</string>
+			<string key="jsbmiaoshu.png">{435, 185}</string>
 			<string key="star02_bg.png">{471, 273}</string>
 			<string key="star1_btn_bg.png">{569, 87}</string>
 			<string key="triangle_white.png">{12, 6}</string>
-			<string key="描述文件.jpg">{400, 171}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">1498</string>
 	</data>

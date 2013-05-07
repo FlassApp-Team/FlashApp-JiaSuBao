@@ -46,6 +46,7 @@
 
 #define URL_SHARE @"/loginsns/share/device.jsp"
 
+#define APP_ID 1
 #define API_KEY @"30efb1a621c4bd711652ecafb7cbd3673a062b3f"
 #define API_VER @"1.5.4"
 
@@ -55,6 +56,8 @@
 #define RefreshLoginNotification @"refreshLoginNotification"
 
 #define CHANNEL @"appstore"
+
+//#define CHANNEL @"fangzhen_market"
 
 //#define CHANNEL @"jasubao_market"
 
@@ -86,6 +89,12 @@
 #define ACCESS_LOG_LAST_TIME @"accessLogLastTime"
 #define UD_LOCATION_ENABLED @"locationEnabled"
 #define FIRST_INSTALL_APP @"first_install_app" //用来设置第一次安装图片质量的缺省值
+
+//add guangtao 
+#define NEWS_APP @"shownewapp"
+#define JPTJ_APP @"jptjnewapp"
+#define XSMF_APP @"xsmfnewapp"
+#define RMYX_APP @"rmyxnewapp"
 
 #import <UIKit/UIKit.h>
 #import "UserSettings.h"

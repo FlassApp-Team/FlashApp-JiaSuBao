@@ -257,28 +257,31 @@ typedef enum {
 
 + (NSString*) monthDescForStartTime:(time_t)startTime endTime:(time_t)endTime
 {
-    NSCalendar* calendar = [NSCalendar currentCalendar];
-    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit;
+//    NSCalendar* calendar = [NSCalendar currentCalendar];
+    
+//    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit;
+    
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:startTime];
-    NSDateComponents *compsStart = [calendar components:unitFlags fromDate:date];
+//    NSDateComponents *compsStart = [calendar components:unitFlags fromDate:date];
     
     date = [NSDate dateWithTimeIntervalSince1970:endTime];
-    NSDateComponents* compsEnd = [calendar components:unitFlags fromDate:date];
+//    NSDateComponents* compsEnd = [calendar components:unitFlags fromDate:date];
     
-    NSString* format1 = NSLocalizedString(@"datastats.DatastatsScrollViewController.dateFormat1", nil); //"YY/M/d"
-    NSString* format2 = NSLocalizedString(@"datastats.DatastatsScrollViewController.dateFormat2", nil); //"YYYY年M月d日"
-    NSString* format3 = NSLocalizedString(@"datastats.DatastatsScrollViewController.dateFormat3", nil); //"M月d日"
+//    NSString* format1 = NSLocalizedString(@"datastats.DatastatsScrollViewController.dateFormat1", nil); //"YY/M/d"
+//    NSString* format2 = NSLocalizedString(@"datastats.DatastatsScrollViewController.dateFormat2", nil); //"YYYY年M月d日"
+//    NSString* format3 = NSLocalizedString(@"datastats.DatastatsScrollViewController.dateFormat3", nil); //"M月d日"
     NSString* format4 = NSLocalizedString(@"datastats.DatastatsScrollViewController.dateFormat4", nil); //"YYYY年M月"
     NSString* desc = nil;
-    if ( compsStart.year != compsEnd.year ) {
-        desc = [NSString stringWithFormat:@"%@ - %@", [DateUtils stringWithDateFormat:startTime format:format1],[DateUtils stringWithDateFormat:endTime format:format1]];
-    }
-    else if ( compsStart.month != compsEnd.month ) {
-        desc = [NSString stringWithFormat:@"%@ - %@", [DateUtils stringWithDateFormat:startTime format:format2],[DateUtils stringWithDateFormat:endTime format:format3]];
-    }
-    else {
+    
+//    if ( compsStart.year != compsEnd.year ) {
+//        desc = [NSString stringWithFormat:@"%@ - %@", [DateUtils stringWithDateFormat:startTime format:format1],[DateUtils stringWithDateFormat:endTime format:format1]];
+//    }
+//    else if ( compsStart.month != compsEnd.month ) {
+//        desc = [NSString stringWithFormat:@"%@ - %@", [DateUtils stringWithDateFormat:startTime format:format2],[DateUtils stringWithDateFormat:endTime format:format3]];
+//    }
+//    else {
         desc = [NSString stringWithFormat:@"%@", [DateUtils stringWithDateFormat:startTime format:format4]];
-    }
+//    }
     
     return desc;
 }

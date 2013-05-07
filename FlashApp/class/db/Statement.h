@@ -19,7 +19,6 @@
 @property (nonatomic, assign) sqlite3_stmt* stmt;
 
 - (id) initWithDB:(sqlite3 *)db sql:(char *)sql;
-
 - (void) bindString:(NSString *)value forIndex:(int)index;
 - (void) bindInt32:(int)value forIndex:(int)index;
 - (void) bindInt64:(long long)value forIndex:(int)index;

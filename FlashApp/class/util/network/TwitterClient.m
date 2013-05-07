@@ -417,6 +417,7 @@
 }
 
 
+//得到压缩的数据
 - (void) getAccessData
 {
     
@@ -772,13 +773,14 @@
 {
     CTTelephonyNetworkInfo* tni = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier* carrier = tni.subscriberCellularProvider;
+    DeviceInfo *device = [DeviceInfo deviceInfoWithLocalDevice];
     [tni release];
-    NSString* url = [NSString stringWithFormat:@"%@/%@.json?&desc=%@&mnc=%@$mcc=%@",
+    NSString* url = [NSString stringWithFormat:@"%@/%@.json?desc=%@&mnc=%@&mcc=%@&appid=%d&deviceId=%@",
                      API_BASE,
                      API_IDC_ZLIST,
                      @"1",
-                     carrier ? carrier.mobileCountryCode : @"",
-                     carrier ? carrier.mobileNetworkCode : @""];
+                     carrier ? carrier.mobileNetworkCode : @"",
+                     carrier ? carrier.mobileCountryCode : @"",APP_ID,device.deviceId];
     url = [TwitterClient composeURLVerifyCode:url];
     [self get:url];
 }
@@ -865,7 +867,7 @@
         statusCode = 401;
         [AppDelegate showAlert:@"错误的用户名或者密码"];
     }
-    else {
+    else { //
         self.errorMessage = @"现在您的网络无法使用，访问网络失败";
         self.errorDetail  = [error localizedDescription];
         [[AppDelegate getAppDelegate] hideLockView];

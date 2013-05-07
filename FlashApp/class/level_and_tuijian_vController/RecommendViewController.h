@@ -18,18 +18,28 @@
     NSOperationQueue*queue;
     BOOL pdSanJiao;
 }
+@property(nonatomic,retain)IBOutlet UILabel *titleLabel;
 
 @property(nonatomic,retain)NSMutableArray *requestArray;
+
 @property(nonatomic,retain)IBOutlet UITableView *myTableView;
-@property(nonatomic,retain)IBOutlet UIImageView *btnBgImageView;
+
+@property (retain, nonatomic) IBOutlet UIView *headView;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *scrollActivity;
+@property(nonatomic,retain)IBOutlet UIPageControl *pageControl;
+@property(nonatomic,retain)IBOutlet UIScrollView *topScrollView;
+
+@property (retain, nonatomic) IBOutlet UIView *sectionView;
 @property(nonatomic,retain)IBOutlet UIButton *explainBtn;
 @property(nonatomic,retain)IBOutlet UIButton *topAppBtn;
 @property(nonatomic,retain)IBOutlet UIButton *topGameBtn;
+@property(nonatomic,retain)IBOutlet UIButton *freeBtn;
 
-@property(nonatomic,retain)IBOutlet UILabel *titleLabel;
+@property (retain, nonatomic) IBOutlet UIImageView *xianMianRedDian;
+@property (retain, nonatomic) IBOutlet UIImageView *gamesRedDian;
 
-@property (retain, nonatomic) IBOutlet UIImageView *scrollShowImage;
-@property (retain, nonatomic) IBOutlet UIButton *scrollShowBtn;
+@property (nonatomic ,copy) void (^showNewsAppAnimation)(BOOL);
+
 
 @property(nonatomic,retain)RecommendDetailViewController *recommendDetailViewController;
 -(IBAction)topAppBtnPress:(id)sender;
