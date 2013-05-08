@@ -124,18 +124,18 @@
     [idcOrderArray removeAllObjects];
     items = [[NSMutableArray array]retain];
     UserSettings* user = [AppDelegate getAppDelegate].user;
-    if ( [[AppDelegate getAppDelegate].networkReachablity currentReachabilityStatus] != NotReachable ) {
-        if ( client ) return;
-        client = [[TwitterClient alloc] initWithTarget:self action:@selector(didGetIDCList:obj:)];
-        [client getIDCList];
-    }
-    else {
+    if ( [[AppDelegate getAppDelegate].networkReachablity currentReachabilityStatus] == NotReachable ) {
         NSString* s = user.idcList;
         if ( s ) {
             idcArray = [[user idcArray] retain];
         }else{
             [AppDelegate showAlert:@"网络连接异常" message:@"网络连接异常，请检查您的网络。"];
         }
+
+    }else {
+        if ( client ) return;
+        client = [[TwitterClient alloc] initWithTarget:self action:@selector(didGetIDCList:obj:)];
+        [client getIDCList];
     }
 }
 

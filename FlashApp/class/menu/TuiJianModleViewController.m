@@ -36,6 +36,7 @@
     [super viewDidLoad];
     self.tuijianBtn.controller=self;
     
+    /**yincangtuijian
     animationImgView = [[UIImageView alloc] initWithFrame:CGRectMake(34, 32, 55, 55)];
     [self.view addSubview:animationImgView];
     
@@ -47,6 +48,7 @@
     if (newsApp) {
         [animationImgView startAnimating];
     }
+     **/
     
     // Do any additional setup after loading the view from its nib.
 }

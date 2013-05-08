@@ -251,7 +251,8 @@
         }
     }
 
-    [AppDelegate installProfile:@"datasave" vpnn:apnName];
+    
+    [AppDelegate installProfile:@"datasave" vpnn:apnName interfable:@"0"];
 }
 
 

@@ -21,8 +21,6 @@
 #import "AccountNumberViewController.h"
 #import "StarViewController.h"
 #import "AboutFlashViewController.h"
-#import "VPNHelpViewController.h"
-#import "VPNCloseHelpViewController.h"
 
 @interface SetingViewController ()
 
@@ -134,10 +132,12 @@
 
 -(void)refresh
 {
+    
     UITableViewCell* cell = [self. setTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     if ( !cell ) return;
     
     UserSettings *user = [UserSettings currentUserSettings];
+    NSLog(@"user.proxyFlag = %d",user.proxyFlag);
     if ([CHANNEL isEqualToString:@"appstore"] &&(user.proxyFlag ==INSTALL_FLAG_NO ||user.proxyFlag ==INSTALL_FLAG_UNKNOWN)&&[user.profileType isEqualToString:@"vpn"]) {
         pdserviceorvpn = YES;
     }else if([CHANNEL isEqualToString:@"appstore"] &&(user.proxyFlag ==INSTALL_FLAG_VPN_RIGHT_IDC_PAC ||user.proxyFlag ==INSTALL_FLAG_VPN_WRONG_IDC_PAC ||user.proxyFlag == INSTALL_FLAG_VPN_RIGHT_IDC_NO_PAC ||user.proxyFlag==INSTALL_FLAG_VPN_WRONG_IDC_NO_PAC)&&[user.profileType isEqualToString:@"vpn"]){
@@ -147,13 +147,12 @@
         pdserviceorvpn = NO;
     }
 
-    
     UIButton * button = (UIButton*) [cell.contentView viewWithTag:TAG_PROFILE_SWITCH];
     UILabel * label = (UILabel*) [cell.contentView viewWithTag:TAG_PROFILE_TEXT];
 
     ConnectionType type = [UIDevice connectionType];
     
-    if ( user.proxyFlag == INSTALL_FLAG_NO||type==WIFI )
+    if ( user.proxyFlag == INSTALL_FLAG_NO ||type==WIFI )
     {
         self.compressionServer=YES;
         label.text=@"关";
@@ -185,20 +184,21 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         cell.selectionStyle=UITableViewCellSelectionStyleBlue;
     }
+    
     for ( UIView* v in cell.contentView.subviews )
     {
         [v removeFromSuperview];
     }
     
-    UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, cell.frame.size.height)] autorelease];
-    bgImageView.backgroundColor=[UIColor whiteColor] ;
-    [cell.contentView addSubview:bgImageView];
+//    UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, cell.bounds.size.height)] autorelease];
+//    bgImageView.backgroundColor=[UIColor whiteColor] ;
+//    [cell.contentView addSubview:bgImageView];
     
     UserSettings *user = [UserSettings currentUserSettings];
     ConnectionType type = [UIDevice connectionType];
     
-    NSLog(@"user.profileType = %@",user.profileType);
-    NSLog(@"user.proxyFlag = %d",user.proxyFlag);
+//    NSLog(@"user.profileType = %@",user.profileType);
+//    NSLog(@"user.proxyFlag = %d",user.proxyFlag);
     
     if (type ==WIFI) {
         if (indexPath.row ==3) {
@@ -212,6 +212,11 @@
             [cell.contentView addSubview:lineImageView];
             
         }else{
+            
+            UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
+                bgImageView.backgroundColor=[UIColor whiteColor] ;
+                [cell.contentView addSubview:bgImageView];
+
             if([indexPath row]==0){
                 
                 UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -338,6 +343,10 @@
             lineImageView.image=[UIImage imageNamed:@"henxian.png"];
             [cell.contentView addSubview:lineImageView];
         }else{
+            UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
+            bgImageView.backgroundColor=[UIColor whiteColor] ;
+            [cell.contentView addSubview:bgImageView];
+
             if([indexPath row]==0){
                 
                 UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -456,6 +465,10 @@
             [cell.contentView addSubview:lineImageView];
             
         }else{
+            UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
+            bgImageView.backgroundColor=[UIColor whiteColor] ;
+            [cell.contentView addSubview:bgImageView];
+
             if([indexPath row]==0){
                 
                 UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -478,7 +491,7 @@
                     
                 [turnBtn addTarget:self action:@selector(turnServeBtnPress:) forControlEvents:UIControlEventTouchUpInside];
                     
-                if ( user.proxyFlag == INSTALL_FLAG_NO ||user.proxyFlag == INSTALL_FLAG_UNKNOWN  ) {
+                if ( user.proxyFlag == INSTALL_FLAG_NO ) {
                     self.compressionServer=YES;
                     turnLabe.text=@"关";
                     [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_close.png"] forState:UIControlStateNormal];

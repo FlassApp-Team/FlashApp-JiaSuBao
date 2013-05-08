@@ -11,7 +11,6 @@
 #import "NetworkSpeedViewController.h"
 #import "TCUtils.h"
 #import "TwitterClient.h"
-#import "VPNHelpViewController.h"
 #import "ViewController.h"
 #import "OpenServeViewController.h"
 
@@ -118,7 +117,7 @@ self.golingMessLabel=nil;
             
         }else{
             
-                [AppDelegate installProfile:nil vpnn:nil];
+                [AppDelegate installProfile:nil vpnn:nil interfable:@"0"];
             
         }
     }

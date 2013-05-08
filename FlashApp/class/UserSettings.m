@@ -297,6 +297,12 @@
     [userDefaults synchronize];
 }
 
++ (void) saveInchk:(NSString *)inchk
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:inchk forKey:@"inchk"];
+    [userDefaults synchronize];
+}
 
 + (void) saveDay:(NSString*)day capacity:(float)capacity
 {

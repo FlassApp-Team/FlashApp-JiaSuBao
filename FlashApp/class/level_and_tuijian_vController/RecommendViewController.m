@@ -176,6 +176,7 @@
         [self startBannerRequest];
     }
     
+    /** yincangtuijian
     if ([[NSUserDefaults standardUserDefaults] boolForKey:XSMF_APP]) {
         
         xianMianRedDian.hidden = NO;
@@ -193,7 +194,7 @@
         
         gamesRedDian.hidden = YES;
     }
-
+     **/
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -663,6 +664,7 @@
     if([indexPath row] == ([appsArr count]))
         return;
     
+    /**yincangtuijian
     NSDictionary *dic=[self.appsArr objectAtIndex: [indexPath row]];
     AppDetailClass *detailClass = [AppDetailClass getAppDetailClass];
     detailClass.apid = [dic objectForKey:@"apid"];
@@ -683,6 +685,7 @@
     detailVC.appImgDic = self.images;
     [self.navigationController pushViewController:detailVC animated:YES];
     [detailVC release];
+     **/
     
 }
 

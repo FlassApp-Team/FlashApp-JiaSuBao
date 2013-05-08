@@ -25,8 +25,6 @@
 #import "TwitterClient.h"
 
 //add guangtao
-#import "VPNHelpViewController.h"
-#import "VPNCloseHelpViewController.h"
 #import "CloseServiceViewController.h"
 
 #define PageCount 2
@@ -185,7 +183,7 @@
         AppDelegate* appDelegate = [AppDelegate getAppDelegate];
         if ( appDelegate.refreshDatasave ) {
             [self performSelector:@selector(getAccessData) withObject:nil afterDelay:0.0];
-            appDelegate.refreshDatasave = NO;
+//            appDelegate.refreshDatasave = NO;
         }
     }
     
@@ -562,18 +560,12 @@
     
     if(type==NONE)
     {
-//        [AppDelegate showAlert:@"提示信息" message:@"网络连接异常,请链接网络"];
         return;
     }
     
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [TwitterClient getStatsData];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
-        });
-    });
+    [self getAccessData:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
 
-//    [self pdVpnAndWifiOrSome];
 }
 
 -(void)lineChange
@@ -590,13 +582,10 @@
     }else{   //如果在wifi下开启的是VPN 提示用户去关闭
         
     }
+  
+        [self getAccessData:NO];
     
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [TwitterClient getStatsData];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
-        });
-    }) ;
+        [[NSNotificationCenter defaultCenter] postNotificationName:RefreshNotification object:nil];
     
 }
 

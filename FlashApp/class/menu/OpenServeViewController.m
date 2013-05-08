@@ -67,12 +67,15 @@
 }
 - (IBAction)chongixinBtn:(id)sender
 {
+    NSString *inchk = [[NSUserDefaults standardUserDefaults] objectForKey:@"inchk"];
+//    NSString *inchk = @"0";
     
-    UserSettings *user = [UserSettings currentUserSettings];
-    user.profileType = @"apn";
-    [UserSettings saveUserSettings:user];
+    if ([@"1" isEqualToString:inchk]) {
+        [AppDelegate installProfile:@"current" vpnn:@"apn" interfable:@"1"];
+    }else{
+        [AppDelegate installProfile:@"current" vpnn:@"apn" interfable:@"0"];
+    }
     
-    [AppDelegate installProfile:@"current" vpnn:user.profileType];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

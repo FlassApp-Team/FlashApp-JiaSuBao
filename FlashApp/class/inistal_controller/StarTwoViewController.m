@@ -17,17 +17,6 @@
 @synthesize ativty;
 @synthesize bgView;
 @synthesize imageView;
-@synthesize starBtn;
-@synthesize shoudongBtn;
-@synthesize zidongBtn;
-@synthesize apnLabel;
-@synthesize vpnLabel;
-@synthesize zidonghelpLabel;
-@synthesize shoudongHelpLabel;
-@synthesize zidongLabel;
-@synthesize shoudongLabel;
-@synthesize miaoshuimageView;
-@synthesize appstoreView;
 @synthesize elseView;
 
 
@@ -36,8 +25,6 @@
     self.imageView=nil;
     self.bgView=nil;
     self.ativty=nil;
-    self.starBtn=nil;
-    [appstoreView release];
     [elseView release];
     [super dealloc];
 }
@@ -57,17 +44,6 @@
     UIImage *image=[UIImage imageNamed:@"activty_bg.png"];
     image=[image stretchableImageWithLeftCapWidth:image.size.width/2 topCapHeight:image.size.height/2];
     self.imageView.image=image;
-    
-    UIImage *img = [UIImage imageNamed:@"white_box.png"];
-    img = [img stretchableImageWithLeftCapWidth:img.size.width/2 topCapHeight:img.size.width/2];
-    self.miaoshuimageView.image = img;
-    
-    if ([CHANNEL isEqualToString:@"appstore"]) {
-        elseView.hidden = YES;
-    }else{
-        appstoreView.hidden = YES;
-    }
-    
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -89,7 +65,7 @@
 }
 
 /*
- *越狱用户点击安装 apn
+ *用户点击安装 apn
  */
 -(IBAction)starServe:(id)sender
 {
@@ -100,32 +76,13 @@
     user.profileType = @"apn";
     [UserSettings saveUserSettings:user];
     
-    [AppDelegate installProfile:nil vpnn:nil];
+    if ([CHANNEL isEqualToString:@"appstore"]) {
+        [AppDelegate installProfile:nil  vpnn:nil interfable:@"1"];
+    }else{
+        [AppDelegate installProfile:nil vpnn:nil interfable:@"0"];
+    }
     
 }
-
--(IBAction)autoBtn:(id)sender /* 自动按钮 */
-{
-    [self activtyStar];
-    
-    UserSettings *user = [UserSettings currentUserSettings];
-    user.profileType = @"apn";
-    [UserSettings saveUserSettings:user];
-    
-    [AppDelegate installProfile:nil  vpnn:nil];
-}
-
--(IBAction)shouDongBtn:(id)sender /* 手动按钮 */
-{
-    [self activtyStar];
-    
-    UserSettings *user = [UserSettings currentUserSettings];
-    user.profileType = @"vpn";
-    [UserSettings saveUserSettings:user];
-    
-    [AppDelegate installProfile:nil  vpnn:nil];
-}
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -139,15 +96,6 @@
 }
 
 - (void)viewDidUnload {
-    [self setShoudongLabel:nil];
-    [self setZidongLabel:nil];
-    [self setApnLabel:nil];
-    [self setVpnLabel:nil];
-    [self setZidonghelpLabel:nil];
-    [self setShoudongHelpLabel:nil];
-    [self setZidongBtn:nil];
-    [self setShoudongBtn:nil];
-    [self setAppstoreView:nil];
     [self setElseView:nil];
     [super viewDidUnload];
 }

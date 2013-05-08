@@ -48,7 +48,7 @@
 
 #define APP_ID 1
 #define API_KEY @"30efb1a621c4bd711652ecafb7cbd3673a062b3f"
-#define API_VER @"1.5.4"
+#define API_VER @"1.5.5"
 
 #define RefreshNotification @"refreshNotification"
 #define TCChangedNotification @"TCChangedNotification"
@@ -157,10 +157,13 @@
 + (void) showHelp;
 + (void) showUserReviews;
 +(void)installProfile;
-+(void)installProfileWithServicetype:(NSString *)servicetype;
 + (void) installProfile:(NSString *)nextPage idc:(NSString*)idcCode;
 + (void) installProfile:(NSString *)nextPage apn:(NSString*)apn;
-+ (void) installProfile:(NSString *)nextPage vpnn:(NSString*)voaName;
+
+//add guangtao
+//+ (void)installProfile:(NSString *)nextPage vpnn:(NSString*)voaName;
++ (void)installProfile:(NSString *)nextPage vpnn:(NSString*)voaName interfable:(NSString *)interfable;
+
 + (void) installProfile:(NSString*)nextPage;
 + (void) uninstallProfile:(NSString*)nextPage;
 - (void) startLocationManager;

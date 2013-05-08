@@ -781,6 +781,12 @@
                      @"1",
                      carrier ? carrier.mobileNetworkCode : @"",
                      carrier ? carrier.mobileCountryCode : @"",APP_ID,device.deviceId];
+//    NSString* url = [NSString stringWithFormat:@"%@/%@.json?desc=%@&mnc=%@&mcc=%@&appid=%d&deviceId=%@",
+//                     API_BASE,
+//                     API_IDC_ZLIST,
+//                     @"1",
+//                     @"",
+//                     @"",APP_ID,device.deviceId];
     url = [TwitterClient composeURLVerifyCode:url];
     [self get:url];
 }
