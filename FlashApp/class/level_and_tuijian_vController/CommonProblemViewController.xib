@@ -47,7 +47,6 @@
 								<int key="NSvFlags">285</int>
 								<string key="NSFrame">{{0, 47}, {320, 413}}</string>
 								<reference key="NSSuperview" ref="370983119"/>
-								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor" id="999239994">
 									<int key="NSColorSpace">3</int>
@@ -72,7 +71,6 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{0, 46}, {320, 1}}</string>
 										<reference key="NSSuperview" ref="784126379"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="636148176"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -87,7 +85,6 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{7, 6}, {55, 33}}</string>
 										<reference key="NSSuperview" ref="784126379"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="714179098"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="IBUIOpaque">NO</bool>
@@ -123,7 +120,6 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{23, 12}, {23, 21}}</string>
 										<reference key="NSSuperview" ref="784126379"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="511306686"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -138,7 +134,6 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{231, 6}, {82, 33}}</string>
 										<reference key="NSSuperview" ref="784126379"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="1023113565"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="IBUIOpaque">NO</bool>
@@ -167,7 +162,6 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{110, 11}, {103, 26}}</string>
 										<reference key="NSSuperview" ref="784126379"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="634799131"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="IBUIOpaque">NO</bool>
@@ -197,7 +191,6 @@
 								</array>
 								<string key="NSFrameSize">{320, 47}</string>
 								<reference key="NSSuperview" ref="370983119"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="410295543"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
@@ -209,7 +202,6 @@
 						</array>
 						<string key="NSFrameSize">{320, 460}</string>
 						<reference key="NSSuperview" ref="191373211"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="784126379"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -221,7 +213,6 @@
 				</array>
 				<string key="NSFrame">{{0, 20}, {320, 460}}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="370983119"/>
 				<reference key="IBUIBackgroundColor" ref="999239994"/>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics"/>
@@ -408,46 +399,7 @@
 			<nil key="sourceID"/>
 			<int key="maxID">21</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<object class="IBPartialClassDescription">
-					<string key="className">CommonProblemViewController</string>
-					<string key="superclassName">UIViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="fankuiBtnPress:">id</string>
-						<string key="turnBtnPress:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="fankuiBtnPress:">
-							<string key="name">fankuiBtnPress:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="turnBtnPress:">
-							<string key="name">turnBtnPress:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="fankuiBtn">UIButton</string>
-						<string key="pTableView">UITableView</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="fankuiBtn">
-							<string key="name">fankuiBtn</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="pTableView">
-							<string key="name">pTableView</string>
-							<string key="candidateClassName">UITableView</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/CommonProblemViewController.h</string>
-					</object>
-				</object>
-			</array>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>

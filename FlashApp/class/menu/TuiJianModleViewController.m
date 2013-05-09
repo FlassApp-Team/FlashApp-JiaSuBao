@@ -36,19 +36,22 @@
     [super viewDidLoad];
     self.tuijianBtn.controller=self;
     
-    /**yincangtuijian
-    animationImgView = [[UIImageView alloc] initWithFrame:CGRectMake(34, 32, 55, 55)];
-    [self.view addSubview:animationImgView];
-    
-    NSArray *animationArr = [NSArray arrayWithObjects:[UIImage imageNamed:@"app_new_up.png"],[UIImage imageNamed:@"app_new_middle.png"],[UIImage imageNamed:@"app_new_down.png"], nil];
+    if (iPhone5) {
+        animationImgView = [[UIImageView alloc] initWithFrame:CGRectMake(47, 12, 35, 40)];
+        [self.view addSubview:animationImgView];
+    }else{
+        animationImgView = [[UIImageView alloc] initWithFrame:CGRectMake(44, 5, 35, 40)];
+        [self.view addSubview:animationImgView];
+    }
+   
+    NSArray *animationArr = [NSArray arrayWithObjects:[UIImage imageNamed:@"app_new_up.png"],[UIImage imageNamed:@"app_new_upMiddle.png"],[UIImage imageNamed:@"app_new_middle.png"],[UIImage imageNamed:@"app_new_downMiddle.png"],[UIImage imageNamed:@"app_new_down.png"],[UIImage imageNamed:@"app_new_downMiddle.png"],[UIImage imageNamed:@"app_new_middle.png"],[UIImage imageNamed:@"app_new_upMiddle.png"],nil];
     animationImgView.animationImages = animationArr;
-    animationImgView.animationDuration = 2;
+    animationImgView.animationDuration = 1;
     
     BOOL newsApp = [[NSUserDefaults standardUserDefaults] boolForKey:NEWS_APP];
     if (newsApp) {
         [animationImgView startAnimating];
     }
-     **/
     
     // Do any additional setup after loading the view from its nib.
 }

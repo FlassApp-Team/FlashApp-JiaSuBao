@@ -159,7 +159,7 @@
     
     self.headView.userInteractionEnabled = NO;
         
-    [self startAPPSRequest:@"1" Page:@"0"];
+    [self topAppBtnPress:topAppBtn];
     
     self.topScrollView.delegate = self;
     
@@ -176,7 +176,6 @@
         [self startBannerRequest];
     }
     
-    /** yincangtuijian
     if ([[NSUserDefaults standardUserDefaults] boolForKey:XSMF_APP]) {
         
         xianMianRedDian.hidden = NO;
@@ -194,7 +193,6 @@
         
         gamesRedDian.hidden = YES;
     }
-     **/
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -664,16 +662,15 @@
     if([indexPath row] == ([appsArr count]))
         return;
     
-    /**yincangtuijian
     NSDictionary *dic=[self.appsArr objectAtIndex: [indexPath row]];
     AppDetailClass *detailClass = [AppDetailClass getAppDetailClass];
     detailClass.apid = [dic objectForKey:@"apid"];
     detailClass.apname = [dic objectForKey:@"apname"];
     detailClass.apdesc = @"";
-    //    detailClass.rkm = [dic objectForKey:@"rkm"];
-    detailClass.rkm = @"我是推荐理由哦";
-    //    detailClass.picslen = [dic objectForKey:@"picslen"];
-    detailClass.picslen = @"(3.5MB)";
+    detailClass.rkm = [dic objectForKey:@"rkm"];
+//    detailClass.rkm = @"我是推荐理由哦";
+    detailClass.picslen = [dic objectForKey:@"picslen"];
+//    detailClass.picslen = @"(3.5MB)";
     detailClass.star = [[dic objectForKey:@"star"] integerValue];
     detailClass.fsize = [dic objectForKey:@"fsize"];
     detailClass.icon = [dic objectForKey:@"icon"];
@@ -685,8 +682,8 @@
     detailVC.appImgDic = self.images;
     [self.navigationController pushViewController:detailVC animated:YES];
     [detailVC release];
-     **/
-    
+     
+
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

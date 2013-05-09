@@ -591,10 +591,10 @@
     [WXApi registerApp:@"wxd1be1f55db841585"];
     
     //创建应用推荐分类的数据库
-//    [AppRecommendDao createAppRecommendTable];
+    [AppRecommendDao createAppRecommendTable];
     
      //查看是否有新的应用推荐
-//    [self ifNewApp];
+    [self ifNewApp];
     
     
     BOOL versionUpgrade = NO;
@@ -1449,18 +1449,23 @@
 -(void)showLockView:(NSString*)message;
 {
     //NSLog(@"BBBBBBB%@",self);
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navController.topViewController.view animated:YES];//add 2012-12-07
-    hud.labelText = message;
-    //hud.detailsLabelText = @"";
-    [self.navController.topViewController.view bringSubviewToFront:hud];
-    [self performSelector:@selector(productLoadFailed) withObject:nil afterDelay:30.0];
-    
+//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navController.topViewController.view animated:YES];//add 2012-12-07
+//    hud.labelText = message;
+//    //hud.detailsLabelText = @"";
+//    [self.navController.topViewController.view bringSubviewToFront:hud];
+//    [self performSelector:@selector(productLoadFailed) withObject:nil afterDelay:30.0];
+    myHUD =[[MBProgressHUD alloc] initWithView:self.navController.topViewController.view];
+    myHUD.labelText = message;
+    [myHUD show:YES];
+    [self.navController.topViewController.view addSubview:myHUD];
+    [myHUD release];
 }
 
 -(void)hideLockView
 {
-    [MBProgressHUD hideHUDForView:self.navController.topViewController.view animated:YES];//add 2012-12-07
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(productLoadFailed) object:nil];
+    [myHUD hide:YES];
+//    [MBProgressHUD hideHUDForView:self.navController.topViewController.view animated:YES];//add 2012-12-07
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(productLoadFailed) object:nil];
     
 }
 -(void)productLoadFailed

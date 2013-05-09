@@ -60,6 +60,9 @@
         [twitterClient release];
         twitterClient = nil;
     }
+    [_yisuoBtn release];
+    [_yisuoLabel release];
+    [_kesuoLabel release];
     [super dealloc];
 }
 
@@ -106,6 +109,9 @@
     
     [self.refleshBtn setBackgroundImage:img1 forState:UIControlStateNormal];
     
+    [AppDelegate labelShadow:self.yisuoLabel];
+    [AppDelegate labelShadow:self.kesuoLabel];
+    
     twitterClient = nil;
     time_t now;
     time(&now);
@@ -114,7 +120,7 @@
     startTime=peroid[0];
     endTime=peroid[1];
     
-    [self jiesuoBtn:nil];
+    [self jiesuoBtn:self.yisuoBtn];
 }
 
 -(IBAction)jiesuoBtn:(id)sender
@@ -145,7 +151,7 @@
     self.jiesuoView.hidden = YES;
     self.jiasuoView.hidden = NO;
     self.dianImage.frame = CGRectMake(235, 161, 12, 6);
-    self.savePoint.frame = CGRectMake(174, 139, 16, 16);
+    self.savePoint.frame = CGRectMake(182, 139, 16, 16);
     pdsw = NO;
     
     [datasArray removeAllObjects];
@@ -160,7 +166,7 @@
     StageStats *currentStats = [StatsMonthDAO statForPeriod:startTime endTime:endTime];
     
     //如果有数据，就去查询它的详细数据
-    if ( currentStats.bytesBefore > 0 ) {
+    if ( currentStats.bytesBefore > 0 ){
         NSArray* arr = [StatsMonthDAO userAgentStatsForPeriod:startTime endTime:endTime orderby:nil];
         NSArray* tempArr = [arr sortedArrayUsingSelector:@selector(compareByPercent:)];
         
@@ -177,15 +183,25 @@
                     canLock ++;
                 }
             }
+            if (agentLock.isLock) {
+                if(![[topStats.uaStr trim] isEqualToString:@"Mozilla"])
+                {
+                    haveLock ++;
+                }
+            }
             
         }
     }
-    [self.kesuoBtn setTitle:[NSString stringWithFormat:@"可锁应用(%d)",canLock] forState:UIControlStateNormal];
+//    [self.kesuoBtn setTitle:[NSString stringWithFormat:@"可锁应用(%d)",canLock] forState:UIControlStateNormal];
+    self.kesuoLabel.text = [NSString stringWithFormat:@"可锁应用(%d)",canLock];
+    self.yisuoLabel.text = [NSString stringWithFormat:@"已锁应用(%d)",haveLock];
 }
 
 -(void)changeLockNum
 {
-    [self.kesuoBtn setTitle:[NSString stringWithFormat:@"可锁应用(%d)",canLock] forState:UIControlStateNormal];
+//    [self.kesuoBtn setTitle:[NSString stringWithFormat:@"可锁应用(%d)",canLock] forState:UIControlStateNormal];
+    self.kesuoLabel.text = [NSString stringWithFormat:@"可锁应用(%d)",canLock];
+    self.yisuoLabel.text = [NSString stringWithFormat:@"已锁应用(%d)",haveLock];
 }
 
 -(void)paixuWithTime:(NSDictionary *)dictionary
@@ -267,7 +283,7 @@
     [[AppDelegate getAppDelegate] hideLockView];
     
     if ( tc.hasError ) {
-        [[AppDelegate getAppDelegate].refreshingLock unlock]; //开锁
+        [[AppDelegate getAppDelegate].refreshingLock unlock]; //开线程锁
         [AppDelegate showAlert:tc.errorMessage];
         return;
     }
@@ -309,6 +325,7 @@
         
         //更新完数据库后要更新下可锁应用的数字
         canLock = 0;
+        haveLock = 0 ;
         [self getCanLockNum];
         
     }
@@ -655,6 +672,7 @@
         
         //更新可锁应用个数
         canLock ++;
+        haveLock -- ;
         [self changeLockNum];
         
         time_t now;
@@ -717,6 +735,7 @@
         if ( code == 200 ) {
             
             //更新可锁应用数
+            haveLock = 0 ;
             canLock += [allLockArr count];
             [self changeLockNum];
             
@@ -779,6 +798,7 @@
         if ( code == 200 ) {
             
             canLock -- ;
+            haveLock ++;
             //更新可锁应用
             [self changeLockNum];
             
@@ -876,6 +896,7 @@
             
             //更新可锁应用数
             canLock = 0 ;
+            haveLock = [datasArray count];
             [self changeLockNum];
             
             time_t now;
@@ -1074,5 +1095,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidUnload {
+    [self setYisuoBtn:nil];
+    [self setYisuoLabel:nil];
+    [self setKesuoLabel:nil];
+    [super viewDidUnload];
+}
 @end
 

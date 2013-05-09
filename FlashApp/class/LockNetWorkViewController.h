@@ -17,6 +17,7 @@
     BOOL pdsw;
     int lockCell;
     int canLock;
+    int haveLock;
 }
 @property(nonatomic,retain)IBOutlet UILabel *AppCountLabel;
 @property(nonatomic ,retain)IBOutlet UILabel *AppCountLabel_1;
@@ -38,6 +39,12 @@
 @property (nonatomic , retain)NSMutableArray *datasArray;
 @property (nonatomic ,retain)NSMutableArray *allLockArr;
 @property (nonatomic ,retain) IBOutlet UIButton *kesuoBtn;
+@property (retain, nonatomic) IBOutlet UIButton *yisuoBtn;
+
+@property (retain, nonatomic) IBOutlet UILabel *yisuoLabel;
+
+@property (retain, nonatomic) IBOutlet UILabel *kesuoLabel;
+
 
 -(IBAction)oneUnlockBtnPress:(id)sender;
 -(IBAction)turnBrnPress:(id)sender;

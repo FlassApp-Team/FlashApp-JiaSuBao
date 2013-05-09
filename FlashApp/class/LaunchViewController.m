@@ -53,10 +53,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.imageView.image=[UIImage imageNamed:@"Default.jpg"];
+    self.imageView.image=[UIImage imageNamed:@"Default.png"];
     if(iPhone5)
     {
-        self.imageView.image=[UIImage imageNamed:@"Default-568h@2x.jpg"];
+        self.imageView.image=[UIImage imageNamed:@"Default-568h@2x.png"];
     }
     
     /*

@@ -104,6 +104,7 @@
 #import <CoreTelephony/CTCarrier.h>
 #import "TCLocationManager.h"
 #import "UserSettings.h"
+#import "MBProgressHUD.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate >
 {
@@ -118,6 +119,8 @@
     
     //线程队列
     NSOperationQueue* operationQueue;
+    
+    MBProgressHUD *myHUD;
 }
 
 @property (nonatomic, assign) BOOL refreshDatasave;
