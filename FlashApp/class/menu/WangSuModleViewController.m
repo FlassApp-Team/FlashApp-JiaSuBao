@@ -42,13 +42,6 @@
     [view removeFromSuperview];
     
     ConnectionType type = [UIDevice connectionType];
-    UserSettings* user = [AppDelegate getAppDelegate].user;
-
-    if ( user.proxyFlag == INSTALL_FLAG_NO )
-    {
-        [AppDelegate showAlert:@"提示信息" message:@"压缩服务未启用,请开启服务"];
-        return;
-    }
     
     if ( type != CELL_2G && type != CELL_3G && type != CELL_4G )
     {

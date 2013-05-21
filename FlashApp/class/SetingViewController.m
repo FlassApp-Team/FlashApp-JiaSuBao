@@ -11,6 +11,7 @@
 #define TAG_ALERT_PROFILE 300
 
 #define TAG_TONGZHI_LABEL 401
+
 #import "SetingViewController.h"
 #import "UserInfoViewController.h"
 #import "FeedbackViewController.h"
@@ -201,136 +202,261 @@
 //    NSLog(@"user.proxyFlag = %d",user.proxyFlag);
     
     if (type ==WIFI) {
-        if (indexPath.row ==3) {
-            UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 10)] autorelease];
-            bgImageView.backgroundColor=[UIColor colorWithRed:248.0/255 green:245.0/255 blue:242.0/255 alpha:1.0] ;
-            [cell.contentView addSubview:bgImageView];
-            
-            UIImageView *lineImageView=[[[UIImageView alloc]init] autorelease];
-            lineImageView.frame=CGRectMake(0, 10, 320, 1);
-            lineImageView.image=[UIImage imageNamed:@"henxian.png"];
-            [cell.contentView addSubview:lineImageView];
-            
-        }else{
-            
-            UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
-                bgImageView.backgroundColor=[UIColor whiteColor] ;
+        if ([user.profileType isEqualToString:@"vpn"]) {
+            if (indexPath.row ==2) {
+                UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 10)] autorelease];
+                bgImageView.backgroundColor=[UIColor colorWithRed:248.0/255 green:245.0/255 blue:242.0/255 alpha:1.0] ;
                 [cell.contentView addSubview:bgImageView];
+            
+                UIImageView *lineImageView=[[[UIImageView alloc]init] autorelease];
+                lineImageView.frame=CGRectMake(0, 10, 320, 1);
+                lineImageView.image=[UIImage imageNamed:@"henxian.png"];
+                [cell.contentView addSubview:lineImageView];
+            
+            }else{
+            
+                UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
+                    bgImageView.backgroundColor=[UIColor whiteColor] ;
+                    [cell.contentView addSubview:bgImageView];
 
-            if([indexPath row]==0){
+                if([indexPath row]==0){
                 
-                UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-                turnBtn.tag=TAG_PROFILE_SWITCH;
-                turnBtn.frame=CGRectMake(269, 14, 45, 18);//259 92 48 1
+                    UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+                    turnBtn.tag=TAG_PROFILE_SWITCH;
+                    turnBtn.frame=CGRectMake(269, 14, 45, 18);//259 92 48 1
                 
-                UILabel *turnLabe=[[[UILabel alloc]init] autorelease];
-                turnLabe.frame=CGRectMake(240, 11, 25, 21);
-                turnLabe.tag= TAG_PROFILE_TEXT;
-                
-                turnLabe.textAlignment=UITextAlignmentLeft;
-                turnLabe.textColor=[UIColor darkGrayColor];
-                turnLabe.font=[UIFont systemFontOfSize:17.0];
-                [turnLabe setBackgroundColor:[UIColor clearColor]];
-                
-                cell.textLabel. textColor=[UIColor darkGrayColor];
-                cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-                
-                cell.textLabel.text=@"  压缩服务";
-                
-                [turnBtn addTarget:self action:@selector(turnServeBtnPress:) forControlEvents:UIControlEventTouchUpInside];
-                
-                self.compressionServer=YES;
-                turnLabe.text=@"关";
-                [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_close.png"] forState:UIControlStateNormal];
-        
-                [cell.contentView addSubview:turnBtn];
-                [cell.contentView addSubview:turnLabe];
-                cell.selectionStyle=UITableViewCellSelectionStyleNone;
-            }
-            switch ([indexPath row]) {
-                case 1:
-                    cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-                    cell.textLabel. textColor=[UIColor darkGrayColor];
-                    cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-                    cell.textLabel.text=@"  APN校准";
-                    
-                    break;
-                case 2:
-                    cell.textLabel. textColor=[UIColor darkGrayColor];
-                    cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-                    cell.textLabel.text=@"  通知";
-                    
                     UILabel *turnLabe=[[[UILabel alloc]init] autorelease];
-                    turnLabe.tag=TAG_TONGZHI_LABEL;
                     turnLabe.frame=CGRectMake(240, 11, 25, 21);
+                    turnLabe.tag= TAG_PROFILE_TEXT;
+                
                     turnLabe.textAlignment=UITextAlignmentLeft;
                     turnLabe.textColor=[UIColor darkGrayColor];
                     turnLabe.font=[UIFont systemFontOfSize:17.0];
                     [turnLabe setBackgroundColor:[UIColor clearColor]];
-                    
-                    
-                    UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-                    turnBtn.frame=CGRectMake(269, 14, 45, 18);//259 92 48 1
-                    NSUserDefaults*userDefault=[NSUserDefaults standardUserDefaults];
-                    BOOL tongZhiFlag=[userDefault boolForKey:@"tongZhiFlag"];
-                    
-                    if(!tongZhiFlag)
-                    {
-                        [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_close.png"] forState:UIControlStateNormal];
-                        
-                        turnLabe.text=@"关";
-                        
-                    }
-                    else
-                    {
-                        [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_open.png"] forState:UIControlStateNormal];
-                        turnLabe.text=@"开";
-                    }
-                    
-                    [turnBtn addTarget:self action:@selector(turnMessageBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+                
+                    cell.textLabel. textColor=[UIColor darkGrayColor];
+                    cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                
+                    cell.textLabel.text=@"  压缩服务";
+                
+                    [turnBtn addTarget:self action:@selector(turnServeBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+                
+                    self.compressionServer=YES;
+                    turnLabe.text=@"关";
+                    [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_close.png"] forState:UIControlStateNormal];
+        
                     [cell.contentView addSubview:turnBtn];
                     [cell.contentView addSubview:turnLabe];
                     cell.selectionStyle=UITableViewCellSelectionStyleNone;
+                }
+                switch ([indexPath row]) {
+                    case 1:
+                        cell.textLabel. textColor=[UIColor darkGrayColor];
+                        cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                        cell.textLabel.text=@"  通知";
                     
-                    break;
-                case 4:
-                    cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-                    cell.textLabel. textColor=[UIColor darkGrayColor];
-                    cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-                    cell.textLabel.text=@"  常见问题";
+                        UILabel *turnLabe=[[[UILabel alloc]init] autorelease];
+                        turnLabe.tag=TAG_TONGZHI_LABEL;
+                        turnLabe.frame=CGRectMake(240, 11, 25, 21);
+                        turnLabe.textAlignment=UITextAlignmentLeft;
+                        turnLabe.textColor=[UIColor darkGrayColor];
+                        turnLabe.font=[UIFont systemFontOfSize:17.0];
+                        [turnLabe setBackgroundColor:[UIColor clearColor]];
                     
-                    break;
-                case 5:
-                    cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-                    cell.textLabel. textColor=[UIColor darkGrayColor];
-                    cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-                    cell.textLabel.text=@"  软件评分";
                     
-                    break;
-                case 6:
-                    cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-                    cell.textLabel. textColor=[UIColor darkGrayColor];
-                    cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-                    cell.textLabel.text=@"  检测更新";
+                        UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+                        turnBtn.frame=CGRectMake(269, 14, 45, 18);//259 92 48 1
+                        NSUserDefaults*userDefault=[NSUserDefaults standardUserDefaults];
+                        BOOL tongZhiFlag=[userDefault boolForKey:@"tongZhiFlag"];
                     
-                    break;
-                case 7:
-                    cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-                    cell.textLabel. textColor=[UIColor darkGrayColor];
-                    cell.textLabel.font=[UIFont systemFontOfSize:17.0];
-                    cell.textLabel.text=@"  关于加速宝";
+                        if(!tongZhiFlag)
+                        {
+                            [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_close.png"] forState:UIControlStateNormal];
+                        
+                            turnLabe.text=@"关";
+                        
+                        }else
+                        {
+                            [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_open.png"] forState:UIControlStateNormal];
+                            turnLabe.text=@"开";
+                        }
                     
-                    break;
-                default:
-                    break;
-            }
-            UIImageView *lineImageView=[[[UIImageView alloc]init] autorelease];
-            lineImageView.frame=CGRectMake(0, cell.frame.size.height-1, 320, 1);
-            lineImageView.image=[UIImage imageNamed:@"henxian.png"];
-            [cell.contentView addSubview:lineImageView];
+                        [turnBtn addTarget:self action:@selector(turnMessageBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+                        [cell.contentView addSubview:turnBtn];
+                        [cell.contentView addSubview:turnLabe];
+                        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+                    
+                        break;
+                    case 3:
+                        cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                        cell.textLabel. textColor=[UIColor darkGrayColor];
+                        cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                        cell.textLabel.text=@"  常见问题";
+                    
+                        break;
+                    case 4:
+                        cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                        cell.textLabel. textColor=[UIColor darkGrayColor];
+                        cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                        cell.textLabel.text=@"  软件评分";
+                    
+                        break;
+                    case 5:
+                        cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                        cell.textLabel. textColor=[UIColor darkGrayColor];
+                        cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                        cell.textLabel.text=@"  检测更新";
+                    
+                        break;
+                    case 6:
+                        cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                        cell.textLabel. textColor=[UIColor darkGrayColor];
+                        cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                        cell.textLabel.text=@"  关于加速宝";
+                    
+                        break;
+                    default:
+                        break;
+                }
+                UIImageView *lineImageView=[[[UIImageView alloc]init] autorelease];
+                lineImageView.frame=CGRectMake(0, cell.frame.size.height-1, 320, 1);
+                lineImageView.image=[UIImage imageNamed:@"henxian.png"];
+                [cell.contentView addSubview:lineImageView];
 
-        }
-        return cell;
+            }
+            return cell;
+        }else{
+                if (indexPath.row ==3) {
+                    UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 10)] autorelease];
+                    bgImageView.backgroundColor=[UIColor colorWithRed:248.0/255 green:245.0/255 blue:242.0/255 alpha:1.0] ;
+                    [cell.contentView addSubview:bgImageView];
+                    
+                    UIImageView *lineImageView=[[[UIImageView alloc]init] autorelease];
+                    lineImageView.frame=CGRectMake(0, 10, 320, 1);
+                    lineImageView.image=[UIImage imageNamed:@"henxian.png"];
+                    [cell.contentView addSubview:lineImageView];
+                    
+                }else{
+                    
+                    UIView *bgImageView=[[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
+                    bgImageView.backgroundColor=[UIColor whiteColor] ;
+                    [cell.contentView addSubview:bgImageView];
+                    
+                    if([indexPath row]==0){
+                        
+                        UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+                        turnBtn.tag=TAG_PROFILE_SWITCH;
+                        turnBtn.frame=CGRectMake(269, 14, 45, 18);//259 92 48 1
+                        
+                        UILabel *turnLabe=[[[UILabel alloc]init] autorelease];
+                        turnLabe.frame=CGRectMake(240, 11, 25, 21);
+                        turnLabe.tag= TAG_PROFILE_TEXT;
+                        
+                        turnLabe.textAlignment=UITextAlignmentLeft;
+                        turnLabe.textColor=[UIColor darkGrayColor];
+                        turnLabe.font=[UIFont systemFontOfSize:17.0];
+                        [turnLabe setBackgroundColor:[UIColor clearColor]];
+                        
+                        cell.textLabel. textColor=[UIColor darkGrayColor];
+                        cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                        
+                        cell.textLabel.text=@"  压缩服务";
+                        
+                        [turnBtn addTarget:self action:@selector(turnServeBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+                        
+                        self.compressionServer=YES;
+                        turnLabe.text=@"关";
+                        [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_close.png"] forState:UIControlStateNormal];
+                        
+                        [cell.contentView addSubview:turnBtn];
+                        [cell.contentView addSubview:turnLabe];
+                        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+                    }
+                    switch ([indexPath row]) {
+                        case 1:
+                            cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                            cell.textLabel. textColor=[UIColor darkGrayColor];
+                            cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                            cell.textLabel.text=@"  APN校准";
+                            
+                            break;
+                        case 2:
+                            cell.textLabel. textColor=[UIColor darkGrayColor];
+                            cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                            cell.textLabel.text=@"  通知";
+                            
+                            UILabel *turnLabe=[[[UILabel alloc]init] autorelease];
+                            turnLabe.tag=TAG_TONGZHI_LABEL;
+                            turnLabe.frame=CGRectMake(240, 11, 25, 21);
+                            turnLabe.textAlignment=UITextAlignmentLeft;
+                            turnLabe.textColor=[UIColor darkGrayColor];
+                            turnLabe.font=[UIFont systemFontOfSize:17.0];
+                            [turnLabe setBackgroundColor:[UIColor clearColor]];
+                            
+                            
+                            UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+                            turnBtn.frame=CGRectMake(269, 14, 45, 18);//259 92 48 1
+                            NSUserDefaults*userDefault=[NSUserDefaults standardUserDefaults];
+                            BOOL tongZhiFlag=[userDefault boolForKey:@"tongZhiFlag"];
+                            
+                            if(!tongZhiFlag)
+                            {
+                                [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_close.png"] forState:UIControlStateNormal];
+                                
+                                turnLabe.text=@"关";
+                                
+                            }
+                            else
+                            {
+                                [turnBtn setBackgroundImage:[UIImage imageNamed:@"apn_bg_open.png"] forState:UIControlStateNormal];
+                                turnLabe.text=@"开";
+                            }
+                            
+                            [turnBtn addTarget:self action:@selector(turnMessageBtnPress:) forControlEvents:UIControlEventTouchUpInside];
+                            [cell.contentView addSubview:turnBtn];
+                            [cell.contentView addSubview:turnLabe];
+                            cell.selectionStyle=UITableViewCellSelectionStyleNone;
+                            
+                            break;
+                        case 4:
+                            cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                            cell.textLabel. textColor=[UIColor darkGrayColor];
+                            cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                            cell.textLabel.text=@"  常见问题";
+                            
+                            break;
+                        case 5:
+                            cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                            cell.textLabel. textColor=[UIColor darkGrayColor];
+                            cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                            cell.textLabel.text=@"  软件评分";
+                            
+                            break;
+                        case 6:
+                            cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                            cell.textLabel. textColor=[UIColor darkGrayColor];
+                            cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                            cell.textLabel.text=@"  检测更新";
+                            
+                            break;
+                        case 7:
+                            cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                            cell.textLabel. textColor=[UIColor darkGrayColor];
+                            cell.textLabel.font=[UIFont systemFontOfSize:17.0];
+                            cell.textLabel.text=@"  关于加速宝";
+                            
+                            break;
+                        default:
+                            break;
+                    }
+                    UIImageView *lineImageView=[[[UIImageView alloc]init] autorelease];
+                    lineImageView.frame=CGRectMake(0, cell.frame.size.height-1, 320, 1);
+                    lineImageView.image=[UIImage imageNamed:@"henxian.png"];
+                    [cell.contentView addSubview:lineImageView];
+                    
+                }
+                return cell;
+            }
     }
     if (pdserviceorvpn) {
         if (indexPath.row == 2) {
@@ -348,7 +474,6 @@
             [cell.contentView addSubview:bgImageView];
 
             if([indexPath row]==0){
-                
                 UIButton *turnBtn=[UIButton buttonWithType:UIButtonTypeCustom];
                 turnBtn.tag=TAG_PROFILE_SWITCH;
                 turnBtn.frame=CGRectMake(269, 14, 45, 18);//259 92 48 1
@@ -601,25 +726,18 @@
     ConnectionType type = [UIDevice connectionType];
     if (type == WIFI || !pdserviceorvpn) {
         switch ([indexPath row]) {
-            case 1:{
-                APNViewController*apnJiaoZhunViewController=[[APNViewController alloc]init];
-                [self.navigationController pushViewController:apnJiaoZhunViewController animated:YES];
-                [apnJiaoZhunViewController release];
-                
-                break;
-            }
-            case 4:{
+            case 3:{
                 CommonProblemViewController*commonProblemViewController=[[[CommonProblemViewController alloc]init] autorelease];
                 [self.navigationController pushViewController:commonProblemViewController animated:YES];
                 break;
             }
-            case 5:{
+            case 4:{
                 NSString *url=@"https://itunes.apple.com/cn/app/jia-su-bao/id606803214?ls=1&mt=8";
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
                 
                 break;
             }
-            case 6:{
+            case 5:{
                 if(self.updateViewController!=nil)
                 {
                     self.updateViewController=nil;
@@ -629,7 +747,7 @@
                 
                 break;
             }
-            case 7:{
+            case 6:{
                 AboutFlashViewController*aboutFlashViewController=[[[AboutFlashViewController alloc]init] autorelease];
                 [[sysdelegate navController  ] pushViewController:aboutFlashViewController animated:YES];
                 break;
@@ -748,8 +866,13 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     ConnectionType type = [UIDevice connectionType];
+    UserSettings *user = [UserSettings currentUserSettings];
     if (type == WIFI) {
-        return 8;
+        if ([user.profileType isEqualToString:@"vpn"]) {
+            return 7;
+        }else{
+            return 8;
+        }
     }
     if (pdserviceorvpn) {
         return 7;
@@ -760,11 +883,19 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ConnectionType type = [UIDevice connectionType];
+    UserSettings *user = [UserSettings currentUserSettings];
     if (type == WIFI) {
-        if ([indexPath row] == 3) {
-            return 10;
+        if ([user.profileType isEqualToString:@"vpn"]) {
+            if ([indexPath row] == 2) {
+                return 10;
+            }
+            return 44;
+        }else{
+            if ([indexPath row] == 3) {
+                return 10;
+            }
+            return 44;
         }
-        return 44;
     }
     if (pdserviceorvpn) {
         if ([indexPath row] == 2) {
@@ -825,7 +956,7 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag = TAG_ALERT_PROFILE) {
+    if (alertView.tag == TAG_ALERT_PROFILE) {
         if ( buttonIndex == 1 ) {
             [self removeProfile];
         }

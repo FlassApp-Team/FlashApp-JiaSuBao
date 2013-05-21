@@ -14,6 +14,7 @@
 @class YouHuaModleViewController;
 @class TuiJianModleViewController;
 @class TellFriendModleViewController;
+@class ImageModleViewController;
 @interface FirstPageViewController : UIViewController
 
 
@@ -26,6 +27,7 @@
 @property(nonatomic,retain)TuiJianModleViewController *tuiJianModleViewController;
 @property(nonatomic,retain)TellFriendModleViewController*tellFriendModleViewController;
 
+@property (nonatomic ,retain)ImageModleViewController *imageModleViewController;
 
 
 

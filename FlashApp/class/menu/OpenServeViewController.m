@@ -40,7 +40,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    scrollView.contentSize = CGSizeMake(320, 680);
+    scrollView.contentSize = CGSizeMake(320, 580);
 }
 
 - (void)viewDidUnload

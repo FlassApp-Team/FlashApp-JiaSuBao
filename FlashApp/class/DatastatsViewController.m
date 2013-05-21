@@ -534,7 +534,7 @@ static int shareArrayPage ;
     
     StatsDetail* topStats = [shareArray objectAtIndex:shareArrayPage];
     NSString* deviceId = [OpenUDID value];
-    NSString* date = [DateUtils stringWithDateFormat:currentStats.startTime format:@"yyyy-MM"];
+    NSString* date = [DateUtils stringWithDateFormat:currentStats.startTime format:@"yyyy_MM"];
     
     //带百分比的分享话语暂时不用
 //    NSString* content = [NSString stringWithFormat:@"#%@用加速宝#我正在使用加速宝，本月已经节省了%@，实际使用%@，压缩总比例为%.1f%%，其中%@压缩比例高达%.1f%%，加速宝流量，省钱，快速。 下载地址：http://jiasu.flashapp.cn/social/%@.html %@", date,
@@ -546,10 +546,11 @@ static int shareArrayPage ;
 //                         deviceId,@"(@飞速流量压缩仪)"];
     //content = @"Very Good!";
 
-    NSString* content = [NSString stringWithFormat:@"#%@用加速宝#节省了%@，%@节省达到%@，网速慢？流量少？就用加速宝。免费下载：http://jiasu.flashapp.cn/social/%@.html %@",         date,[NSString stringForByteNumber:(currentStats.bytesBefore - currentStats.bytesAfter)],
-                         [topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,
-                         [NSString stringForByteNumber:(topStats.before - topStats.after)],
-                         deviceId,@"(@飞速流量压缩仪)"];
+    NSString *content = [NSString stringWithFormat:@"%@_%@_%@_%@",date,[NSString stringWithFormat:@"%ld",(currentStats.bytesBefore - currentStats.bytesAfter)],[topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,[NSString stringWithFormat:@"%lld",(topStats.before - topStats.after)]];
+//    NSString* content = [NSString stringWithFormat:@"#%@用加速宝#节省了%@，%@节省达到%@，网速慢？流量少？就用加速宝。免费下载：http://jiasu.flashapp.cn/social/%@.html %@",         date,[NSString stringForByteNumber:(currentStats.bytesBefore - currentStats.bytesAfter)],
+//                         [topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,
+//                         [NSString stringForByteNumber:(topStats.before - topStats.after)],
+//                         deviceId,@"(@飞速流量压缩仪)"];
     
     NSData* image = [self captureScreen];
     

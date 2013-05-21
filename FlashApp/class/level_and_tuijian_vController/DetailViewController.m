@@ -250,9 +250,9 @@ static BOOL showAppPic = NO;
         if ([appDetail.apdesc isEqualToString:@""]) {
             appDetail.apdesc = @"本应用暂无应用描述！";
         }
-//        appDetail.pics = [NSMutableArray arrayWithArray:[result objectForKey:@"pics"]];
+        appDetail.pics = [NSMutableArray arrayWithArray:[result objectForKey:@"pics"]];
         
-        appDetail.pics = [NSArray arrayWithObjects:@"http://a270.phobos.apple.com/us/r1000/079/Purple/v4/cd/84/d4/cd84d4c7-5d3e-df59-811d-759fb6ea999a/mzl.rzaasbmu.75x75-65.png",@"http://a915.phobos.apple.com/us/r1000/089/Purple/f4/c1/22/mzm.cybvekpd.75x75-65.png",@"http://a915.phobos.apple.com/us/r1000/089/Purple/f4/c1/22/mzm.cybvekpd.75x75-65.png",@"http://a270.phobos.apple.com/us/r1000/079/Purple/v4/cd/84/d4/cd84d4c7-5d3e-df59-811d-759fb6ea999a/mzl.rzaasbmu.75x75-65.png",@"http://a294.phobos.apple.com/us/r1000/071/Purple2/v4/b2/58/0c/b2580c7c-75c5-a305-6957-35d546839872/mzl.nuiuwhsb.75x75-65.png", nil];
+//        appDetail.pics = [NSArray arrayWithObjects:@"http://a270.phobos.apple.com/us/r1000/079/Purple/v4/cd/84/d4/cd84d4c7-5d3e-df59-811d-759fb6ea999a/mzl.rzaasbmu.75x75-65.png",@"http://a915.phobos.apple.com/us/r1000/089/Purple/f4/c1/22/mzm.cybvekpd.75x75-65.png",@"http://a915.phobos.apple.com/us/r1000/089/Purple/f4/c1/22/mzm.cybvekpd.75x75-65.png",@"http://a270.phobos.apple.com/us/r1000/079/Purple/v4/cd/84/d4/cd84d4c7-5d3e-df59-811d-759fb6ea999a/mzl.rzaasbmu.75x75-65.png",@"http://a294.phobos.apple.com/us/r1000/071/Purple2/v4/b2/58/0c/b2580c7c-75c5-a305-6957-35d546839872/mzl.nuiuwhsb.75x75-65.png", nil];
         
         //设置Label的高度
         fontHeight = [self heightForString:appDetail.apdesc fontSize:14 andWidth:300];

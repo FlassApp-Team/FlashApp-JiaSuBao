@@ -14,6 +14,7 @@
 #import "GoLineModleViewController.h"
 #import "ModleOneViewController.h"
 #import "TellFriendModleViewController.h"
+#import "ImageModleViewController.h"
 @interface FirstPageViewController ()
 -(void)initViewControll;
 @end
@@ -84,10 +85,16 @@
         self.youHuaModleViewController.view.frame=CGRectMake(152, 234, self.youHuaModleViewController.view.frame.size.width, self.youHuaModleViewController.view.frame.size.height);
         
         
-        self.tuiJianModleViewController=[[[TuiJianModleViewController alloc]initWithNibName:@"TuiJianModleViewController_iphone5" bundle:nil] autorelease];
-
-        [self.view addSubview:self.tuiJianModleViewController.view];
-        self.tuiJianModleViewController.view.frame=CGRectMake(17, 376, self.tuiJianModleViewController.view.frame.size.width, self.tuiJianModleViewController.view.frame.size.height);
+        if ([CHANNEL isEqualToString:@"appstore"]) {
+             self.imageModleViewController=[[[ImageModleViewController alloc]initWithNibName:@"ImageModleViewController_iphone5" bundle:nil] autorelease];
+            [self.view addSubview:self.imageModleViewController.view];
+            self.imageModleViewController.view.frame=CGRectMake(17, 376, self.imageModleViewController.view.frame.size.width, self.imageModleViewController.view.frame.size.height);
+            
+        }else{
+            self.tuiJianModleViewController=[[[TuiJianModleViewController alloc]initWithNibName:@"TuiJianModleViewController_iphone5" bundle:nil] autorelease];
+            [self.view addSubview:self.tuiJianModleViewController.view];
+            self.tuiJianModleViewController.view.frame=CGRectMake(17, 376, self.tuiJianModleViewController.view.frame.size.width, self.tuiJianModleViewController.view.frame.size.height);
+        }
         
         self.tellFriendModleViewController=[[[TellFriendModleViewController alloc]initWithNibName:@"TellFriendModleViewController_iphone5" bundle:nil] autorelease];
         [self.view addSubview:self.tellFriendModleViewController.view];
@@ -113,10 +120,15 @@
         [self.view addSubview:self.youHuaModleViewController.view];
         self.youHuaModleViewController.view.frame=CGRectMake(149, 182, self.youHuaModleViewController.view.frame.size.width, self.youHuaModleViewController.view.frame.size.height);
         
-        
-        self.tuiJianModleViewController=[[[TuiJianModleViewController alloc]init] autorelease];
-        [self.view addSubview:self.tuiJianModleViewController.view];
-        self.tuiJianModleViewController.view.frame=CGRectMake(17, 311, self.tuiJianModleViewController.view.frame.size.width, self.tuiJianModleViewController.view.frame.size.height);
+        if ([CHANNEL isEqualToString:@"appstore"]) {
+            self.imageModleViewController=[[[ImageModleViewController alloc]init] autorelease];
+            [self.view addSubview:self.imageModleViewController.view];
+            self.imageModleViewController.view.frame=CGRectMake(17, 311, self.imageModleViewController.view.frame.size.width, self.imageModleViewController.view.frame.size.height);
+        }else{
+            self.tuiJianModleViewController=[[[TuiJianModleViewController alloc]init] autorelease];
+            [self.view addSubview:self.tuiJianModleViewController.view];
+            self.tuiJianModleViewController.view.frame=CGRectMake(17, 311, self.tuiJianModleViewController.view.frame.size.width, self.tuiJianModleViewController.view.frame.size.height);
+        }
         
         self.tellFriendModleViewController=[[[TellFriendModleViewController alloc]init] autorelease];
         [self.view addSubview:self.tellFriendModleViewController.view];

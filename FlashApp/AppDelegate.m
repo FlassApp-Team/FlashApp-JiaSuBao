@@ -94,8 +94,14 @@
         //结果集解析成array
         NSMutableArray *categoryArray = [NSMutableArray arrayWithCapacity:3];
         [categoryArray addObjectsFromArray:[result objectForKey:@"catsu"]];
+        
+        //储存CP 下次请求数据的时候带上
+        [[NSUserDefaults standardUserDefaults] setObject:[result objectForKey:@"cp"] forKey:@"catsucp"] ;
+        
         //查询数据库中 应用分类 的结果集
         NSDictionary *databasedic = [AppRecommendDao fondAllAppRecommend];
+        
+        NSLog(@"1212121212121212 urlurlurl is %@  cpcpcpcpcp is %.0f %@ :",str,cpi,result);
         
          //如果查询的结果集是空， 那么我们就把请求来的结果 插入数据库表中
         if ([databasedic count] == 0) {
@@ -182,6 +188,7 @@
         NSString* apn = [userDefault objectForKey:@"apnName"];
         url = [AppDelegate getInstallURL:nextPage install:YES vpn:apn idc:idcCode servicetype:@"apn" interfable:@"0"];
     }
+    NSLog(@"112233 %@",url);
      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 //
@@ -588,13 +595,10 @@
     
     
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
-    [WXApi registerApp:@"wxd1be1f55db841585"];
     
-    //创建应用推荐分类的数据库
-    [AppRecommendDao createAppRecommendTable];
     
-     //查看是否有新的应用推荐
-    [self ifNewApp];
+    //注册微信
+    [WXApi registerApp:@"wx0d70d827b4ee5ad2"];
     
     
     BOOL versionUpgrade = NO;
@@ -637,6 +641,14 @@
     if ( !versionUpgrade ) {
         [self execUpgradeSQL:version oldVersion:oldVersion];
     }
+    
+    //创建应用推荐分类的数据库
+    [AppRecommendDao createAppRecommendTable];
+    
+    //查看是否有新的应用推荐
+    [self ifNewApp];
+
+    
     self.refreshDatastats = NO;
     self.refreshDatasave = YES;
     
@@ -654,8 +666,6 @@
     proxySlow = NO;
     
     
-    //初始化微信SDK
-    [WXApi registerApp:@"wx0d70d827b4ee5ad2"];
     
     //显示程序开启页面 ， 提示安装描述文件，和欢迎界面都在这里面设置的
     [self showSetupView];
@@ -1441,31 +1451,22 @@
         user.dayCapacity = 0;
         user.dayCapacityDelta = 0;
     }
-    
     [UserSettings saveUserSettings:user];
 }
 
 #pragma mark-Loading M
 -(void)showLockView:(NSString*)message;
 {
-    //NSLog(@"BBBBBBB%@",self);
-//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navController.topViewController.view animated:YES];//add 2012-12-07
-//    hud.labelText = message;
-//    //hud.detailsLabelText = @"";
-//    [self.navController.topViewController.view bringSubviewToFront:hud];
-//    [self performSelector:@selector(productLoadFailed) withObject:nil afterDelay:30.0];
-    myHUD =[[MBProgressHUD alloc] initWithView:self.navController.topViewController.view];
-    myHUD.labelText = message;
-    [myHUD show:YES];
-    [self.navController.topViewController.view addSubview:myHUD];
-    [myHUD release];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navController.topViewController.view animated:YES];//add 2012-12-07
+    hud.labelText = message;
+    [self.navController.topViewController.view bringSubviewToFront:hud];
+    [self performSelector:@selector(productLoadFailed) withObject:nil afterDelay:30.0];
 }
 
 -(void)hideLockView
-{
-    [myHUD hide:YES];
-//    [MBProgressHUD hideHUDForView:self.navController.topViewController.view animated:YES];//add 2012-12-07
-//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(productLoadFailed) object:nil];
+{    
+    [MBProgressHUD hideHUDForView:self.navController.topViewController.view animated:YES];//add 2012-12-07
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(productLoadFailed) object:nil];
     
 }
 -(void)productLoadFailed

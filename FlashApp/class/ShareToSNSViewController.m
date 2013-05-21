@@ -111,7 +111,6 @@
     if([AppDelegate  deviceSysVersion]>=6.0f)
     {
         [[[AppDelegate getAppDelegate] navController] dismissViewControllerAnimated:YES completion:nil];
-        
     }
     else
     {

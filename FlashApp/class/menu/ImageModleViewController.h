@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ImageQualityViewController.h"
 #import "CustomBUtton.h"
 #import "CGLabel.h"
+@class ImageCompressViewController;
 @interface ImageModleViewController : UIViewController
-@property(nonatomic,retain)ImageQualityViewController*imageQualityViewController;
+//@property(nonatomic,retain)ImageQualityViewController*imageQualityViewController;
+@property (nonatomic ,retain) ImageCompressViewController *icvc;
 @property(nonatomic,retain)IBOutlet CustomBUtton *zhiliangBtn;
 @property(nonatomic,retain)IBOutlet CGLabel*zhiliangLabel;
 @end

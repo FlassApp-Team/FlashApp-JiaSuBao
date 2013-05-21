@@ -52,7 +52,6 @@
     if (newsApp) {
         [animationImgView startAnimating];
     }
-    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -72,6 +71,7 @@
         }else
         {
             [self.animationImgView stopAnimating];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:NEWS_APP];
         }
     };
     

@@ -7,7 +7,7 @@
 //
 
 #import "ImageModleViewController.h"
-#import "ImageQualityViewController.h"
+#import "ImageCompressViewController.h"
 @interface ImageModleViewController ()
 -(void)setImageQuality;
 @end
@@ -15,12 +15,13 @@
 @implementation ImageModleViewController
 @synthesize zhiliangBtn;
 @synthesize zhiliangLabel;
-@synthesize imageQualityViewController;
+//@synthesize imageQualityViewController;
+@synthesize icvc;
 -(void)dealloc
 {
     self.zhiliangLabel=nil;
     self.zhiliangBtn=nil;
-    self.imageQualityViewController=nil;
+    self.icvc = nil;
     [super dealloc];
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -73,11 +74,12 @@
     
     UIView *view=(UIView*)[self.view viewWithTag:101];
     [view removeFromSuperview];
-    if(self.imageQualityViewController==nil)
+    if(self.icvc==nil)
     {
-        self.imageQualityViewController=[[[ImageQualityViewController alloc]init] autorelease];
+        self.icvc=[[[ImageCompressViewController alloc]init] autorelease];
     }
-    [[sysdelegate navController  ] pushViewController:self.imageQualityViewController animated:YES];
+    [[sysdelegate navController  ] pushViewController:self.icvc animated:YES];
+
     
 }
 

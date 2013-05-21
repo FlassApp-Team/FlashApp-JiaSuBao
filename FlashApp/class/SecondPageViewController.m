@@ -13,7 +13,6 @@
 #import "WangSuModleViewController.h"
 #import "LockNetModleViewController.h"
 #import "ZhengDuanModleViewController.h"
-#import "wenTiModleViewController.h"
 #import "TellFriendModleViewController.h"
 @interface SecondPageViewController ()
 -(void)initViewController;
@@ -72,15 +71,16 @@
         
         
         self.zhengDuanModleViewController=[[[ZhengDuanModleViewController alloc]initWithNibName:@"ZhengDuanModleViewController_iphone5" bundle:nil] autorelease];
-
         [self.view addSubview:self.zhengDuanModleViewController.view];
         self.zhengDuanModleViewController.view.frame=CGRectMake(17, 234, self.zhengDuanModleViewController.view.frame.size.width, self.zhengDuanModleViewController.view.frame.size.height);
         
-        
-        self.imageModleViewController=[[[ImageModleViewController alloc]initWithNibName:@"ImageModleViewController_iphone5" bundle:nil] autorelease];
-
-        [self.view addSubview:self.imageModleViewController.view];
-        self.imageModleViewController.view.frame=CGRectMake(152, 234, self.imageModleViewController.view.frame.size.width, self.imageModleViewController.view.frame.size.height);
+        if ([CHANNEL isEqualToString:@"appstore"]) {
+            self.imageModleViewController = nil;
+        }else{
+            self.imageModleViewController=[[[ImageModleViewController alloc]initWithNibName:@"ImageModleViewController_iphone5" bundle:nil] autorelease];
+            [self.view addSubview:self.imageModleViewController.view];
+            self.imageModleViewController.view.frame=CGRectMake(152, 234, self.imageModleViewController.view.frame.size.width, self.imageModleViewController.view.frame.size.height);
+        }
         
         
         //常见问题
@@ -106,10 +106,14 @@
         [self.view addSubview:self.zhengDuanModleViewController.view];
         self.zhengDuanModleViewController.view.frame=CGRectMake(17, 182, self.zhengDuanModleViewController.view.frame.size.width, self.zhengDuanModleViewController.view.frame.size.height);
         
+        if ([CHANNEL isEqualToString:@"appstore"]) {
+            self.imageModleViewController = nil;
+        }else{
+            self.imageModleViewController=[[[ImageModleViewController alloc]init] autorelease];
+            [self.view addSubview:self.imageModleViewController.view];
+            self.imageModleViewController.view.frame=CGRectMake(149, 182, self.imageModleViewController.view.frame.size.width, self.imageModleViewController.view.frame.size.height);
+        }
         
-        self.imageModleViewController=[[[ImageModleViewController alloc]init] autorelease];
-        [self.view addSubview:self.imageModleViewController.view];
-        self.imageModleViewController.view.frame=CGRectMake(149, 182, self.imageModleViewController.view.frame.size.width, self.imageModleViewController.view.frame.size.height);
         
         //常见问题
 //        self.wenTiModleViewController=[[[WenTiModleViewController alloc]init] autorelease];

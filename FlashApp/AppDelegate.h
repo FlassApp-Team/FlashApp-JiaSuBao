@@ -57,9 +57,9 @@
 
 #define CHANNEL @"appstore"
 
-//#define CHANNEL @"fangzhen_market"
-
 //#define CHANNEL @"jasubao_market"
+
+//#define CHANNEL @"fangzhen_market"
 
 //#define CHANNEL @"fangyi_market"
 

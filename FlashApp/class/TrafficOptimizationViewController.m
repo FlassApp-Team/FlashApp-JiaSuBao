@@ -39,9 +39,9 @@
 #import "UserAgentLockDAO.h"
 #import "UserAgentLock.h"
 #import "cnvUILabel.h"
-#import "ImageQualityViewController.h"
 #import "OpenUDID.h"
 #import "UserAgentLockDAO.h"
+#import "ImageCompressViewController.h"
 @interface TrafficOptimizationViewController ()
 - (void) getAccessData;
 -(void)initView;
@@ -817,7 +817,7 @@
 
 -(void)setting:(UIButton*)button
 {
-    ImageQualityViewController *imageQualityViewController=[[[ImageQualityViewController alloc]init] autorelease];
+    ImageCompressViewController *imageQualityViewController=[[[ImageCompressViewController alloc]init] autorelease];
     [[sysdelegate currentViewController].navigationController pushViewController:imageQualityViewController animated:YES];
 }
 
