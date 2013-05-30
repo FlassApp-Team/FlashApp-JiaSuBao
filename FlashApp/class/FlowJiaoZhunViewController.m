@@ -75,7 +75,7 @@
     self.locationIcon=nil;
     self.stateLabel=nil;
     
-    self.taocanBtn=nil;
+    self.taocanBtn=nil; 
     self.benyueBtn=nil;
     self.liuliangBtn=nil;
     self.jingqueBtn=nil;
@@ -96,8 +96,6 @@
     [self loadData];
     [super viewWillAppear:animated];
 }
-
-
 
 - (void) viewDidAppear:(BOOL)animated
 {

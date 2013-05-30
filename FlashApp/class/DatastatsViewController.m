@@ -545,8 +545,10 @@ static int shareArrayPage ;
 //                         ((float)(topStats.before - topStats.after)) / topStats.before * 100,
 //                         deviceId,@"(@飞速流量压缩仪)"];
     //content = @"Very Good!";
+    
+    NSString *name = [topStats.userAgent stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 
-    NSString *content = [NSString stringWithFormat:@"%@_%@_%@_%@",date,[NSString stringWithFormat:@"%ld",(currentStats.bytesBefore - currentStats.bytesAfter)],[topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,[NSString stringWithFormat:@"%lld",(topStats.before - topStats.after)]];
+    NSString *content = [NSString stringWithFormat:@"%@_%@_%@_%@",date,[NSString stringWithFormat:@"%ld",(currentStats.bytesBefore - currentStats.bytesAfter)],[name compare:@"未知"] == NSOrderedSame ? @"最高" : name,[NSString stringWithFormat:@"%lld",(topStats.before - topStats.after)]];
 //    NSString* content = [NSString stringWithFormat:@"#%@用加速宝#节省了%@，%@节省达到%@，网速慢？流量少？就用加速宝。免费下载：http://jiasu.flashapp.cn/social/%@.html %@",         date,[NSString stringForByteNumber:(currentStats.bytesBefore - currentStats.bytesAfter)],
 //                         [topStats.userAgent compare:@"未知"] == NSOrderedSame ? @"最高" : topStats.userAgent,
 //                         [NSString stringForByteNumber:(topStats.before - topStats.after)],

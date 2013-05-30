@@ -12,12 +12,10 @@
 
 static sqlite3* theDatabase = nil;
 
-
 @interface DBConnection (private)
 + (void) createDatabase:(NSString *)dbPath;
 + (NSString*) getDBPath;
 @end
-
 
 @implementation DBConnection
 

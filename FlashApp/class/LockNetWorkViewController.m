@@ -96,6 +96,8 @@
     
     pdsw = YES;
     
+    canHaveLockKeys = [[NSMutableArray alloc] init];
+    
     datasArray = [[NSMutableArray alloc] init];
     
     allLockArr = [[NSMutableArray alloc] init];
@@ -123,6 +125,12 @@
     [self jiesuoBtn:self.yisuoBtn];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self getCanLockNum];
+}
+
 -(IBAction)jiesuoBtn:(id)sender
 {
     //    self.AppCountLabel.text=[NSString stringWithFormat:@"当前已锁网应用:  个"];
@@ -141,6 +149,7 @@
     
 }
 
+//可锁应用按钮
 -(IBAction)jiasuoBtn:(id)sender
 {
     //    self.AppCountLabel_1.text = [NSString stringWithFormat:@"当前可锁网应用:  个"];
@@ -157,44 +166,34 @@
     [datasArray removeAllObjects];
     
     //更新数据
-    [self getAccessData];
+    [self SelectNoLockAppForDetail];
 }
 
 -(void)getCanLockNum
 {
-    //从数据库中加载数据加载 月份用了的所有数据
-    StageStats *currentStats = [StatsMonthDAO statForPeriod:startTime endTime:endTime];
-    
-    //如果有数据，就去查询它的详细数据
-    if ( currentStats.bytesBefore > 0 ){
-        NSArray* arr = [StatsMonthDAO userAgentStatsForPeriod:startTime endTime:endTime orderby:nil];
-        NSArray* tempArr = [arr sortedArrayUsingSelector:@selector(compareByPercent:)];
-        
-        for (int i=0;i<[tempArr count]; i++)
-        {
-            
-            StatsDetail* topStats = [tempArr objectAtIndex:i];
-            UserAgentLock *agentLock=  [UserAgentLockDAO getUserAgentLock:[topStats.uaStr trim]];
-            
-            if(!agentLock.isLock)
-            {
-                if(![[topStats.uaStr trim] isEqualToString:@"Mozilla"])
-                {
-                    canLock ++;
-                }
-            }
-            if (agentLock.isLock) {
-                if(![[topStats.uaStr trim] isEqualToString:@"Mozilla"])
-                {
-                    haveLock ++;
-                }
-            }
-            
-        }
-    }
-//    [self.kesuoBtn setTitle:[NSString stringWithFormat:@"可锁应用(%d)",canLock] forState:UIControlStateNormal];
-    self.kesuoLabel.text = [NSString stringWithFormat:@"可锁应用(%d)",canLock];
-    self.yisuoLabel.text = [NSString stringWithFormat:@"已锁应用(%d)",haveLock];
+//    //从数据库中加载数据加载 月份用了的所有数据
+//    StageStats *currentStats = [StatsMonthDAO statForPeriod:startTime endTime:endTime];
+//    
+//    //如果有数据，就去查询它的详细数据
+//    if ( currentStats.bytesBefore > 0 ){
+//        NSArray* arr = [StatsMonthDAO userAgentStatsForPeriod:startTime endTime:endTime orderby:nil];
+//        NSArray* tempArr = [arr sortedArrayUsingSelector:@selector(compareByPercent:)];
+//        
+//        for (int i=0;i<[tempArr count]; i++)
+//        {
+//            
+//            StatsDetail* topStats = [tempArr objectAtIndex:i];
+//            UserAgentLock *agentLock=  [UserAgentLockDAO getUserAgentLock:[topStats.uaStr trim]];
+//            if (agentLock.isLock) {
+//                if(![[topStats.uaStr trim] isEqualToString:@"Mozilla"])
+//                {
+//                    haveLock ++;
+//                }
+//            }
+//        }
+//    }
+    canLock = [[self getAllCanLockAppAndDisAllHasLockApp] count];
+    [self changeLockNum];
 }
 
 -(void)changeLockNum
@@ -245,6 +244,8 @@
     
     int count=[self.allLockDic count];
     self.AppCountLabel.text=[NSString stringWithFormat:@"当前已锁网应用: %d 个",count];
+    haveLock = count;
+    [self changeLockNum];
     
     self.AppCountLabel.hidden = NO;
     
@@ -257,6 +258,9 @@
 -(void)loadtableViewWithjiasuo
 {
     self.AppCountLabel_1.text = [NSString stringWithFormat:@"当前可锁网应用: %d 个",[datasArray count]];
+    canLock = [datasArray count];
+    [self changeLockNum];
+    
     [self.myTableView reloadData];
     
     self.AppCountLabel_1.hidden = NO;
@@ -307,7 +311,7 @@
         agentLock.userAgent=[[array objectAtIndex:i] trim] ;
         agentLock.appName=agName;
         
-        if ( lock )
+        if ( lock ) //请求来所有的可以锁的应用，然后得到lock=1 的数据。 意思就是本机锁网的应用
         {
             
             time_t now;
@@ -323,12 +327,10 @@
         
         [UserAgentLockDAO updateUserAgentLock:agentLock];
         
-        //更新完数据库后要更新下可锁应用的数字
-        canLock = 0;
-        haveLock = 0 ;
-        [self getCanLockNum];
+
         
     }
+    //更新完数据库后要更新下解锁应用的数字
     [self loadtableViewWithjiesuo ];
 }
 
@@ -435,6 +437,44 @@
 }
 
 #pragma mark : 查询没有锁网的应用
+- (void)SelectNoLockAppForDetail
+{
+    //从数据库中加所有可以锁网应用数据
+    NSDictionary *dics = [self getAllCanLockAppAndDisAllHasLockApp];
+    [canHaveLockKeys removeAllObjects];
+    [canHaveLockKeys setArray:[dics allKeys]];
+    for (int i = 0 ; i < [dics count]; i++) {
+        
+        if(![[[dics objectForKey:[canHaveLockKeys objectAtIndex:i]] trim] isEqualToString:@"Mozilla"])
+        {
+            NSDictionary *dic = [NSDictionary dictionaryWithObject:[[dics objectForKey:[canHaveLockKeys objectAtIndex:i]] trim] forKey:[canHaveLockKeys objectAtIndex:i]];
+            [self.datasArray addObject:dic];
+        }
+    }
+    [self loadtableViewWithjiasuo];
+    
+//    [self loadNotData];
+}
+
+//从数据库中查询出所有联网应用，并且过滤掉已经锁网的应用
+- (NSMutableDictionary *)getAllCanLockAppAndDisAllHasLockApp
+{
+    NSMutableDictionary *accDic = (NSMutableDictionary *)[StatsDetailDAO getUserAgentAnduaStr];
+    NSDictionary *lockDic = [UserAgentLockDAO getAllLockedApps];
+    NSArray *accKeys =  [accDic allKeys];
+    NSArray *lockKeys = [lockDic allKeys];
+    for (int i = 0 ; i < [accKeys count]; i++) {
+        NSString *allAppName = [accDic objectForKey:[accKeys objectAtIndex:i]];
+            for (int j = 0 ; j < [lockKeys count]; j++) {
+                UserAgentLock *userLock = [lockDic objectForKey:[lockKeys objectAtIndex:j]];
+                if ([userLock.appName isEqualToString:allAppName] && userLock.isLock) {
+                    [accDic removeObjectForKey:[accKeys objectAtIndex:i]];
+                }
+            }
+    }
+    return accDic;
+}
+/**
 - (void) getAccessData
 {
 //    [TCUtils readIfData:-1];
@@ -502,7 +542,7 @@
     BOOL hasData = [TwitterClient procecssAccessData:obj time:t]; //今天的数据为空
     [[AppDelegate getAppDelegate].refreshingLock unlock];
     
-    if ( hasData ) {
+    if ( !hasData ) {
         //从数据库中加载数据
         [self loadNotData];
     }
@@ -515,7 +555,8 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
 }
-
+**/
+ 
 -(void)loadNotData
 {
     StageStats *currentStats = [StatsMonthDAO statForPeriod:startTime endTime:endTime];
@@ -735,8 +776,8 @@
         if ( code == 200 ) {
             
             //更新可锁应用数
+            canLock += haveLock;
             haveLock = 0 ;
-            canLock += [allLockArr count];
             [self changeLockNum];
             
             [UserAgentLockDAO deleteAll];
@@ -756,8 +797,8 @@
 {
     int tag = button.tag - AGENT_BUTTON_TAG;
     lockCell = tag;
-    StatsDetail *s = [datasArray objectAtIndex:tag];
-    NSString *title = [NSString stringWithFormat:@"请选择 %@ 的锁网时长", s.userAgent ];
+    NSString *appName = [[datasArray objectAtIndex:tag] objectForKey:[canHaveLockKeys objectAtIndex:tag]];
+    NSString *title = [NSString stringWithFormat:@"请选择 %@ 的锁网时长", appName];
     UIActionSheet* sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"2小时",@"8小时",@"当月",@"永久(手动开启)", nil];
     [sheet showInView:self.navigationController.view];
     [sheet release];
@@ -766,10 +807,10 @@
 - (void) disableUserAgentNetwork:(int)isLock lockMinutes:(int)minutes
 {
     UserSettings* user = [AppDelegate getAppDelegate].user;
-    StatsDetail *s = [datasArray objectAtIndex:lockCell];
+    NSString *userAgent = [canHaveLockKeys objectAtIndex:lockCell] ;
     NSString* url = [NSString stringWithFormat:@"%@/%@.json?misc=%@&lock=%d&locktime=%d&host=%@&port=%d",
                      API_BASE, API_SETTING_DISABLEUA,
-                     [[s.uaStr trim] encodeAsURIComponent], isLock, minutes, user.proxyServer, user.proxyPort];
+                     [[userAgent trim] encodeAsURIComponent], isLock, minutes, user.proxyServer, user.proxyPort];
     
     [[AppDelegate getAppDelegate] showLockView:@"正在为您锁网..."];
     
@@ -799,25 +840,28 @@
             
             canLock -- ;
             haveLock ++;
-            //更新可锁应用
+            //更新可锁应用显示的个数
             [self changeLockNum];
             
-            time_t now;
-            
-            time( &now );
-            
-            for(int i=0;i<[datasArray count];i++)
-            {
-                StatsDetail* topStats = [self.datasArray objectAtIndex:i];
-                UserAgentLock*agentLock = [[[UserAgentLock alloc] init] autorelease];
-                agentLock.userAgent = [topStats.uaStr trim];
-                agentLock.appName=topStats.userAgent;
-                agentLock.isLock = 1;
-                agentLock.lockTime = now;
-                agentLock.timeLengh = 0;
-                [UserAgentLockDAO updateUserAgentLock:agentLock];
-            }
+//            time_t now;
+//            
+//            time( &now );
+//            
+//            for(int i=0;i<[datasArray count];i++)
+//            {
+//                NSString *userAgent = [canHaveLockKeys objectAtIndex:i];
+//                NSString *appName = [[self.datasArray objectAtIndex:i] objectForKey:[canHaveLockKeys objectAtIndex:i]];
+//                
+//                UserAgentLock*agentLock = [[[UserAgentLock alloc] init] autorelease];
+//                agentLock.userAgent = userAgent;
+//                agentLock.appName = appName;
+//                agentLock.isLock = 1;
+//                agentLock.lockTime = now;
+//                agentLock.timeLengh = 0;
+//                [UserAgentLockDAO updateUserAgentLock:agentLock];
+//            }
             [datasArray removeObjectAtIndex:lockCell];
+            [canHaveLockKeys removeObjectAtIndex:lockCell];
             [self loadtableViewWithjiasuo];
             [self performSelector:@selector(hiddenLoadingViewWithjiasuo) withObject:nil afterDelay:0.3f];
             return;
@@ -853,8 +897,9 @@
     
     for(int i=0;i<[datasArray count];i++)
     {
-        StatsDetail* topStats = [self.datasArray objectAtIndex:i];
-        NSString* Str=[topStats.uaStr trim];
+        NSString *appName = [[self.datasArray objectAtIndex:i] objectForKey:[canHaveLockKeys objectAtIndex:i]];
+        NSString *Str = [appName stringByReplacingOccurrencesOfString:@" " withString:@""];
+        NSLog(@"str is %@",Str);
         
         if(i==[datasArray count]-1)
         {
@@ -895,25 +940,25 @@
         if ( code == 200 ) {
             
             //更新可锁应用数
+            haveLock +=canLock;
             canLock = 0 ;
-            haveLock = [datasArray count];
             [self changeLockNum];
             
-            time_t now;
-            
-            time( &now );
-            
-            for(int i=0;i<[datasArray count];i++)
-            {
-                StatsDetail* topStats = [self.datasArray objectAtIndex:i];
-                UserAgentLock*agentLock = [[[UserAgentLock alloc] init] autorelease];
-                agentLock.userAgent = [topStats.uaStr trim];
-                agentLock.appName=topStats.userAgent;
-                agentLock.isLock = 1;
-                agentLock.lockTime = now;
-                agentLock.timeLengh = 0;
-                [UserAgentLockDAO updateUserAgentLock:agentLock];
-            }
+//            time_t now;
+//            
+//            time( &now );
+//            
+//            for(int i=0;i<[datasArray count];i++)
+//            {
+//                StatsDetail* topStats = [self.datasArray objectAtIndex:i];
+//                UserAgentLock*agentLock = [[[UserAgentLock alloc] init] autorelease];
+//                agentLock.userAgent = [topStats.uaStr trim];
+//                agentLock.appName=topStats.userAgent;
+//                agentLock.isLock = 1;
+//                agentLock.lockTime = now;
+//                agentLock.timeLengh = 0;
+//                [UserAgentLockDAO updateUserAgentLock:agentLock];
+//            }
             [datasArray removeAllObjects];
             [self loadtableViewWithjiasuo];
             [self performSelector:@selector(hiddenLoadingViewWithjiasuo) withObject:nil afterDelay:0.3f];
@@ -1026,8 +1071,9 @@
         label.text=userAgentLock.appName;
         
     }else{
-        StatsDetail *StatsDetail = [datasArray objectAtIndex:indexs];
-        label.text = StatsDetail.userAgent;
+        NSString *appName = [[datasArray objectAtIndex:indexs] objectForKey:[canHaveLockKeys objectAtIndex:indexs]];
+//        NSLog(@" datasArray object i = %@",[datasArray objectAtIndex:indexs]);
+        label.text = appName;
     }
 }
 

@@ -18,5 +18,7 @@
 + (NSDictionary*) getStateDetailsForAccessDay:(time_t)accessDay;
 + (void) incrStatsDetail:(StatsDetail*)statsDetail;
 + (NSDictionary*) getUserAgentDicFor:(NSArray*)userAgentArr;
++ (NSDictionary *)getUserAgentAnduaStr;
+
 
 @end

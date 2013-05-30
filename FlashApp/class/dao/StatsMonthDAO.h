@@ -31,4 +31,5 @@
 + (NSArray*) getDetailStatsMonth:(time_t)month limit:(NSInteger)limit;
 + (time_t) getFirstStatsMonth;
 
+
 @end

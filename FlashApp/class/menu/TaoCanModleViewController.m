@@ -48,12 +48,13 @@
 
     // Do any additional setup after loading the view from its nib.
 }
+
 -(void)loadData
 {
     NSString *str=nil;
     UserSettings* user = [AppDelegate getAppDelegate].user;
-    float totalm=[user.ctTotal floatValue];
-    long  long byte=[user.ctUsed longLongValue];
+    float totalm=[user.ctTotal floatValue]; //套餐全部流量
+    long  long byte=[user.ctUsed longLongValue]; //用户已使用流量
     float count=totalm- byte / 1024.0f / 1024.0f;
  
     self.tcUnitLabel.text=@"MB";
@@ -139,9 +140,7 @@
     {
         FlowJiaoZhunViewController*flowJiaoZhunViewController=[[[FlowJiaoZhunViewController alloc]init] autorelease];
         [[sysdelegate navController  ] pushViewController:flowJiaoZhunViewController animated:YES];
-
     }
-
     
 }
 

@@ -18,6 +18,7 @@
     int lockCell;
     int canLock;
     int haveLock;
+    NSMutableArray *canHaveLockKeys;//add guangtao 把可以锁网的应用程序userAgent放进去
 }
 @property(nonatomic,retain)IBOutlet UILabel *AppCountLabel;
 @property(nonatomic ,retain)IBOutlet UILabel *AppCountLabel_1;

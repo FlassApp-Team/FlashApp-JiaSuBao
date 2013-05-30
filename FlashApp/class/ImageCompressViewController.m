@@ -152,25 +152,25 @@
             break;
         case 1:
             //压缩质量高按钮
-            self.compressImgView.image = [UIImage imageNamed:@"image_gaozhiliang.png"];
+            self.compressImgView.image = [UIImage imageNamed:@"img_compress_gao.jpg"];
             picLevel = PIC_ZL_HIGH;
             qs = 2;
             break;
         case 2:
             //压缩质量中按钮
-            self.compressImgView.image = [UIImage imageNamed:@"image_zhongzhiliang.png"];
+            self.compressImgView.image = [UIImage imageNamed:@"img_compress_zhong.jpg"];
             picLevel = PIC_ZL_MIDDLE;
             qs = 1;
             break;
         case 3:
             //压缩质量低按钮
-            self.compressImgView.image = [UIImage imageNamed:@"image_dizhiliang.png"];
+            self.compressImgView.image = [UIImage imageNamed:@"img_compress_di.jpg"];
             picLevel = PIC_ZL_LOW;
             qs = 0 ;
             break;
         case 4:
             //不压缩按钮
-            self.compressImgView.image = [UIImage imageNamed:@"image_noc.png"];
+            self.compressImgView.image = [UIImage imageNamed:@"img_compress_no.jpg"];
             picLevel = PIC_ZL_NOCOMPRESS;
             qs = 3;
             break;

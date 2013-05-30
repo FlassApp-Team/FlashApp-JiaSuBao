@@ -55,9 +55,9 @@
 #define RefreshAppLockedNotification @"refreshAppLockedNotification"
 #define RefreshLoginNotification @"refreshLoginNotification"
 
-#define CHANNEL @"appstore"
+//#define CHANNEL @"appstore"
 
-//#define CHANNEL @"jasubao_market"
+#define CHANNEL @"jasubao_market"
 
 //#define CHANNEL @"fangzhen_market"
 

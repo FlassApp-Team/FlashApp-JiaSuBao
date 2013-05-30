@@ -189,5 +189,25 @@
     return dic;
 }
 
++ (NSMutableDictionary *)getUserAgentAnduaStr
+{
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:3];
+    
+    time_t now;
+    time( &now );
+    time_t createtime = now - 24*60*60*90; //得到用户从今天开始到90天前的时间。
+    
+    sqlite3 *conn = [DBConnection getDatabase];
+    NSString *sql = [NSString stringWithFormat:@"select distinct useragent, uastr from stats_detail where useragent != 'iOS(系统服务、通知等)'  and uastr is not null and uastr <> ''  and createtime > %ld",createtime ];
+    NSLog(@"sql is ------------ %@",sql);
+    
+    Statement* stmt = [[Statement alloc] initWithDB:conn sql:(char *)[sql UTF8String]];
+    [stmt bindInt64:createtime forIndex:1];
+    while ( [stmt step] == SQLITE_ROW ) {
+        [dic setObject:[stmt getString:0] forKey:[stmt getString:1]];
+    }
+    NSLog(@"dic is :%@",dic);
+    return dic;
+}
 
 @end

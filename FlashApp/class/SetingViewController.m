@@ -724,48 +724,17 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     ConnectionType type = [UIDevice connectionType];
-    if (type == WIFI || !pdserviceorvpn) {
-        switch ([indexPath row]) {
-            case 3:{
-                CommonProblemViewController*commonProblemViewController=[[[CommonProblemViewController alloc]init] autorelease];
-                [self.navigationController pushViewController:commonProblemViewController animated:YES];
-                break;
-            }
-            case 4:{
-                NSString *url=@"https://itunes.apple.com/cn/app/jia-su-bao/id606803214?ls=1&mt=8";
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-                
-                break;
-            }
-            case 5:{
-                if(self.updateViewController!=nil)
-                {
-                    self.updateViewController=nil;
-                }
-                self.updateViewController=[[[UpdateViewController alloc]init] autorelease];
-                [self.view addSubview:self.updateViewController.view];
-                
-                break;
-            }
-            case 6:{
-                AboutFlashViewController*aboutFlashViewController=[[[AboutFlashViewController alloc]init] autorelease];
-                [[sysdelegate navController  ] pushViewController:aboutFlashViewController animated:YES];
-                break;
-            }
-            default:
-                break;
-        }
-    }else{
-        if (pdserviceorvpn) {
+    UserSettings *user = [UserSettings currentUserSettings];
+        if ([user.profileType isEqualToString:@"vpn"]) {
             switch ([indexPath row]) {
                 case 3:{
                     CommonProblemViewController*commonProblemViewController=[[[CommonProblemViewController alloc]init] autorelease];
                     [self.navigationController pushViewController:commonProblemViewController animated:YES];
                     break;
-                }
-                case 4:{
+                }case 4:{
                     NSString *url=@"https://itunes.apple.com/cn/app/jia-su-bao/id606803214?ls=1&mt=8";
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                    
                     break;
                 }
                 case 5:{
@@ -777,8 +746,41 @@
                     [self.view addSubview:self.updateViewController.view];
                     
                     break;
+                } case 6:{
+                    AboutFlashViewController*aboutFlashViewController=[[[AboutFlashViewController alloc]init] autorelease];
+                    [[sysdelegate navController  ] pushViewController:aboutFlashViewController animated:YES];
+                    break;
+                }
+                default:
+                    break;
+            }
+        }else{
+            switch ([indexPath row]) {
+                case 1:{
+                    APNViewController*apnJiaoZhunViewController=[[APNViewController alloc]init];
+                    [self.navigationController pushViewController:apnJiaoZhunViewController animated:YES];
+                    [apnJiaoZhunViewController release];
+                    break;
+                }case 4:{
+                    CommonProblemViewController*commonProblemViewController=[[[CommonProblemViewController alloc]init] autorelease];
+                    [self.navigationController pushViewController:commonProblemViewController animated:YES];
+                    break;
+                }case 5:{
+                    NSString *url=@"https://itunes.apple.com/cn/app/jia-su-bao/id606803214?ls=1&mt=8";
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                    
+                    break;
                 }
                 case 6:{
+                    if(self.updateViewController!=nil)
+                    {
+                        self.updateViewController=nil;
+                    }
+                    self.updateViewController=[[[UpdateViewController alloc]init] autorelease];
+                    [self.view addSubview:self.updateViewController.view];
+                    
+                    break;
+                } case 7:{
                     AboutFlashViewController*aboutFlashViewController=[[[AboutFlashViewController alloc]init] autorelease];
                     [[sysdelegate navController  ] pushViewController:aboutFlashViewController animated:YES];
                     break;
@@ -787,46 +789,6 @@
                     break;
             }
         }
-//        }else{
-//            switch ([indexPath row]) {
-//                case 1:{
-//                    APNViewController*apnJiaoZhunViewController=[[APNViewController alloc]init];
-//                    [self.navigationController pushViewController:apnJiaoZhunViewController animated:YES];
-//                    [apnJiaoZhunViewController release];
-//                    
-//                    break;
-//                }
-//                case 4:{
-//                    CommonProblemViewController*commonProblemViewController=[[[CommonProblemViewController alloc]init] autorelease];
-//                    [self.navigationController pushViewController:commonProblemViewController animated:YES];
-//                    break;
-//                }
-//                case 5:{
-//                    NSString *url=@"https://itunes.apple.com/cn/app/jia-su-bao/id606803214?ls=1&mt=8";
-//                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-//                    
-//                    break;
-//                }
-//                case 6:{
-//                    if(self.updateViewController!=nil)
-//                    {
-//                        self.updateViewController=nil;
-//                    }
-//                    self.updateViewController=[[[UpdateViewController alloc]init] autorelease];
-//                    [self.view addSubview:self.updateViewController.view];
-//                    
-//                    break;
-//                }
-//                case 7:{
-//                    AboutFlashViewController*aboutFlashViewController=[[[AboutFlashViewController alloc]init] autorelease];
-//                    [[sysdelegate navController  ] pushViewController:aboutFlashViewController animated:YES];
-//                    break;
-//                }
-//                default:
-//                    break;
-//            }
-//        }
-    }
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
