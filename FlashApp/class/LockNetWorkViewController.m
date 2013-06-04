@@ -897,8 +897,8 @@
     
     for(int i=0;i<[datasArray count];i++)
     {
-        NSString *appName = [[self.datasArray objectAtIndex:i] objectForKey:[canHaveLockKeys objectAtIndex:i]];
-        NSString *Str = [appName stringByReplacingOccurrencesOfString:@" " withString:@""];
+        NSString *Str = [canHaveLockKeys objectAtIndex:i];
+//        NSString *Str = [appName stringByReplacingOccurrencesOfString:@" " withString:@""];
         NSLog(@"str is %@",Str);
         
         if(i==[datasArray count]-1)

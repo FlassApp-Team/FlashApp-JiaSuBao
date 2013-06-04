@@ -8,19 +8,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "FlashApp/class/LockNetWorkViewController.m"
-         timestampString = "391575493.947654"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "807"
-         endingLineNumber = "807"
-         landmarkName = "-disableUserAgentNetwork:lockMinutes:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "FlashApp/class/LockNetWorkViewController.m"
          timestampString = "391575502.371636"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
@@ -40,6 +27,19 @@
          startingLineNumber = "924"
          endingLineNumber = "924"
          landmarkName = "-didlockAllApps:obj:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "FlashApp/class/LockNetWorkViewController.m"
+         timestampString = "391589936.198826"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "808"
+         endingLineNumber = "808"
+         landmarkName = "-disableUserAgentNetwork:lockMinutes:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
