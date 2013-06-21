@@ -6,6 +6,8 @@
 //  Copyright (c) 2012年 Home. All rights reserved.
 //
 
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/TencentOAuthObject.h>
 #import "LoginNewViewController.h"
 //#import "RegisterNewViewController.h"
 //#import "ForgotPasswdViewController.h"
@@ -13,6 +15,9 @@
 #import "AppDelegate.h"
 #import "StringUtil.h"
 #import "OpenUDID.h"
+#import "UserSettings.h"
+#import "NSString+SBJSON.h"
+#import "MBProgressHUD.h"
 
 
 #define TAG_BG_IMAGEVIEW 101
@@ -23,6 +28,7 @@
 @end
 
 @implementation LoginNewViewController
+TencentOAuth *tencentOAuth;
 
 @synthesize sinaButton;
 @synthesize renrenButton;
@@ -118,6 +124,12 @@
     [self.renrenButton setTitleColor:BgTextColor forState:UIControlStateHighlighted];
     [self.qqButton setTitleColor:BgTextColor forState:UIControlStateHighlighted];
     [self.TXButton setTitleColor:BgTextColor forState:UIControlStateHighlighted];
+    
+    MBProgressHUD *loginHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    loginHUD.tag = 101010;
+    loginHUD.labelText = @"正在登陆请稍后...";
+    [self.view addSubview:loginHUD];
+    [loginHUD release];
 
 }
 
@@ -301,7 +313,7 @@
 -(IBAction)loginTX
 {
     [self loginSNS:@"QQWeibo"];
-
+    
 }
 - (void) loginBySina
 {
@@ -317,9 +329,11 @@
 
 - (void) loginByQQ
 {
-    [self loginSNS:@"QQ"];
+    thirdType = @"QQ";
+    NSArray *permissions = [NSArray arrayWithObjects:@"get_simple_userinfo",@"",@"add_share" ,@"add_t", nil];
+    tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"100379557" andDelegate:self];
+    [tencentOAuth authorize:permissions inSafari:NO];
 }
-
 
 - (void) loginByBaidu
 {
@@ -330,6 +344,193 @@
 - (void) loginByWangyiweibo
 {
     [self loginSNS:@"wangyiWeibo"];
+}
+
+
+- (void) afterLogin
+{
+    UINavigationController* nav = [[AppDelegate getAppDelegate] navController];
+    if ( nav == self.navigationController ) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+    else {
+        [nav dismissModalViewControllerAnimated:YES];
+    }
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"登陆成功" message:@"恭喜您登陆成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+    [alertView show];
+    [alertView release];
+}
+
+- (NSString *)addcChlAndrdAndCodeAndVer:(NSString *)urlStr requestTypeDic:(NSDictionary *)dic
+{
+    //随机数
+    int rd = ((float) rand()) / RAND_MAX * 10000;
+    
+    NSString* deviceId = [OpenUDID value];
+    //MD5加密
+    NSString* s = [NSString stringWithFormat:@"%@%@%@%@%@%d", deviceId, CHANNEL, [dic objectForKey:@"snsid"],[dic objectForKey:@"snstype"], API_KEY,rd ];
+    //MD5加密
+    NSString* code = [s md5HexDigest];
+    
+    //生成新的url
+    NSString *newUrl = [NSString stringWithFormat:@"%@&chl=%@&rd=%d&code=%@&ver=%@",urlStr,CHANNEL,rd,code,API_VER];
+    
+    return newUrl;
+}
+
+- (void)startThirdLoginRequest:(NSDictionary *)loginDic
+{        
+    NSString *urlString = [NSString stringWithFormat:@"http://p.flashapp.cn/api/users/registsns.json?appid=%d&deviceId=%@&nickname=%@&snsid=%@&snstype=%@&token=%@",APP_ID,[OpenUDID value],[loginDic objectForKey:@"nickname"],[loginDic objectForKey:@"snsid"],[loginDic objectForKey:@"snstype"],[loginDic objectForKey:@"token"]];
+    urlString = [self addcChlAndrdAndCodeAndVer:urlString requestTypeDic:loginDic];
+        
+    NSString *newURL = (NSString*)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)urlString, (CFStringRef)@"%", NULL, kCFStringEncodingUTF8);
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:newURL]];
+    [request setTimeOutSeconds:10];
+    [request setNumberOfTimesToRetryOnTimeout:2];
+    [request setCompletionBlock:^{
+        NSString *responseString =  [request responseString];
+        NSRange rangOK = [responseString rangeOfString:@"200"];
+        if (rangOK.length > 0 ) {
+             NSLog(@"responseString  is ok  %@",responseString);
+        }else{
+            
+        }
+       
+    }];
+    [request startAsynchronous];
+}
+
+#pragma mark - TencentOAuthDelegate
+/**
+ * 登录成功后的回调
+ */
+- (void)tencentDidLogin
+{
+    if (tencentOAuth.accessToken !=nil && 0 != tencentOAuth.accessToken) {
+        
+        MBProgressHUD *loginHUD ;
+        for (UIView *view in  [self.view subviews] ) {
+            if (view.tag == 101010) {
+                loginHUD = (MBProgressHUD *)view;
+            }
+        }
+        [loginHUD show:YES];
+        
+        [tencentOAuth getUserInfo];
+        
+        //分享
+//        TCAddShareDic *shareDic = [TCAddShareDic dictionary];
+//        shareDic.paramTitle = @"分享加速宝测试";
+//        shareDic.paramUrl = @"http://www.flashapp.cn";
+//        shareDic.paramComment = @"加速的哦";//分享理由
+//        shareDic.paramSummary = @"网速慢，流量少！就用加速宝";//分享摘要
+//        [tencentOAuth addShareWithParams:shareDic];
+        
+        //记录下accessToken
+        [[NSUserDefaults standardUserDefaults] setObject:tencentOAuth.accessToken forKey:QQ_LOGIN_ACCESSTOKEN];
+        [[NSUserDefaults standardUserDefaults] setObject:tencentOAuth.openId forKey:QQ_LOGIN_OPENID];
+        [[NSUserDefaults standardUserDefaults] setObject:tencentOAuth.expirationDate forKey:QQ_LOGIN_BACKTIME];
+    }
+}
+
+- (void)startThirdLoginRequestWithServer
+{
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] initWithCapacity:3];
+    NSString *urlString = [NSString stringWithFormat:@"http://%@",@"qq"];
+    ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
+    [request setCompletionBlock:^{
+        NSString *responseStr = [request responseString];
+        [dic setDictionary:[responseStr JSONValue]];
+    }];
+    NSLog(@"dic is ====+++++=====+++++ %@",dic);
+}
+
+/**
+ * 登录失败后的回调
+ * \param cancelled 代表用户是否主动退出登录
+ */
+- (void)tencentDidNotLogin:(BOOL)cancelled
+{
+    if (cancelled) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"退出登录" message:@"您取消了登陆" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
+    }else{
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"登录失败" message:@"登陆失败，您检查用户名、密码。" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alertView show];
+        [alertView release];
+    }
+}
+
+/**
+ * 登录时网络有问题的回调
+ */
+- (void)tencentDidNotNetWork
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"登陆异常" message:@"您的网络似乎有问题，请检查网络后con登陆。" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+    [alertView show];
+    [alertView release];
+}
+
+#pragma mark - TencentSessionDelegate
+/**
+ * 退出登录的回调
+ */
+- (void)tencentDidLogout
+{
+    
+}
+
+/**
+ * 获取用户个人信息回调
+ * \param response API返回结果，具体定义参见sdkdef.h文件中\ref APIResponse
+ * \remarks 正确返回示例: \snippet example/getUserInfoResponse.exp success
+ *          错误返回示例: \snippet example/getUserInfoResponse.exp fail
+ */
+- (void)getUserInfoResponse:(APIResponse*) response
+{
+    MBProgressHUD *loginHUD ;
+    for (UIView *view in  [self.view subviews] ) {
+        if (view.tag == 101010) {
+            loginHUD = (MBProgressHUD *)view;
+        }
+    }
+    [loginHUD hide:YES];
+    
+    if (response.retCode == URLREQUEST_SUCCEED) {
+        UserSettings* user = [AppDelegate getAppDelegate].user;
+        user.username = [tencentOAuth openId];
+        user.nickname = [response.jsonResponse objectForKey:@"nickname"];
+        [UserSettings saveUserSettings:user];
+        
+        NSString *qqheadImgURL = [response.jsonResponse objectForKey:@"figureurl_qq_1"];
+        ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:qqheadImgURL]];
+        [request setCompletionBlock:^{
+            user.headImageData = [request responseData];
+            [UserSettings saveUserSettings:user];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RefreshLoginNotification object:nil];
+        }];
+        [request startAsynchronous];
+        
+        //请求服务器将数据传递给后台接口
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[response.jsonResponse objectForKey:@"nickname"],@"nickname",tencentOAuth.openId,@"snsid",thirdType,@"snstype",tencentOAuth.accessToken,@"token" ,nil];
+        [self startThirdLoginRequest:dic];
+    }
+    
+    [self performSelector:@selector(afterLogin) withObject:nil];
+}
+
+/**
+ * 分享到QZone回调
+ * \param response API返回结果，具体定义参见sdkdef.h文件中\ref APIResponse
+ * \remarks 正确返回示例: \snippet example/addShareResponse.exp success
+ *          错误返回示例: \snippet example/addShareResponse.exp fail
+ */
+- (void)addShareResponse:(APIResponse*) response
+{
+    if (response.retCode == URLREQUEST_SUCCEED) {
+        NSLog(@"RESPONSE DIC IS = %@",response.jsonResponse);
+    }
 }
 
 

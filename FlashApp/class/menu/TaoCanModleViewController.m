@@ -133,15 +133,16 @@
     float totalm=[user.ctTotal floatValue];
     if(totalm)
     {
-        TaoCanViewController*taoCanViewController=[[[TaoCanViewController alloc]init] autorelease];
+        TaoCanViewController*taoCanViewController=[[TaoCanViewController alloc]init];
         [[sysdelegate navController  ] pushViewController:taoCanViewController animated:YES];
+        [taoCanViewController release];
     }
     else
     {
-        FlowJiaoZhunViewController*flowJiaoZhunViewController=[[[FlowJiaoZhunViewController alloc]init] autorelease];
+        FlowJiaoZhunViewController*flowJiaoZhunViewController=[[FlowJiaoZhunViewController alloc]init];
         [[sysdelegate navController  ] pushViewController:flowJiaoZhunViewController animated:YES];
+        [flowJiaoZhunViewController release];
     }
-    
 }
 
 - (void)didReceiveMemoryWarning

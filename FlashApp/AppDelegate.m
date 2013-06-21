@@ -5,6 +5,8 @@
 //  Created by lidiansen on 12-12-13.
 //  Copyright (c) 2012年 lidiansen. All rights reserved.
 //
+
+#import <TencentOpenAPI/TencentOAuth.h>
 #import "SetingViewController.h"
 #import "DetectionViewController.h"
 #import "WangSuViewController.h"
@@ -31,6 +33,7 @@
 #import "MBProgressHUD.h"
 #import "GetAddress.h"
 #import "NSString+SBJson.h"
+#import "Flurry.h"
 
 //add guangtao 
 #import "OpenServeViewController.h"
@@ -293,14 +296,16 @@
         else {
             [userDefault removeObjectForKey:@"apnName"];
         }
-    }else if([user.profileType isEqualToString:@"vpn"]){
-        if ( voaName && [voaName length] > 0 ) {
-            [userDefault setObject:voaName forKey:@"vpnName"];
-        }
-        else {
-            [userDefault removeObjectForKey:@"vpnName"];
-        }
     }
+    //应该不会进入这里吧
+//    else if([user.profileType isEqualToString:@"vpn"]){
+//        if ( voaName && [voaName length] > 0 ) {
+//            [userDefault setObject:voaName forKey:@"vpnName"];
+//        }
+//        else {
+//            [userDefault removeObjectForKey:@"vpnName"];
+//        }
+//    }
     [userDefault synchronize];
     
     NSString *url = [AppDelegate getInstallURL:nextPage install:YES vpn:voaName idc:nil servicetype:@"apn" interfable:interfable];
@@ -555,8 +560,9 @@
     //    time_t peroid[2];
     //    [TCUtils getPeriodOfTcMonth:peroid time:now];
     ViewController *viewController =  [ViewController getSelfViewController];
-    self.navController=[[UINavigationController alloc]initWithRootViewController:viewController];
-    self.window.rootViewController = self.navController;
+    navController=[[UINavigationController alloc]initWithRootViewController:viewController];
+    self.window.rootViewController = navController;
+    
     [navController release];
 }
 
@@ -564,23 +570,53 @@
 - (void) showSetupView
 {
     LaunchViewController *lanuchController = [[LaunchViewController alloc]init];
-    if(self.navController==nil)
+    if(navController==nil)
     {
-        self.navController=[[UINavigationController alloc]initWithRootViewController:lanuchController];
-        [lanuchController release];
+        navController=[[UINavigationController alloc]initWithRootViewController:lanuchController];
     }
     DeviceInfo* device = [DeviceInfo deviceInfoWithLocalDevice];
     float version = [device.version floatValue];
     if ( version >= 4.0 ) {
-        self.window.rootViewController =  self.navController;
-        [self.navController release];
+        self.window.rootViewController =  navController;
     }
     else {
-        [self.window addSubview: self.navController.view];
-        [self.navController release];
+        [self.window addSubview: navController.view];
     }
+    [lanuchController release];
+    [navController release];
     
 }
+
+/*
+ *判断VPN是开启还是关闭
+ *return YES 开启 ， return NO 关闭；
+ */
++(BOOL)pdVpnIsOpenOrClose
+{
+    GetAddress* ga = [[GetAddress alloc] init];
+    BOOL vpnStarted = NO;
+    [ga getIPAddress];
+    NSArray* ipNames = ga.ipNames;
+    NSArray* ifNames = ga.ifNames;
+    int len = [ipNames count];
+    NSString* ifName;
+    NSString* ipName;
+    for ( int i=0; i<len; i++ ) {
+        ifName = [ifNames objectAtIndex:i];
+        ipName = [ipNames objectAtIndex:i];
+        NSRange r = [ifName rangeOfString:@"utun"];
+        if ( r.location == NSNotFound ) {
+            continue;
+        }
+        else {
+            vpnStarted  = YES;
+            break;
+        }
+    }
+    [ga release];
+    return vpnStarted;
+}
+
 
 #pragma mark - application delegate
 
@@ -593,12 +629,20 @@
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     
-    
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
-    
     
     //注册微信
     [WXApi registerApp:@"wx0d70d827b4ee5ad2"];
+    
+    //注册Flurry
+    [Flurry startSession:@"X5GH7TJ735Z82Q7M2N9M"];
+    [Flurry logEvent:@"USER_OPEN_APP"]; //统计软件开启次数
+    //统计渠道
+    BOOL flurry_channel = [[NSUserDefaults standardUserDefaults] boolForKey:@"flurry_channel"];
+    if (!flurry_channel) {
+        [Flurry logEvent:@"APP_CHANNEL" withParameters:[NSDictionary dictionaryWithObjectsAndKeys:CHANNEL ,@"channel_name" ,nil]];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"flurry_channel"];
+    }
     
     
     BOOL versionUpgrade = NO;
@@ -623,7 +667,7 @@
             }
             else {
                 versionUpgrade = NO;
-            }
+            }   
         }
     }
     
@@ -736,38 +780,19 @@
     }
 }
 
-/*
- *判断VPN是开启还是关闭
- *return YES 开启 ， return NO 关闭； 
- */
-+(BOOL)pdVpnIsOpenOrClose
+- (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    GetAddress* ga = [[GetAddress alloc] init];
-    BOOL vpnStarted = NO;
-    [ga getIPAddress];
-    NSArray* ipNames = ga.ipNames;
-    NSArray* ifNames = ga.ifNames;
-    int len = [ipNames count];
-    NSString* ifName;
-    NSString* ipName;
-    for ( int i=0; i<len; i++ ) {
-        ifName = [ifNames objectAtIndex:i];
-        ipName = [ipNames objectAtIndex:i];
-        NSRange r = [ifName rangeOfString:@"utun"];
-        if ( r.location == NSNotFound ) {
-            continue;
-        }
-        else {
-            vpnStarted  = YES;
-            break;
-        }
-    }
-    [ga release];
-    return vpnStarted;
+    [Flurry logEvent:@"APP_GO_BACKGROUND"];//应用程序被挂起的次数
 }
+
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+//{
+//    return [TencentOAuth HandleOpenURL:url];
+//}
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
+    
     NSString* urlString = [url absoluteString];
     NSLog(@"application:handleOpenURL: %@", urlString);
     //?取消的情况下如何调用？
@@ -913,12 +938,19 @@
             return YES;
         }
     }
-
-
+    
+    NSRange qqLoginRang = [urlString rangeOfString:@"tencent100379557"] ;
+    
+    if (qqLoginRang.length > 0 ) {
+        return [TencentOAuth HandleOpenURL:url];
+    }
+    
     //For微信SDK
     return  [WXApi handleOpenURL:url delegate:self];
     //    return YES;
 }
+
+#pragma mark -- APNS Notification
 - (void) application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     NSString* s = [deviceToken description];
@@ -957,8 +989,6 @@
     NSLog( @"++++++++++++++++4Faild to get token:%@", [error description] );
 }
 
-
-#pragma mark -- APNS Notification
 - (void) application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [self performSelectorOnMainThread:@selector(processRemoteNotification:) withObject:userInfo waitUntilDone:NO];

@@ -62,6 +62,7 @@ static BOOL showAppPic = NO;
     [showPicView release];
     [showPicScrollView release];
     [showPicBtn release];
+    [appImgDic release];
 
     [gotuAnzhuang release];
     [super dealloc];
@@ -314,7 +315,7 @@ static BOOL showAppPic = NO;
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:idenfition];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition] autorelease];
         cell.userInteractionEnabled = NO;
     }
     [cell.contentView addSubview:liyouView];
@@ -326,7 +327,7 @@ static BOOL showAppPic = NO;
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:idenfition];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition] autorelease];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     [cell.contentView addSubview:endPicBtnView];
@@ -337,7 +338,7 @@ static BOOL showAppPic = NO;
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:idenfition];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition] autorelease];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.contentView addSubview:showPicScrollView];
     }
@@ -349,7 +350,7 @@ static BOOL showAppPic = NO;
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:idenfition];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition] autorelease];
         cell.userInteractionEnabled = NO;
     }
     [cell.contentView addSubview:miaoshuTitleView];
@@ -361,7 +362,7 @@ static BOOL showAppPic = NO;
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:idenfition];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:idenfition] autorelease];
         cell.userInteractionEnabled = NO;
         
         UILabel *label = [[UILabel alloc] init];

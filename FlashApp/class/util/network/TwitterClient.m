@@ -22,6 +22,7 @@
 #import <CoreTelephony/CTCall.h>
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import "Flurry.h"
 
 @implementation TwitterClient
 
@@ -468,6 +469,20 @@
     UserSettings* user = [AppDelegate getAppDelegate].user;
     
     NSObject* value = [result objectForKey:@"proxyFlag"];
+    
+    BOOL flurry_activate = [[NSUserDefaults standardUserDefaults] boolForKey:@"flurry_activate"];
+    
+    int proxyflag_int = [[result objectForKey:@"proxyFlag"] integerValue];
+    
+    if (0 != proxyflag_int) {
+        if (1 != proxyflag_int) {
+            if (!flurry_activate) {
+                [Flurry logEvent:@"USER_ACTIVATE_OK" withParameters:[NSDictionary dictionaryWithObjectsAndKeys:[result objectForKey:@"proxyFlag"],@"proxyFlag", nil]];
+                
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"flurry_activate"];
+            }
+        }
+    }
     
     NSLog(@"proxyFlag=================%@",[result objectForKey:@"proxyFlag"]);
     

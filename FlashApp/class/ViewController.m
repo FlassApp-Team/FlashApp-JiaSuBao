@@ -589,6 +589,16 @@
     
 }
 
+- (IBAction)testLogOutBug:(id)sender
+{
+    UserSettings *user = [AppDelegate getAppDelegate].user;
+    user.username = nil;
+    user.nickname = nil;
+    [UserSettings saveUserSettings:user];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RefreshLoginNotification object:nil];
+}
+
+
 /*
  *判断在wifi下 或者在 3G下 VPN 是否开启关闭
  *

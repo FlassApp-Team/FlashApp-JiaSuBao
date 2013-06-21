@@ -196,6 +196,7 @@
 //    [cell.contentView addSubview:bgImageView];
     
     UserSettings *user = [UserSettings currentUserSettings];
+//    NSLog(@"user.prxoyType = %@",user.profileType);
     ConnectionType type = [UIDevice connectionType];
     
 //    NSLog(@"user.profileType = %@",user.profileType);
@@ -999,7 +1000,6 @@
             }
             self.userInfoViewController=[[[UserInfoViewController alloc]init] autorelease];
             
-
             [self.bgView addSubview:self.userInfoViewController.view];
             self.userInfoViewController.view.frame=CGRectMake(7, 25, 319, 67);
             [self.userInfoViewController.feibiLineImageView setHidden:YES];

@@ -505,8 +505,6 @@
  */
 -(void)saveButtonClick:(id)sender
 {
-    
-    
     IDCInfo* idc = [idcArray objectAtIndex:selectedRow];
     UserSettings* user = [AppDelegate getAppDelegate].user;
     if ( [idc.host compare:user.idcServer] == NSOrderedSame ) return;
@@ -520,7 +518,6 @@
 
 - (void) refreshTable
 {
-
     [self.tableView reloadData];
 }
 

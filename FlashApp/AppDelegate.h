@@ -46,9 +46,9 @@
 
 #define URL_SHARE @"/loginsns/share/device.jsp"
 
-#define APP_ID 1
+#define APP_ID 2
 #define API_KEY @"30efb1a621c4bd711652ecafb7cbd3673a062b3f"
-#define API_VER @"1.5.5"
+#define API_VER @"1.5.6"
 
 #define RefreshNotification @"refreshNotification"
 #define TCChangedNotification @"TCChangedNotification"
@@ -57,7 +57,7 @@
 
 //#define CHANNEL @"appstore"
 
-#define CHANNEL @"jasubao_market"
+//#define CHANNEL @"jasubao_market"
 
 //#define CHANNEL @"fangzhen_market"
 
@@ -69,7 +69,10 @@
 
 //#define CHANNEL @"wanghui_market"
 
+#define CHANNEL @"duomi_market"
+
 //#define CHANNEL @"91_market"
+//#define CHANNEL @"178_market"
 //#define CHANNEL @"weiphone_market"
 //#define CHANNEL @"tongbutui_market"
 //#define CHANNEL @"163_market"
@@ -95,6 +98,11 @@
 #define JPTJ_APP @"jptjnewapp"
 #define XSMF_APP @"xsmfnewapp"
 #define RMYX_APP @"rmyxnewapp"
+
+// QQ login accessToken , openId , 过期时间
+#define QQ_LOGIN_ACCESSTOKEN @"qq_accessTonken"
+#define QQ_LOGIN_OPENID @"qq_openId"
+#define QQ_LOGIN_BACKTIME @"qq_backTime"
 
 #import <UIKit/UIKit.h>
 #import "UserSettings.h"

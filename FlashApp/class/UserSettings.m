@@ -184,7 +184,7 @@
     
     //add guangtao
     settings.rcen = [userDefaults integerForKey:@"rcen" ];
-    settings.profileType = [userDefaults objectForKey:@"profileType"];
+    settings.profileType = [userDefaults objectForKey:@"stype"];
     
 //    if ( !settings.profileType || settings.profileType.length == 0 ) {
 //        if ( [@"appstore" isEqualToString:CHANNEL] )
