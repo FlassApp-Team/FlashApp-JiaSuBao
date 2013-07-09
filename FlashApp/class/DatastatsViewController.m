@@ -34,7 +34,7 @@
 @end
 
 @implementation DatastatsViewController
-@synthesize turnBtn;
+
 @synthesize refleshBtn;
 
 @synthesize shareBtn;
@@ -78,7 +78,7 @@ static int shareArrayPage ;
     self.scrollView=nil;
     self.shareBtn=nil;
     self.refleshBtn=nil;
-    self.turnBtn=nil;
+   
     
     self.userAgentStats=nil;
     
@@ -113,7 +113,7 @@ static int shareArrayPage ;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+     
     currentPage = 0;
     
     self.userAgentStats=[[[NSMutableArray alloc]init] autorelease];
@@ -128,9 +128,9 @@ static int shareArrayPage ;
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     self.scrollView.delegate = self;
     
-    UIImage* img1=[UIImage imageNamed:@"opaque_small.png"];
-    img1=[img1 stretchableImageWithLeftCapWidth:img1.size.width/2 topCapHeight:img1.size.height/2];
-    [self.refleshBtn setBackgroundImage:img1 forState:UIControlStateNormal];
+//    UIImage* img1=[UIImage imageNamed:@"opaque_small.png"];
+//    img1=[img1 stretchableImageWithLeftCapWidth:img1.size.width/2 topCapHeight:img1.size.height/2];
+//    [self.refleshBtn setBackgroundImage:img1 forState:UIControlStateNormal];
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadData) name:RefreshNotification object: nil];
     
     [self initscrollview];

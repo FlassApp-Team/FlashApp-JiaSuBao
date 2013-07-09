@@ -41,6 +41,13 @@
 #import "AppClasses.h"
 #import "AppRecommendDao.h"
 
+//add fangzhen notification
+#import "NotificationUtils.h"
+#import "JiaoZhunViewController.h"
+#import "DatastatsViewController.h"
+#import "Prefs.h"
+#import "TaoCanViewController.h"
+
 #define APPID 606803214//addd jianfei han
 
 @implementation AppDelegate
@@ -55,6 +62,8 @@
 @synthesize proxySlow;
 @synthesize adjustSMSSend;
 @synthesize window;
+@synthesize mArray;
+//@synthesize pushNotifationType;
 - (void)dealloc
 {
     [operationQueue release];
@@ -69,7 +78,10 @@
     [dbWriteLock release];
      self.user=nil;
     self.navController=nil;
+    [mArray release];
+    
     [window release];
+  //  [pushNotifationType release];
     [super dealloc];
 }
 
@@ -89,7 +101,7 @@
     NSString *scr =[NSString stringWithFormat:@"%.0f*%.0f",rect.size.width,rect.size.height];
     
     NSString *str = [NSString stringWithFormat:@"http://apps.flashapp.cn/api/vapp/catsu?deviceId=%@&platform=%@&cpi=%.0f&appid=%d&osversion=%@&dwname=%@&scr=%@&mnc=%@&mcc=%@&vr=%@&chl=%@&ver=%@",device.deviceId,[device.platform encodeAsURIComponent],cpi,APP_ID,[device.version encodeAsURIComponent],[device.hardware encodeAsURIComponent],scr,ccar ?ccar.mobileNetworkCode:@"",ccar?ccar.mobileCountryCode:@"",version,CHANNEL,API_VER];
-    
+    NSLog(@"");
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:str]];
     [request setCompletionBlock:^{
         //请求返回的 应用分类 的结果集
@@ -671,6 +683,8 @@
         }
     }
     
+    [userDefaults setObject:@"YES" forKey:@"loginStatus"];
+        
     //初始化user类，单例
     self.user = [UserSettings currentUserSettings];
     
@@ -747,6 +761,9 @@
     refreshThread = [[NSThread alloc] initWithTarget:self selector:@selector(runRefresh:) object:nil];
     [refreshThread start];
     
+    //add by fangzhen notification  cancel ApplicationIconBadgeNumber  
+    [application setApplicationIconBadgeNumber:0];
+    
     return YES;
 }
 
@@ -778,10 +795,31 @@
         //访问getMemberInfo接口 ，获取用户限额和级别
         [self getMemberInfo];
     }
+    
+    //add by fangzhen notification  cancel     
+    NotificationUtils *nt = [[NotificationUtils alloc]autorelease];
+    [nt onOrOff:NO];
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:@"logoutDate"];
+     [Prefs setArray:nil];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+     //add by fangzhen notification  add
+    NSDate *nowDate = [[[NSDate alloc] init] autorelease];
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:nowDate forKey:@"logoutDate"];
+    [userDefaults setObject:@"YES" forKey:@"background"];
+    
+   
+    NotificationUtils *nt = [[NotificationUtils alloc]autorelease];
+    [nt onOrOff:YES];
+    mArray=[[NSMutableArray alloc]init];
+    [mArray addObjectsFromArray:[nt mArray]];
+    
+
+    
     [Flurry logEvent:@"APP_GO_BACKGROUND"];//应用程序被挂起的次数
 }
 
@@ -999,7 +1037,10 @@
 
     UIApplicationState state = [UIApplication sharedApplication].applicationState;
     NSString* type = [userInfo objectForKey:@"type"];
-    pushNotifationType=type;
+    
+    pushNotifationType = nil;
+    pushNotifationType = [[NSString stringWithFormat:@"%@",type]retain];
+
     if((state==UIApplicationStateActive || state==UIApplicationStateInactive ))
     {
         NSString *cancelTitle = @"取消";
@@ -1030,8 +1071,8 @@
         }
         else if ( [@"combo" compare:pushNotifationType] == NSOrderedSame )
         {
-            FlowJiaoZhunViewController*flowJiaoZhunViewController=[[[FlowJiaoZhunViewController alloc]init] autorelease];
-            [self.navController pushViewController:flowJiaoZhunViewController animated:NO];
+            JiaoZhunViewController *jiaoZhunViewController=[[[JiaoZhunViewController alloc]init] autorelease];
+            [self.navController pushViewController:jiaoZhunViewController animated:NO];
         }
         else if ( [@"appm" compare:pushNotifationType] == NSOrderedSame ||[@"flowm" compare:pushNotifationType] == NSOrderedSame)
         {
@@ -1072,6 +1113,7 @@
 {
     if(buttonIndex==1)
     {
+        
         if ( [@"init" compare:pushNotifationType] == NSOrderedSame )
         {
 
@@ -1086,14 +1128,23 @@
         }
         else if ( [@"combo" compare:pushNotifationType] == NSOrderedSame )
         {
-            FlowJiaoZhunViewController*flowJiaoZhunViewController=[[[FlowJiaoZhunViewController alloc]init] autorelease];
-            [self.navController pushViewController:flowJiaoZhunViewController animated:NO];
+            JiaoZhunViewController *jiaoZhunViewController=[[[JiaoZhunViewController alloc]init] autorelease];
+            [self.navController pushViewController:jiaoZhunViewController animated:NO];
         }
         else if ( [@"appm" compare:pushNotifationType] == NSOrderedSame ||[@"flowm" compare:pushNotifationType] == NSOrderedSame)
         {
             DetectionViewController*detectionViewController=[[[DetectionViewController alloc]init] autorelease];
             [[sysdelegate navController  ] pushViewController:detectionViewController animated:NO];
         }
+        else if ( ([@"eightStats" compare:pushNotifationType] == NSOrderedSame) ||( [@"hundredStats" compare:pushNotifationType] == NSOrderedSame ))
+        {
+            TaoCanViewController *taoCanViewController=[[TaoCanViewController alloc]init];
+            [self.navController pushViewController:taoCanViewController animated:NO];
+            
+        }else if([@"weekPost" compare:pushNotifationType]  == NSOrderedSame){
+            [self.navController popViewControllerAnimated:YES];
+        }
+
 
     }
     NSLog(@"button index %d",buttonIndex);
@@ -1507,4 +1558,53 @@
     [self hideLockView];
 }
 
+#pragma mark-notification
+//add by fangzhen
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
+    if(notification.userInfo){
+        int number=((NSNumber*)[notification.userInfo objectForKey:@"number"]).intValue;
+        NSLog(@"notification number:%d", number);
+        NSString *no_type = [notification.userInfo objectForKey:@"type"];
+        NSString *info = [notification.userInfo objectForKey:@"info"];
+       // [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:no_type];
+        pushNotifationType = nil;
+        pushNotifationType = [[NSString stringWithFormat:@"%@",no_type]retain];
+           
+        UIApplicationState state = [UIApplication sharedApplication].applicationState;
+        //NSString *background = [[NSUserDefaults standardUserDefaults] objectForKey:@"background"];
+       // NSLog(@"background:%@",background);
+//        if(state==UIApplicationStateActive  )
+//        {
+//            NSString *cancelTitle = @"取消";
+//            NSString *showTitle = @"确定";
+//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"加速宝"
+//                                                        message:info
+//                                                        delegate:self
+//                                                        cancelButtonTitle:cancelTitle
+//                                                        otherButtonTitles:showTitle, nil];
+//            [alertView show];
+//            [alertView release];
+//                
+//        }else{
+        
+            //[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"background"];
+        if(state != UIApplicationStateActive  ){
+            if([@"eightStats" isEqualToString:no_type] || [@"hundredStats" isEqualToString:no_type]){
+                TaoCanViewController *taoCanViewController=[[TaoCanViewController alloc]init];
+                [self.navController pushViewController:taoCanViewController animated:NO];
+                
+            }else{
+                NotificationUtils *nt = [[NotificationUtils alloc]autorelease];
+                [nt setMArray:mArray];
+                [nt showNotification:number type:no_type info:info];
+                
+                
+            }
+
+        }
+           
+       // }
+    }
+
+}
 @end

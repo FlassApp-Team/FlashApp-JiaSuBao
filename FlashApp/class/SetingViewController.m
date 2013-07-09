@@ -76,9 +76,9 @@
     
     self.bigImageView.frame = CGRectMake(0, BGimageViewOfSet, 320, 270);
     
-    UIImage* img=[UIImage imageNamed:@"opaque_small.png"];
-    img=[img stretchableImageWithLeftCapWidth:7 topCapHeight:8];
-    [self.fanKuiBtn setBackgroundImage:img forState:UIControlStateNormal];
+//    UIImage* img=[UIImage imageNamed:@"opaque_small.png"];
+//    img=[img stretchableImageWithLeftCapWidth:7 topCapHeight:8];
+//    [self.fanKuiBtn setBackgroundImage:img forState:UIControlStateNormal];
     
     UserSettings *user = [UserSettings currentUserSettings];
     if ([CHANNEL isEqualToString:@"appstore"] &&(user.proxyFlag ==INSTALL_FLAG_NO ||user.proxyFlag ==INSTALL_FLAG_UNKNOWN)&&[user.profileType isEqualToString:@"vpn"]) {

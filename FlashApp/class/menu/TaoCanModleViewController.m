@@ -9,6 +9,7 @@
 #import "TaoCanModleViewController.h"
 #import "TaoCanViewController.h"
 #import "FlowJiaoZhunViewController.h"
+#import "JiaoZhunViewController.h"
 @interface TaoCanModleViewController ()
 -(void)loadData;
 @end
@@ -139,9 +140,16 @@
     }
     else
     {
-        FlowJiaoZhunViewController*flowJiaoZhunViewController=[[FlowJiaoZhunViewController alloc]init];
-        [[sysdelegate navController  ] pushViewController:flowJiaoZhunViewController animated:YES];
-        [flowJiaoZhunViewController release];
+        
+//        FlowJiaoZhunViewController*flowJiaoZhunViewController=[[FlowJiaoZhunViewController alloc]init];
+//        [[sysdelegate navController  ] pushViewController:flowJiaoZhunViewController animated:YES];
+//        [flowJiaoZhunViewController release];
+        
+        JiaoZhunViewController *jiaozhunViewController = [[JiaoZhunViewController alloc] init];
+        [[sysdelegate navController  ] pushViewController:jiaozhunViewController animated:YES];
+        [JiaoZhunViewController release];
+
+        
     }
 }
 

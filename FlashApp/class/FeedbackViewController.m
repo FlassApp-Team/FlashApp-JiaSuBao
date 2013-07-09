@@ -51,10 +51,10 @@
     self.contactField.returnKeyType=UIReturnKeyDone;
     
     
-    UIImage *image1=[UIImage imageNamed:@"about_clause_bg.png"];
-    image1=[image1 stretchableImageWithLeftCapWidth:image1.size.width/2 topCapHeight:image1.size.height/2];
+//    UIImage *image1=[UIImage imageNamed:@"about_clause_bg.png"];
+//    image1=[image1 stretchableImageWithLeftCapWidth:image1.size.width/2 topCapHeight:image1.size.height/2];
     [self.submitButton setUserInteractionEnabled:NO];
-    [self.submitButton setBackgroundImage:image1 forState:UIControlStateNormal];
+   // [self.submitButton setBackgroundImage:image1 forState:UIControlStateNormal];
     
     
     
@@ -97,11 +97,13 @@
     content = [NSString stringWithFormat:@"#%@#%@", [OpenUDID value], content];
     
     BOOL reachable = [UIDevice reachableToHost:P_HOST];
+    DeviceInfo *device = [DeviceInfo deviceInfoWithLocalDevice];
+     NSString *version = [[NSUserDefaults standardUserDefaults] objectForKey:@"version"];
     //BOOL reachable = NO;
     if ( reachable ) {
         UserSettings* user = [AppDelegate getAppDelegate].user;
         NSString* url = [NSString stringWithFormat:@"%@/%@.json", API_BASE, API_FEEDBACK_FEEDBACK];
-        NSString* body = [NSString stringWithFormat:@"content=%@&email=%@&username=%@&ftype=%d", [content encodeAsURIComponent], [contact encodeAsURIComponent], user.username,11 ];
+        NSString* body = [NSString stringWithFormat:@"content=%@&email=%@&username=%@&ftype=%d&appid=%d&platform=%@&innver=%d&vr=%@&chl=%@", [content encodeAsURIComponent], [contact encodeAsURIComponent], user.username,11,APP_ID,device.platform,0,version,CHANNEL ];
         client = [[TwitterClient alloc] initWithTarget:self action:@selector(didSave:obj:)];
         [client post:url body:body];
     }
@@ -166,6 +168,7 @@
 
 - (void)textViewDidChange:(UITextView *)v
 {
+    [self.submitButton setTitle:@"发送" forState:UIControlStateNormal];
     if([v.text compare:@""]==NSOrderedSame||[v.text compare:TEXT_PLACEHOLDER]==NSOrderedSame)
     {
         if(!self.submitButton.userInteractionEnabled)

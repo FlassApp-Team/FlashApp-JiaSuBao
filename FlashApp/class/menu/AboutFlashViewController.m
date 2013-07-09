@@ -54,9 +54,9 @@
     [self.serverBtn setBackgroundImage:image forState:UIControlStateNormal];
     
     
-    UIImage* img=[UIImage imageNamed:@"opaque_small.png"];
-    img=[img stretchableImageWithLeftCapWidth:7 topCapHeight:8];
-    [self.fankuiBtn setBackgroundImage:img forState:UIControlStateNormal];
+//    UIImage* img=[UIImage imageNamed:@"opaque_small.png"];
+//    img=[img stretchableImageWithLeftCapWidth:7 topCapHeight:8];
+//    [self.fankuiBtn setBackgroundImage:img forState:UIControlStateNormal];
     
     
     [self.btn1 setTitleColor:[UIColor colorWithRed:50.0/255 green:79.0/255 blue:133.0/255 alpha:1.0] forState:UIControlStateHighlighted];

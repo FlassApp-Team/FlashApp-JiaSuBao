@@ -84,10 +84,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIImage* img1=[UIImage imageNamed:@"opaque_small.png"];
-    img1=[img1 stretchableImageWithLeftCapWidth:7 topCapHeight:8];
-    
-    [self.refleshBtn setBackgroundImage:img1 forState:UIControlStateNormal];
+//    UIImage* img1=[UIImage imageNamed:@"opaque_small.png"];
+//    img1=[img1 stretchableImageWithLeftCapWidth:7 topCapHeight:8];
+//    
+//    [self.refleshBtn setBackgroundImage:img1 forState:UIControlStateNormal];
     
     //可以更换的几个机房
     self.idcPickerViewController=[[[IDCPickerViewController alloc]init] autorelease];

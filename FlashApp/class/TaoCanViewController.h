@@ -11,7 +11,7 @@
 #import "TwitterClient.h"
 #import "TCStatsAPPSpeed.h"
 @class FlowJiaoZhunViewController;
-
+@class JiaoZhunViewController;
 @interface TaoCanViewController : UIViewController
 {
     BOOL dirty;
@@ -39,6 +39,7 @@
 @property(nonatomic,retain)IBOutlet UIImageView*jingduBgImageView;
 
 @property(nonatomic,retain)FlowJiaoZhunViewController *flowJiaoZhunViewController;
+@property(nonatomic,retain)JiaoZhunViewController *jiaoZhunViewController;
 -(IBAction)turnBtnPress:(id)sender;
 -(IBAction)jiaozhunBtnPress:(id)sender;
 -(void)getDataTotalCount;

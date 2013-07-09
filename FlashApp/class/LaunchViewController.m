@@ -59,7 +59,14 @@
         self.imageView.image=[UIImage imageNamed:@"Default-568h@2x.png"];
     }
     
-    /*
+    if([@"PP_market" isEqualToString: CHANNEL]){
+        UIImageView *ppImage = [[UIImageView alloc]initWithFrame:CGRectMake(182.0, 20.0, 118.0, 33.0)];
+        ppImage.image = [UIImage imageNamed:@"ppWelcome.png"];
+        [self.view addSubview:ppImage];
+        [ppImage release];
+
+    }
+        /*
      *查询本月的流量使用情况，方法
      */
     time_t now;

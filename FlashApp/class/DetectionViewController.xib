@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">12D78</string>
+		<string key="IBDocument.SystemVersion">11G56</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1187.37</string>
-		<string key="IBDocument.HIToolboxVersion">626.00</string>
+		<string key="IBDocument.AppKitVersion">1138.51</string>
+		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">2083</string>
@@ -101,9 +101,8 @@
 							<object class="IBUIButton" id="744337079">
 								<reference key="NSNextResponder" ref="993876262"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{7, 6}, {55, 33}}</string>
+								<string key="NSFrame">{{6, 6}, {55, 33}}</string>
 								<reference key="NSSuperview" ref="993876262"/>
-								<reference key="NSNextKeyView" ref="672478283"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUIContentMode">2</int>
@@ -118,24 +117,10 @@
 								<reference key="IBUINormalTitleShadowColor" ref="543844924"/>
 								<object class="NSCustomResource" key="IBUINormalBackgroundImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">opaque.png</string>
+									<string key="NSResourceName">back.png</string>
 								</object>
 								<reference key="IBUIFontDescription" ref="337826039"/>
 								<reference key="IBUIFont" ref="915857770"/>
-							</object>
-							<object class="IBUIImageView" id="672478283">
-								<reference key="NSNextResponder" ref="993876262"/>
-								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{23, 12}, {23, 21}}</string>
-								<reference key="NSSuperview" ref="993876262"/>
-								<reference key="NSNextKeyView" ref="727574186"/>
-								<string key="NSReuseIdentifierKey">_NS:9</string>
-								<bool key="IBUIUserInteractionEnabled">NO</bool>
-								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<object class="NSCustomResource" key="IBUIImage">
-									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">turn.png</string>
-								</object>
 							</object>
 							<object class="IBUIImageView" id="727574186">
 								<reference key="NSNextResponder" ref="993876262"/>
@@ -568,14 +553,13 @@
 						<reference key="object" ref="993876262"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="943461159"/>
-							<reference ref="744337079"/>
-							<reference ref="672478283"/>
 							<reference ref="772147436"/>
 							<reference ref="634583411"/>
 							<reference ref="727574186"/>
 							<reference ref="589230859"/>
 							<reference ref="271049509"/>
 							<reference ref="245036276"/>
+							<reference ref="744337079"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 					</object>
@@ -587,11 +571,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">17</int>
 						<reference key="object" ref="744337079"/>
-						<reference key="parent" ref="993876262"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">16</int>
-						<reference key="object" ref="672478283"/>
 						<reference key="parent" ref="993876262"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -706,7 +685,6 @@
 				<string key="11.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<real value="2" key="11.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
 				<string key="12.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="16.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="17.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<real value="0.0" key="17.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
 				<string key="19.CustomClassName">CGLabel</string>
@@ -745,11 +723,10 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
+			<string key="back.png">{115, 68}</string>
 			<string key="liuliangbackground.jpg">{640, 336}</string>
 			<string key="liuliangicon.png">{56, 52}</string>
-			<string key="opaque.png">{110, 66}</string>
 			<string key="triangle_white.png">{12, 6}</string>
-			<string key="turn.png">{23, 21}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">2083</string>
 	</data>

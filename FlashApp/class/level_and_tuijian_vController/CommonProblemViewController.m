@@ -44,9 +44,9 @@
 {
     [super viewDidLoad];
 
-    UIImage* img=[UIImage imageNamed:@"opaque_small.png"];
-    img=[img stretchableImageWithLeftCapWidth:7 topCapHeight:8];
-    [self.fankuiBtn setBackgroundImage:img forState:UIControlStateNormal];
+//    UIImage* img=[UIImage imageNamed:@"opaque_small.png"];
+//    img=[img stretchableImageWithLeftCapWidth:7 topCapHeight:8];
+//    [self.fankuiBtn setBackgroundImage:img forState:UIControlStateNormal];
     
     [self.strs addObject:@"★安装过其他压缩软件，如何正常使用加速宝?"];
 

@@ -48,12 +48,14 @@
 
 #define APP_ID 2
 #define API_KEY @"30efb1a621c4bd711652ecafb7cbd3673a062b3f"
-#define API_VER @"1.5.6"
+#define API_VER @"1.5.7"
 
 #define RefreshNotification @"refreshNotification"
 #define TCChangedNotification @"TCChangedNotification"
 #define RefreshAppLockedNotification @"refreshAppLockedNotification"
 #define RefreshLoginNotification @"refreshLoginNotification"
+
+#define RGB(A,B,C) [UIColor colorWithRed:A/255.0 green:B/255.0 blue:C/255.0 alpha:1.0] 
 
 //#define CHANNEL @"appstore"
 
@@ -69,8 +71,9 @@
 
 //#define CHANNEL @"wanghui_market"
 
-#define CHANNEL @"duomi_market"
+//#define CHANNEL @"duomi_market"
 
+#define CHANNEL @"PP_market"
 //#define CHANNEL @"91_market"
 //#define CHANNEL @"178_market"
 //#define CHANNEL @"weiphone_market"
@@ -129,6 +132,7 @@
     NSOperationQueue* operationQueue;
     
     MBProgressHUD *myHUD;
+    
 }
 
 @property (nonatomic, assign) BOOL refreshDatasave;
@@ -146,7 +150,6 @@
 @property (strong, nonatomic) UIWindow *window;
 @property(nonatomic,retain) UINavigationController *navController;
 @property (nonatomic, retain) Reachability* networkReachablity;
-
 
 + (time_t) getLastAccessLogTime;
 +(void)setLabelFrame:(UILabel *)label1 label2:(UILabel*)label2;
@@ -186,4 +189,8 @@
 - (BOOL) proxyServerSlow;
 - (NSString*) appInfoToJSONString:(NSDictionary*)currentApps;
 +(BOOL)pdVpnIsOpenOrClose;
+
+
+//add by fangzhen
+@property (nonatomic,retain) NSMutableArray *mArray;
 @end

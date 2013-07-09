@@ -106,10 +106,10 @@
     img=[img stretchableImageWithLeftCapWidth:img.size.width/2 topCapHeight:0];
     [self.oneUnlockBtn setBackgroundImage:img forState:UIControlStateNormal];
     
-    UIImage* img1=[UIImage imageNamed:@"opaque_small.png"];
-    img1=[img1 stretchableImageWithLeftCapWidth:7 topCapHeight:8];
-    
-    [self.refleshBtn setBackgroundImage:img1 forState:UIControlStateNormal];
+//    UIImage* img1=[UIImage imageNamed:@"opaque_small.png"];
+//    img1=[img1 stretchableImageWithLeftCapWidth:7 topCapHeight:8];
+//    
+//    [self.refleshBtn setBackgroundImage:img1 forState:UIControlStateNormal];
     
     [AppDelegate labelShadow:self.yisuoLabel];
     [AppDelegate labelShadow:self.kesuoLabel];

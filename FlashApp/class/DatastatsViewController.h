@@ -37,7 +37,6 @@
 
 @property(nonatomic,retain)IBOutlet UIScrollView *scrollView;
 
-@property(nonatomic,retain)IBOutlet UIButton *turnBtn;
 @property(nonatomic,retain)IBOutlet UIButton *refleshBtn;
 @property(nonatomic,retain)IBOutlet  CGLabel *savaLabel;
 @property(nonatomic,retain)IBOutlet  CGLabel *jiasuLabel;

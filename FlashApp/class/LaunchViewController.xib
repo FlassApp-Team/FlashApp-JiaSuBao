@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">12E55</string>
+		<string key="IBDocument.SystemVersion">11G56</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1187.39</string>
-		<string key="IBDocument.HIToolboxVersion">626.00</string>
+		<string key="IBDocument.AppKitVersion">1138.51</string>
+		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">2083</string>
@@ -41,6 +41,7 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{320, 480}</string>
 						<reference key="NSSuperview" ref="297943534"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="567437376"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -59,6 +60,7 @@
 								<int key="NSvFlags">301</int>
 								<string key="NSFrame">{{20, 6}, {21, 23}}</string>
 								<reference key="NSSuperview" ref="567437376"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="237047283"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -73,6 +75,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{48, 6}, {116, 23}}</string>
 								<reference key="NSSuperview" ref="567437376"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="731956154"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -108,6 +111,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{19, 40}, {52, 45}}</string>
 								<reference key="NSSuperview" ref="567437376"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="819506234"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor" id="272332974">
@@ -143,6 +147,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{19, 95}, {28, 26}}</string>
 								<reference key="NSSuperview" ref="567437376"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="523467860"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -157,6 +162,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{129, 50}, {89, 36}}</string>
 								<reference key="NSSuperview" ref="567437376"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="926876528"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -188,6 +194,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{51, 97}, {269, 21}}</string>
 								<reference key="NSSuperview" ref="567437376"/>
+								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -216,6 +223,7 @@
 						</array>
 						<string key="NSFrame">{{0, 345}, {320, 135}}</string>
 						<reference key="NSSuperview" ref="297943534"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="864303008"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="272332974"/>
@@ -225,6 +233,7 @@
 				</array>
 				<string key="NSFrameSize">{320, 480}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="56065969"/>
 				<reference key="IBUIBackgroundColor" ref="272332974"/>
 				<object class="IBUIScreenMetrics" key="IBUISimulatedDestinationMetrics">
@@ -353,10 +362,10 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="523467860"/>
 							<reference ref="926876528"/>
-							<reference ref="864303008"/>
 							<reference ref="237047283"/>
 							<reference ref="731956154"/>
 							<reference ref="819506234"/>
+							<reference ref="864303008"/>
 						</array>
 						<reference key="parent" ref="297943534"/>
 					</object>
@@ -415,9 +424,67 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">53</int>
+			<int key="maxID">54</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">CGLabel</string>
+					<string key="superclassName">UILabel</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/CGLabel.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">LaunchViewController</string>
+					<string key="superclassName">UIViewController</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="MBLabel">CGLabel</string>
+						<string key="MBdataLabel">CGLabel</string>
+						<string key="imageView">UIImageView</string>
+						<string key="lodingView">UIView</string>
+						<string key="saveDataLabel">CGLabel</string>
+						<string key="saveImageView">UIImageView</string>
+						<string key="tcLabel">CGLabel</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="MBLabel">
+							<string key="name">MBLabel</string>
+							<string key="candidateClassName">CGLabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="MBdataLabel">
+							<string key="name">MBdataLabel</string>
+							<string key="candidateClassName">CGLabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="imageView">
+							<string key="name">imageView</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lodingView">
+							<string key="name">lodingView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="saveDataLabel">
+							<string key="name">saveDataLabel</string>
+							<string key="candidateClassName">CGLabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="saveImageView">
+							<string key="name">saveImageView</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="tcLabel">
+							<string key="name">tcLabel</string>
+							<string key="candidateClassName">CGLabel</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/LaunchViewController.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>

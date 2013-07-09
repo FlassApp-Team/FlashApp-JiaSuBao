@@ -15,6 +15,7 @@
 #import "IFDataService.h"
 #import "DBConnection.h"
 #import "Statement.h"
+#import "NotificationUtils.h"
 
 typedef enum {
     NET_FLOW_TYPE_READ,
@@ -66,6 +67,9 @@ typedef enum {
     IFData* ifData = [IFDataService readCellFlowData];
     if ( !ifData ) return;
     
+    //add by fangzhen flow percent notification
+    [NotificationUtils dataStatsNotification];
+    
     if ( ifData.receiveBytes < 0 || ifData.sendBytes < 0 ) return;
     if ( ifData.lastchangeTime <= 0 || (ifData.receiveBytes==0 && ifData.sendBytes==0) ) return;
     
@@ -79,6 +83,7 @@ typedef enum {
     
     UserSettings* user = [AppDelegate getAppDelegate].user;
     long used = [user getTcUsed];
+    
     
     time_t now;
     time( &now );
@@ -147,7 +152,7 @@ typedef enum {
             
             [self insertStatsNetFlow:ifData.lastchangeTime receive:ifData.receiveBytes send:ifData.sendBytes delta:delta type:NET_FLOW_TYPE_READ desc:desc];
         }
-    }
+   }
 
 }
 

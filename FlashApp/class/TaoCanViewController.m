@@ -8,6 +8,7 @@
 
 #import "TaoCanViewController.h"
 #import "FlowJiaoZhunViewController.h"
+#import "JiaoZhunViewController.h"
 #import "TCUtils.h"
 #import "DateUtils.h"
 #import "StatsDayDAO.h"
@@ -31,6 +32,7 @@
 @synthesize titleLabel;
 @synthesize jingduBgImageView;
 @synthesize flowJiaoZhunViewController;
+@synthesize jiaoZhunViewController;
 @synthesize client;
  
 @synthesize unitLabel;
@@ -67,6 +69,7 @@
     self.jingduImageView=nil;
     
     self.flowJiaoZhunViewController=nil;
+    self.jiaoZhunViewController=nil;
     self.jingduBgImageView=nil;
     if ( client ) {
         [client cancel];
@@ -445,17 +448,33 @@
 }
 -(IBAction)jiaozhunBtnPress:(id)sender
 {
-    if(self.flowJiaoZhunViewController!=nil)
+//    if(self.flowJiaoZhunViewController!=nil)
+//    {
+//        self.flowJiaoZhunViewController=nil;
+//    }
+//    if(self.flowJiaoZhunViewController==nil)
+//    {
+//        self.flowJiaoZhunViewController=[[[FlowJiaoZhunViewController alloc]init] autorelease];
+//        self.flowJiaoZhunViewController.controller=self;
+//        [[sysdelegate currentViewController].navigationController pushViewController:self.flowJiaoZhunViewController animated:YES];
+//        
+//    }
+    if(self.jiaoZhunViewController!=nil)
     {
-        self.flowJiaoZhunViewController=nil;
+        self.jiaoZhunViewController=nil;
     }
-    if(self.flowJiaoZhunViewController==nil)
+    if(self.jiaoZhunViewController==nil)
     {
-        self.flowJiaoZhunViewController=[[[FlowJiaoZhunViewController alloc]init] autorelease];
-        self.flowJiaoZhunViewController.controller=self;
-        [[sysdelegate currentViewController].navigationController pushViewController:self.flowJiaoZhunViewController animated:YES];
+        self.jiaoZhunViewController=[[[JiaoZhunViewController alloc]init] autorelease];
+        self.jiaoZhunViewController.controller=self;
+        [[sysdelegate currentViewController].navigationController pushViewController:self.jiaoZhunViewController animated:YES];
         
     }
+
+//    JiaoZhunViewController *jiaozhunViewController = [[JiaoZhunViewController alloc] init];
+//    [[sysdelegate navController  ] pushViewController:jiaozhunViewController animated:YES];
+//    [JiaoZhunViewController release];
+    
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
